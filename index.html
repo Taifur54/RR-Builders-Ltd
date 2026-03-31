@@ -114,7 +114,7 @@
 <script>
   const SUPABASE_URL = 'https://atxhshirummpenfqtwku.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   let lang = localStorage.getItem('bt_lang') || 'en';
   const T = {
     en: { sub:'Construction & Real Estate Management', title:'Welcome back', cardSub:'Sign in to access your dashboard', email:'Email Address', pass:'Password', btn:'Sign In', loading:'Signing in...', footer:'Contact administrator to create your account' },
@@ -142,7 +142,7 @@
     if(!email||!password){showError(lang==='bn'?'ইমেইল এবং পাসওয়ার্ড দিন':'Please enter email and password');return;}
     btn.disabled=true; btnText.innerHTML=`<span class="spinner"></span>${T[lang].loading}`; errEl.style.display='none';
     try {
-      const{data,error}=await supabase.auth.signInWithPassword({email,password});
+      const{data,error}=await sbClient.auth.signInWithPassword({email,password});
       if(error){showError('Error: '+error.message);btn.disabled=false;btnText.textContent=T[lang].btn;return;}
       if(!data.session){showError('No session returned. Check Supabase settings.');btn.disabled=false;btnText.textContent=T[lang].btn;return;}
       window.location.href='dashboard.html';
@@ -150,7 +150,7 @@
   }
   function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';}
   document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
-  supabase.auth.getSession().then(({data})=>{if(data.session)window.location.href='dashboard.html';});
+  sbClient.auth.getSession().then(({data})=>{if(data.session)window.location.href='dashboard.html';});
 </script>
 </body>
 </html>
