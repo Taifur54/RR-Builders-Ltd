@@ -733,7 +733,7 @@
 <script>
 const SUPABASE_URL = 'https://atxhshirummpenfqtwku.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUser=null, userProfile=null, buildings=[], employees=[], tenants=[], currentDeliveryId=null;
 let lang = localStorage.getItem('bt_lang')||'en';
@@ -751,10 +751,10 @@ function setLang(l){
 }
 
 async function init(){
-  const{data:{session}}=await supabase.auth.getSession();
+  const{data:{session}}=await sbClient.auth.getSession();
   if(!session){window.location.href='index.html';return;}
   currentUser=session.user;
-  const{data:profile}=await supabase.from('user_profiles').select('*').eq('id',currentUser.id).single();
+  const{data:profile}=await sbClient.from('user_profiles').select('*').eq('id',currentUser.id).single();
   userProfile=profile;
   if(profile){document.getElementById('user-name').textContent=profile.full_name||currentUser.email;document.getElementById('user-role').textContent=profile.role||'staff';document.getElementById('user-avatar').textContent=(profile.full_name||'U')[0].toUpperCase();}
   else{document.getElementById('user-name').textContent=currentUser.email;}
@@ -794,7 +794,7 @@ function monthName(m){return['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug',
 function statusBadge(s){const map={paid:'badge-success',partial:'badge-warn',unpaid:'badge-danger',delivered:'badge-success',ordered:'badge-info',in_transit:'badge-warn',partially_delivered:'badge-warn',cancelled:'badge-danger',confirmed:'badge-info',active:'badge-success',inactive:'badge-muted',under_construction:'badge-warn',completed:'badge-success'};return `<span class="badge ${map[s]||'badge-muted'}">${s.replace(/_/g,' ')}</span>`;}
 
 async function loadBuildings(){
-  const{data}=await supabase.from('buildings').select('*').order('created_at');
+  const{data}=await sbClient.from('buildings').select('*').order('created_at');
   buildings=data||[];
   ['t-building','s-building','e-building','m-building','em-building','rent-building-filter','exp-building-filter','mat-building-filter','rep-building-filter','tenant-building-filter'].forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
@@ -810,7 +810,7 @@ async function loadBuildingsPage(){
 async function saveBuilding(){
   const payload={name:document.getElementById('b-name').value,address:document.getElementById('b-address').value,total_floors:parseInt(document.getElementById('b-floors').value)||0,status:document.getElementById('b-status').value,notes:document.getElementById('b-notes').value};
   if(!payload.name){showToast('Name required','error');return;}
-  const{error}=await supabase.from('buildings').insert(payload);
+  const{error}=await sbClient.from('buildings').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Building saved!');closeModal('modal-building');
   ['b-name','b-address','b-floors','b-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -820,17 +820,17 @@ async function saveBuilding(){
 async function loadFloors(selectId,buildingId){
   const el=document.getElementById(selectId);if(!el)return;
   el.innerHTML='<option value="">Whole Building</option>';if(!buildingId)return;
-  const{data}=await supabase.from('floors').select('*').eq('building_id',buildingId).order('floor_number');
+  const{data}=await sbClient.from('floors').select('*').eq('building_id',buildingId).order('floor_number');
   (data||[]).forEach(f=>{const o=document.createElement('option');o.value=f.id;o.textContent=`Floor ${f.floor_number}${f.label?' – '+f.label:''}`;el.appendChild(o);});
 }
 async function loadApartments(selectId,buildingId){
   const el=document.getElementById(selectId);if(!el)return;
   el.innerHTML='<option value="">Select Apartment</option>';if(!buildingId)return;
-  const{data}=await supabase.from('apartments').select('*, floors(floor_number)').eq('building_id',buildingId).order('apartment_number');
+  const{data}=await sbClient.from('apartments').select('*, floors(floor_number)').eq('building_id',buildingId).order('apartment_number');
   (data||[]).forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=`${a.apartment_number}${a.floors?' (Floor '+a.floors.floor_number+')':''}`;el.appendChild(o);});
 }
 async function loadTenants(){
-  const{data}=await supabase.from('tenants').select('*, apartments(apartment_number, buildings(id, name))').order('created_at',{ascending:false});
+  const{data}=await sbClient.from('tenants').select('*, apartments(apartment_number, buildings(id, name))').order('created_at',{ascending:false});
   tenants=data||[];renderTenants(tenants);
   const rpTenant=document.getElementById('rp-tenant');
   if(rpTenant){rpTenant.innerHTML='<option value="">Select Tenant</option>';tenants.filter(t2=>t2.is_active).forEach(t2=>{const o=document.createElement('option');o.value=t2.id;o.textContent=t2.full_name;rpTenant.appendChild(o);});}
@@ -854,20 +854,20 @@ async function saveTenant(){
   const apt=document.getElementById('t-apartment').value;
   const payload={full_name:document.getElementById('t-name').value,phone:document.getElementById('t-phone').value,nid:document.getElementById('t-nid').value,email:document.getElementById('t-email').value,apartment_id:apt||null,monthly_rent:parseFloat(document.getElementById('t-rent').value)||0,advance_amount:parseFloat(document.getElementById('t-advance').value)||0,security_deposit:parseFloat(document.getElementById('t-deposit').value)||0,lease_start:document.getElementById('t-lease-start').value||null,lease_end:document.getElementById('t-lease-end').value||null,emergency_contact:document.getElementById('t-emergency').value,notes:document.getElementById('t-notes').value};
   if(!payload.full_name){showToast('Name required','error');return;}
-  const{error}=await supabase.from('tenants').insert(payload);
+  const{error}=await sbClient.from('tenants').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
-  if(apt)await supabase.from('apartments').update({status:'rented'}).eq('id',apt);
+  if(apt)await sbClient.from('apartments').update({status:'rented'}).eq('id',apt);
   showToast('Tenant saved!');closeModal('modal-tenant');
   ['t-name','t-phone','t-nid','t-email','t-rent','t-advance','t-deposit','t-lease-start','t-lease-end','t-emergency','t-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   loadTenants();
 }
-async function toggleTenant(id,current){await supabase.from('tenants').update({is_active:!current}).eq('id',id);loadTenants();}
+async function toggleTenant(id,current){await sbClient.from('tenants').update({is_active:!current}).eq('id',id);loadTenants();}
 async function loadRent(){
   const month=document.getElementById('rent-month-filter').value;
   const year=document.getElementById('rent-year-filter').value;
   const building=document.getElementById('rent-building-filter').value;
   const status=document.getElementById('rent-status-filter').value;
-  let q=supabase.from('rent_payments').select('*, tenants(full_name), apartments(apartment_number), buildings(name)').eq('month',month).eq('year',year);
+  let q=sbClient.from('rent_payments').select('*, tenants(full_name), apartments(apartment_number), buildings(name)').eq('month',month).eq('year',year);
   if(building)q=q.eq('building_id',building);if(status)q=q.eq('payment_status',status);
   const{data}=await q.order('created_at',{ascending:false});
   const payments=data||[];
@@ -888,8 +888,8 @@ async function saveRentPayment(){
   const due=parseFloat(document.getElementById('rp-due').value)||0;
   const status=paid>=due?'paid':paid>0?'partial':'unpaid';
   const payload={tenant_id:tenantId,apartment_id:tenant?.apartment_id||null,building_id:null,month:parseInt(document.getElementById('rp-month').value),year:parseInt(document.getElementById('rp-year').value),amount_due:due,amount_paid:paid,late_fee:parseFloat(document.getElementById('rp-late').value)||0,payment_status:status,payment_method:document.getElementById('rp-method').value,cheque_number:document.getElementById('rp-cheque').value,deposited_to:document.getElementById('rp-deposited').value,payment_date:document.getElementById('rp-date').value||null,due_date:document.getElementById('rp-due-date').value||null,notes:document.getElementById('rp-notes').value,recorded_by:currentUser.id};
-  if(tenant?.apartment_id){const{data:apt}=await supabase.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();if(apt)payload.building_id=apt.building_id;}
-  const{error}=await supabase.from('rent_payments').insert(payload);
+  if(tenant?.apartment_id){const{data:apt}=await sbClient.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();if(apt)payload.building_id=apt.building_id;}
+  const{error}=await sbClient.from('rent_payments').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Payment recorded!');closeModal('modal-rent');
   ['rp-cheque','rp-date','rp-due-date','rp-notes','rp-due','rp-paid','rp-late'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -897,13 +897,13 @@ async function saveRentPayment(){
   loadRent();
 }
 async function editRent(id){
-  const{data}=await supabase.from('rent_payments').select('*').eq('id',id).single();if(!data)return;
+  const{data}=await sbClient.from('rent_payments').select('*').eq('id',id).single();if(!data)return;
   const newStatus=data.payment_status==='paid'?'unpaid':'paid';
-  await supabase.from('rent_payments').update({payment_status:newStatus,amount_paid:newStatus==='paid'?data.amount_due:0}).eq('id',id);
+  await sbClient.from('rent_payments').update({payment_status:newStatus,amount_paid:newStatus==='paid'?data.amount_due:0}).eq('id',id);
   loadRent();
 }
 async function loadSales(){
-  const{data}=await supabase.from('apartment_sales').select('*, apartments(apartment_number), buildings(name)').order('created_at',{ascending:false});
+  const{data}=await sbClient.from('apartment_sales').select('*, apartments(apartment_number), buildings(name)').order('created_at',{ascending:false});
   const sales=data||[];const body=document.getElementById('sales-body');
   if(!sales.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No sales yet</p></div></td></tr>';return;}
   body.innerHTML=sales.map(s=>`<tr><td><strong>${s.buyer_name}</strong><div style="font-size:11px;color:var(--muted)">${s.buyer_phone||''}</div></td><td>${s.apartments?.apartment_number||'—'}<div style="font-size:11px;color:var(--muted)">${s.buildings?.name||''}</div></td><td>${fmt(s.sale_price)}</td><td>${fmt(s.advance_paid)}</td><td>${fmt(s.remaining_amount)}</td><td>${s.payment_method||'—'}</td><td>${s.deposited_to||'—'}</td><td>${s.registry_done?'<span class="badge badge-success">Done</span>':'<span class="badge badge-warn">Pending</span>'}</td></tr>`).join('');
@@ -913,9 +913,9 @@ async function saveSale(){
   if(!apt||!bld){showToast('Select building and apartment','error');return;}
   const payload={apartment_id:apt,building_id:bld,buyer_name:document.getElementById('s-buyer').value,buyer_phone:document.getElementById('s-phone').value,buyer_nid:document.getElementById('s-nid').value,sale_price:parseFloat(document.getElementById('s-price').value)||0,advance_paid:parseFloat(document.getElementById('s-advance').value)||0,payment_method:document.getElementById('s-method').value,cheque_number:document.getElementById('s-cheque').value,deposited_to:document.getElementById('s-deposited').value,sale_date:document.getElementById('s-date').value||null,registry_done:document.getElementById('s-registry').value==='true',notes:document.getElementById('s-notes').value,recorded_by:currentUser.id};
   if(!payload.buyer_name){showToast('Buyer name required','error');return;}
-  const{error}=await supabase.from('apartment_sales').insert(payload);
+  const{error}=await sbClient.from('apartment_sales').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
-  await supabase.from('apartments').update({status:'sold'}).eq('id',apt);
+  await sbClient.from('apartments').update({status:'sold'}).eq('id',apt);
   showToast('Sale recorded!');closeModal('modal-sale');
   ['s-buyer','s-phone','s-nid','s-price','s-advance','s-cheque','s-date','s-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   loadSales();
@@ -924,7 +924,7 @@ async function loadExpenses(){
   const building=document.getElementById('exp-building-filter').value;
   const category=document.getElementById('exp-category-filter').value;
   const month=document.getElementById('exp-month-filter').value;
-  let q=supabase.from('construction_expenses').select('*, buildings(name), floors(floor_number)');
+  let q=sbClient.from('construction_expenses').select('*, buildings(name), floors(floor_number)');
   if(building)q=q.eq('building_id',building);if(category)q=q.eq('category',category);
   if(month){const[y,m]=month.split('-');q=q.gte('expense_date',`${y}-${m}-01`).lte('expense_date',`${y}-${m}-31`);}
   const{data}=await q.order('expense_date',{ascending:false});
@@ -937,7 +937,7 @@ async function loadExpenses(){
 async function saveExpense(){
   const payload={building_id:document.getElementById('e-building').value,floor_id:document.getElementById('e-floor').value||null,category:document.getElementById('e-category').value,description:document.getElementById('e-desc').value,amount:parseFloat(document.getElementById('e-amount').value)||0,payment_method:document.getElementById('e-method').value,expense_date:document.getElementById('e-date').value,vendor_name:document.getElementById('e-vendor').value,receipt_number:document.getElementById('e-receipt').value,notes:document.getElementById('e-notes').value,recorded_by:currentUser.id};
   if(!payload.building_id||!payload.description||!payload.amount){showToast('Fill required fields','error');return;}
-  const{error}=await supabase.from('construction_expenses').insert(payload);
+  const{error}=await sbClient.from('construction_expenses').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Expense saved!');closeModal('modal-expense');
   ['e-desc','e-amount','e-vendor','e-receipt','e-notes','e-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -946,7 +946,7 @@ async function saveExpense(){
 async function loadMaterials(){
   const building=document.getElementById('mat-building-filter').value;
   const status=document.getElementById('mat-status-filter').value;
-  let q=supabase.from('materials').select('*, buildings(name), floors(floor_number)');
+  let q=sbClient.from('materials').select('*, buildings(name), floors(floor_number)');
   if(building)q=q.eq('building_id',building);if(status)q=q.eq('delivery_status',status);
   const{data}=await q.order('created_at',{ascending:false});
   const mats=data||[];const body=document.getElementById('materials-body');
@@ -956,7 +956,7 @@ async function loadMaterials(){
 async function saveMaterial(){
   const payload={building_id:document.getElementById('m-building').value,floor_id:document.getElementById('m-floor').value||null,material_type:document.getElementById('m-type').value,custom_type:document.getElementById('m-custom').value,supplier_name:document.getElementById('m-supplier').value,supplier_phone:document.getElementById('m-sup-phone').value,quantity_ordered:parseFloat(document.getElementById('m-qty').value)||0,quantity_unit:document.getElementById('m-unit').value,unit_price:parseFloat(document.getElementById('m-unit-price').value)||null,total_amount:parseFloat(document.getElementById('m-total').value)||0,advance_paid:parseFloat(document.getElementById('m-advance').value)||0,payment_method:document.getElementById('m-method').value,order_date:document.getElementById('m-order-date').value,expected_delivery:document.getElementById('m-exp-delivery').value||null,deposited_to:document.getElementById('m-deposited').value,notes:document.getElementById('m-notes').value,recorded_by:currentUser.id};
   if(!payload.building_id||!payload.quantity_ordered){showToast('Fill required fields','error');return;}
-  const{error}=await supabase.from('materials').insert(payload);
+  const{error}=await sbClient.from('materials').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Order saved!');closeModal('modal-material');
   ['m-custom','m-supplier','m-sup-phone','m-qty','m-unit','m-unit-price','m-total','m-order-date','m-exp-delivery','m-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -969,15 +969,15 @@ async function saveDelivery(){
   const payment=parseFloat(document.getElementById('d-payment').value)||0;
   const delivDate=document.getElementById('d-date').value;
   const delivTime=document.getElementById('d-time').value;
-  const{error:logErr}=await supabase.from('material_deliveries').insert({material_id:currentDeliveryId,quantity_delivered:qty,delivery_date:delivDate||null,delivery_time:delivTime||null,payment_made:payment,payment_method:document.getElementById('d-method').value,notes:document.getElementById('d-notes').value,recorded_by:currentUser.id});
+  const{error:logErr}=await sbClient.from('material_deliveries').insert({material_id:currentDeliveryId,quantity_delivered:qty,delivery_date:delivDate||null,delivery_time:delivTime||null,payment_made:payment,payment_method:document.getElementById('d-method').value,notes:document.getElementById('d-notes').value,recorded_by:currentUser.id});
   if(logErr){showToast('Error: '+logErr.message,'error');return;}
-  const{data:mat}=await supabase.from('materials').select('*').eq('id',currentDeliveryId).single();
+  const{data:mat}=await sbClient.from('materials').select('*').eq('id',currentDeliveryId).single();
   if(mat){
     const newQty=Number(mat.quantity_delivered)+qty;
     const newAdv=Number(mat.advance_paid)+payment;
     const newStatus=newQty>=Number(mat.quantity_ordered)?'delivered':newQty>0?'partially_delivered':mat.delivery_status;
-    await supabase.from('materials').update({quantity_delivered:newQty,advance_paid:newAdv,delivery_status:newStatus,actual_delivery_date:delivDate||mat.actual_delivery_date,actual_delivery_time:delivTime||mat.actual_delivery_time}).eq('id',currentDeliveryId);
-    if(mat.notify_on_delivery)await supabase.from('notifications').insert({user_id:currentUser.id,title:'Material Delivered',message:`${mat.material_type} delivery: ${qty} ${mat.quantity_unit} received`,type:'delivery',related_id:currentDeliveryId,related_table:'materials'});
+    await sbClient.from('materials').update({quantity_delivered:newQty,advance_paid:newAdv,delivery_status:newStatus,actual_delivery_date:delivDate||mat.actual_delivery_date,actual_delivery_time:delivTime||mat.actual_delivery_time}).eq('id',currentDeliveryId);
+    if(mat.notify_on_delivery)await sbClient.from('notifications').insert({user_id:currentUser.id,title:'Material Delivered',message:`${mat.material_type} delivery: ${qty} ${mat.quantity_unit} received`,type:'delivery',related_id:currentDeliveryId,related_table:'materials'});
   }
   showToast('Delivery updated!');closeModal('modal-delivery');
   ['d-qty','d-time','d-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -985,7 +985,7 @@ async function saveDelivery(){
   loadMaterials();loadNotifications();
 }
 async function loadEmployees(typeFilter='all'){
-  let q=supabase.from('employees').select('*, buildings(name)');
+  let q=sbClient.from('employees').select('*, buildings(name)');
   if(typeFilter!=='all')q=q.eq('type',typeFilter);
   const{data}=await q.order('created_at',{ascending:false});
   employees=data||[];renderEmployees(employees);
@@ -1004,7 +1004,7 @@ function filterEmployees(type){
 async function saveEmployee(){
   const payload={full_name:document.getElementById('em-name').value,type:document.getElementById('em-type').value,phone:document.getElementById('em-phone').value,nid:document.getElementById('em-nid').value,monthly_salary:parseFloat(document.getElementById('em-salary').value)||0,building_id:document.getElementById('em-building').value||null,join_date:document.getElementById('em-join').value||null,notes:document.getElementById('em-notes').value};
   if(!payload.full_name){showToast('Name required','error');return;}
-  const{error}=await supabase.from('employees').insert(payload);
+  const{error}=await sbClient.from('employees').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Employee saved!');closeModal('modal-employee');
   ['em-name','em-phone','em-nid','em-salary','em-join','em-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -1015,7 +1015,7 @@ async function loadSalary(){
   if(employees.length===0){await loadEmployees();}
   const month=document.getElementById('sal-month-filter').value;
   const year=document.getElementById('sal-year-filter').value;
-  const{data}=await supabase.from('salary_payments').select('*, employees(full_name, type)').eq('month',month).eq('year',year).order('created_at',{ascending:false});
+  const{data}=await sbClient.from('salary_payments').select('*, employees(full_name, type)').eq('month',month).eq('year',year).order('created_at',{ascending:false});
   const payments=data||[];
   const totalDue=payments.reduce((s,p)=>s+Number(p.amount_due),0);
   const totalPaid=payments.reduce((s,p)=>s+Number(p.amount_paid),0);
@@ -1036,7 +1036,7 @@ async function saveSalaryPayment(){
   const empId=document.getElementById('sp-employee').value;
   if(!empId){showToast('Select employee','error');return;}
   const payload={employee_id:empId,month:parseInt(document.getElementById('sp-month').value),year:parseInt(document.getElementById('sp-year').value),amount_due:parseFloat(document.getElementById('sp-due').value)||0,amount_paid:parseFloat(document.getElementById('sp-paid').value)||0,payment_method:document.getElementById('sp-method').value,payment_date:document.getElementById('sp-date').value||null,notes:document.getElementById('sp-notes').value,paid_by:currentUser.id};
-  const{error}=await supabase.from('salary_payments').insert(payload);
+  const{error}=await sbClient.from('salary_payments').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Salary payment saved!');closeModal('modal-salary');
   ['sp-due','sp-paid','sp-date','sp-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -1044,7 +1044,7 @@ async function saveSalaryPayment(){
 }
 async function loadDashboard(){
   const now=new Date();const month=now.getMonth()+1;const year=now.getFullYear();
-  const{data:rent}=await supabase.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',month).eq('year',year);
+  const{data:rent}=await sbClient.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',month).eq('year',year);
   const rentCollected=(rent||[]).reduce((s,r)=>s+Number(r.amount_paid),0);
   const rentDue=(rent||[]).reduce((s,r)=>s+Number(r.amount_due),0);
   document.getElementById('stat-rent').textContent=fmt(rentCollected);
@@ -1052,37 +1052,37 @@ async function loadDashboard(){
   document.getElementById('stat-pending').textContent=fmt(rentDue-rentCollected);
   document.getElementById('stat-pending-sub').textContent=`${(rent||[]).filter(r=>r.payment_status==='unpaid').length} unpaid units`;
   const startM=`${year}-${String(month).padStart(2,'0')}-01`;const endM=`${year}-${String(month).padStart(2,'0')}-31`;
-  const{data:exp}=await supabase.from('construction_expenses').select('amount').gte('expense_date',startM).lte('expense_date',endM);
+  const{data:exp}=await sbClient.from('construction_expenses').select('amount').gte('expense_date',startM).lte('expense_date',endM);
   document.getElementById('stat-expenses').textContent=fmt((exp||[]).reduce((s,e)=>s+Number(e.amount),0));
   document.getElementById('stat-exp-sub').textContent=`${(exp||[]).length} transactions`;
-  const{data:sal}=await supabase.from('salary_payments').select('amount_paid').eq('month',month).eq('year',year);
+  const{data:sal}=await sbClient.from('salary_payments').select('amount_paid').eq('month',month).eq('year',year);
   document.getElementById('stat-salary').textContent=fmt((sal||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
   document.getElementById('stat-sal-sub').textContent=`${(sal||[]).length} payments`;
-  const{count:tenantCount}=await supabase.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);
+  const{count:tenantCount}=await sbClient.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);
   document.getElementById('stat-tenants').textContent=tenantCount||0;
-  const{count:matCount}=await supabase.from('materials').select('*',{count:'exact',head:true}).not('delivery_status','in','("delivered","cancelled")');
+  const{count:matCount}=await sbClient.from('materials').select('*',{count:'exact',head:true}).not('delivery_status','in','("delivered","cancelled")');
   document.getElementById('stat-materials').textContent=matCount||0;
-  const{data:recentP}=await supabase.from('rent_payments').select('*, tenants(full_name), buildings(name)').order('created_at',{ascending:false}).limit(6);
+  const{data:recentP}=await sbClient.from('rent_payments').select('*, tenants(full_name), buildings(name)').order('created_at',{ascending:false}).limit(6);
   const pBody=document.getElementById('dash-payments-body');
   pBody.innerHTML=(recentP||[]).map(p=>`<tr><td>${p.tenants?.full_name||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${statusBadge(p.payment_status)}</td><td>${fmtDate(p.payment_date)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No payments yet</td></tr>';
-  const{data:pendMat}=await supabase.from('materials').select('*, buildings(name)').not('delivery_status','in','("delivered","cancelled")').order('created_at',{ascending:false}).limit(6);
+  const{data:pendMat}=await sbClient.from('materials').select('*, buildings(name)').not('delivery_status','in','("delivered","cancelled")').order('created_at',{ascending:false}).limit(6);
   const mBody=document.getElementById('dash-materials-body');
   mBody.innerHTML=(pendMat||[]).map(m=>`<tr><td>${m.material_type==='other'?m.custom_type||'Other':m.material_type}</td><td>${m.buildings?.name||'—'}</td><td>${m.quantity_ordered} ${m.quantity_unit}</td><td>${m.quantity_delivered} ${m.quantity_unit}</td><td>${m.quantity_remaining} ${m.quantity_unit}</td><td>${statusBadge(m.delivery_status)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No pending deliveries</td></tr>';
 }
 async function loadReports(){
   const year=document.getElementById('rep-year-filter').value||new Date().getFullYear();
   const building=document.getElementById('rep-building-filter').value;
-  let rq=supabase.from('rent_payments').select('amount_paid,month').eq('year',year);
+  let rq=sbClient.from('rent_payments').select('amount_paid,month').eq('year',year);
   if(building)rq=rq.eq('building_id',building);
   const{data:rentData}=await rq;
   document.getElementById('rep-rent').textContent=fmt((rentData||[]).reduce((s,r)=>s+Number(r.amount_paid),0));
-  let eq2=supabase.from('construction_expenses').select('amount,expense_date').gte('expense_date',`${year}-01-01`).lte('expense_date',`${year}-12-31`);
+  let eq2=sbClient.from('construction_expenses').select('amount,expense_date').gte('expense_date',`${year}-01-01`).lte('expense_date',`${year}-12-31`);
   if(building)eq2=eq2.eq('building_id',building);
   const{data:expData}=await eq2;
   document.getElementById('rep-expenses').textContent=fmt((expData||[]).reduce((s,e)=>s+Number(e.amount),0));
-  const{data:salData}=await supabase.from('salary_payments').select('amount_paid,month').eq('year',year);
+  const{data:salData}=await sbClient.from('salary_payments').select('amount_paid,month').eq('year',year);
   document.getElementById('rep-salary').textContent=fmt((salData||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
-  let sq=supabase.from('apartment_sales').select('advance_paid');if(building)sq=sq.eq('building_id',building);
+  let sq=sbClient.from('apartment_sales').select('advance_paid');if(building)sq=sq.eq('building_id',building);
   const{data:salesData}=await sq;
   document.getElementById('rep-sales').textContent=fmt((salesData||[]).reduce((s,s2)=>s+Number(s2.advance_paid),0));
   const months=Array.from({length:12},(_,i)=>i+1);
@@ -1095,16 +1095,16 @@ async function loadReports(){
   }).join('');
 }
 async function loadNotifications(){
-  const{data}=await supabase.from('notifications').select('*').order('created_at',{ascending:false}).limit(20);
+  const{data}=await sbClient.from('notifications').select('*').order('created_at',{ascending:false}).limit(20);
   const notifs=data||[];const unread=notifs.filter(n=>!n.is_read).length;
   const badge=document.getElementById('notif-badge');badge.textContent=unread;badge.style.display=unread>0?'flex':'none';
   document.getElementById('notif-list').innerHTML=notifs.map(n=>`<div class="notif-item ${n.is_read?'':'unread'}" onclick="readNotif('${n.id}')"><div class="title">${n.title}</div><div class="msg">${n.message}</div><div class="time">${fmtDate(n.created_at)}</div></div>`).join('')||'<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No notifications</div>';
 }
 function toggleNotif(e){if(e)e.stopPropagation();document.getElementById('notif-panel').classList.toggle('open');}
 document.addEventListener('click',function(e){const panel=document.getElementById('notif-panel');const btn=document.querySelector('.notif-btn');if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&btn&&!btn.contains(e.target)){panel.classList.remove('open');}});
-async function readNotif(id){await supabase.from('notifications').update({is_read:true}).eq('id',id);loadNotifications();}
-async function markAllRead(){await supabase.from('notifications').update({is_read:true}).eq('is_read',false);loadNotifications();}
-async function logout(){await supabase.auth.signOut();window.location.href='index.html';}
+async function readNotif(id){await sbClient.from('notifications').update({is_read:true}).eq('id',id);loadNotifications();}
+async function markAllRead(){await sbClient.from('notifications').update({is_read:true}).eq('is_read',false);loadNotifications();}
+async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
