@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>R.R Builders Ltd — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f2ece0;
+    --bg2: #e8e0d0;
+    --surface: #faf7f1;
+    --surface2: #ede7da;
+    --border: #d8cfc0;
+    --border2: #c4b9a8;
+    --accent: #1a2d6b;
+    --accent2: #243d94;
+    --accentlight: rgba(26,45,107,0.08);
+    --text: #18182a;
+    --muted: #7a6e5e;
+    --danger: #b84040;
+    --gold: #9a7228;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .bg-texture {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(26,45,107,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,45,107,0.035) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+  .bg-vignette {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(0,0,0,0.06));
+  }
+  .login-wrap { position: relative; z-index: 1; width: 100%; max-width: 440px; padding: 16px; }
+  .logo-row { text-align: center; margin-bottom: 36px; }
+  .logo-mark { width: 80px; height: 80px; margin: 0 auto 14px; display: block; filter: drop-shadow(0 4px 16px rgba(26,45,107,0.18)); }
+  .logo-title { font-family: 'Cormorant Garamond', serif; font-size: 27px; font-weight: 700; color: var(--accent); letter-spacing: 0.3px; line-height: 1.1; }
+  .logo-divider { width: 48px; height: 1.5px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 10px auto; }
+  .logo-sub { font-size: 10.5px; color: var(--muted); letter-spacing: 2.5px; text-transform: uppercase; font-weight: 400; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 40px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 6px 24px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.9) inset;
+  }
+  .lang-toggle { display: flex; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 28px; }
+  .lang-btn { flex:1; padding:8px; background:var(--surface2); border:none; border-right:1px solid var(--border); color:var(--muted); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.2s; font-family:'Jost',sans-serif; letter-spacing:0.5px; }
+  .lang-btn:last-child { border-right:none; }
+  .lang-btn.active { background:var(--accent); color:#fff; }
+  .card-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; margin-bottom:4px; }
+  .card-sub { font-size:13px; color:var(--muted); margin-bottom:28px; font-weight:300; }
+  .field { margin-bottom:20px; }
+  .field label { display:block; font-size:10.5px; font-weight:600; color:var(--muted); margin-bottom:7px; letter-spacing:1.5px; text-transform:uppercase; }
+  .field input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:2px; padding:12px 14px; color:var(--text); font-size:14px; font-family:'Jost',sans-serif; outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+  .field input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(26,45,107,0.09); }
+  .field input::placeholder { color:#bbb0a0; }
+  .btn-primary { width:100%; padding:13px; background:var(--accent); border:none; border-radius:2px; color:#fff; font-family:'Jost',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.2s; letter-spacing:2.5px; text-transform:uppercase; margin-top:8px; }
+  .btn-primary:hover { background:var(--accent2); box-shadow:0 4px 16px rgba(26,45,107,0.22); }
+  .btn-primary:disabled { opacity:0.5; cursor:not-allowed; }
+  .error-msg { background:rgba(184,64,64,0.06); border:1px solid rgba(184,64,64,0.2); border-radius:2px; padding:10px 14px; font-size:13px; color:var(--danger); margin-bottom:16px; display:none; }
+  .footer-note { text-align:center; margin-top:20px; font-size:12px; color:var(--muted); }
+  .spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:8px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="bg-texture"></div>
+<div class="bg-vignette"></div>
+<div class="login-wrap">
+  <div class="logo-row">
+    <svg class="logo-mark" viewBox="0 0 100 95" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 84 Q50 96 88 84" fill="none" stroke="#1a2d6b" stroke-width="3.8" stroke-linecap="round"/>
+      <rect x="22" y="14" width="34" height="66" fill="#1a2d6b" rx="1"/>
+      <line x1="29" y1="19" x2="29" y2="77" stroke="#f2ece0" stroke-width="1.6"/>
+      <line x1="35" y1="19" x2="35" y2="77" stroke="#f2ece0" stroke-width="1.6"/>
+      <line x1="41" y1="19" x2="41" y2="77" stroke="#f2ece0" stroke-width="1.6"/>
+      <line x1="47" y1="19" x2="47" y2="77" stroke="#f2ece0" stroke-width="1.6"/>
+      <rect x="55" y="32" width="22" height="48" fill="#1a2d6b" rx="1"/>
+      <rect x="60" y="52" width="12" height="16" fill="#f2ece0" rx="6"/>
+      <rect x="55" y="25" width="9" height="9" fill="#1a2d6b"/>
+    </svg>
+    <div class="logo-title">R.R Builders Ltd.</div>
+    <div class="logo-divider"></div>
+    <div class="logo-sub" id="logo-sub">Construction & Real Estate Management</div>
+  </div>
+  <div class="card">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">English</button>
+      <button class="lang-btn" onclick="setLang('bn')">বাংলা</button>
+    </div>
+    <div class="card-title" id="card-title">Welcome back</div>
+    <div class="card-sub" id="card-sub">Sign in to access your dashboard</div>
+    <div class="error-msg" id="error-msg"></div>
+    <div class="field"><label id="lbl-email">Email Address</label><input type="email" id="email" placeholder="your@email.com" /></div>
+    <div class="field"><label id="lbl-pass">Password</label><input type="password" id="password" placeholder="••••••••" /></div>
+    <button class="btn-primary" id="login-btn" onclick="handleLogin()"><span id="btn-text">Sign In</span></button>
+    <div class="footer-note" id="footer-note">Contact administrator to create your account</div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://atxhshirummpenfqtwku.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let lang = localStorage.getItem('bt_lang') || 'en';
+  const T = {
+    en: { sub:'Construction & Real Estate Management', title:'Welcome back', cardSub:'Sign in to access your dashboard', email:'Email Address', pass:'Password', btn:'Sign In', loading:'Signing in...', footer:'Contact administrator to create your account' },
+    bn: { sub:'নির্মাণ ও রিয়েল এস্টেট ম্যানেজমেন্ট', title:'স্বাগতম', cardSub:'আপনার ড্যাশবোর্ডে প্রবেশ করুন', email:'ইমেইল ঠিকানা', pass:'পাসওয়ার্ড', btn:'প্রবেশ করুন', loading:'লোড হচ্ছে...', footer:'অ্যাকাউন্টের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন' }
+  };
+  function setLang(l) {
+    lang=l; localStorage.setItem('bt_lang',l);
+    document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&l==='en')||(i===1&&l==='bn')));
+    const t=T[l];
+    document.getElementById('logo-sub').textContent=t.sub;
+    document.getElementById('card-title').textContent=t.title;
+    document.getElementById('card-sub').textContent=t.cardSub;
+    document.getElementById('lbl-email').textContent=t.email;
+    document.getElementById('lbl-pass').textContent=t.pass;
+    document.getElementById('btn-text').textContent=t.btn;
+    document.getElementById('footer-note').textContent=t.footer;
+  }
+  setLang(lang);
+  async function handleLogin() {
+    const email=document.getElementById('email').value.trim();
+    const password=document.getElementById('password').value;
+    const btn=document.getElementById('login-btn');
+    const errEl=document.getElementById('error-msg');
+    const btnText=document.getElementById('btn-text');
+    if(!email||!password){showError(lang==='bn'?'ইমেইল এবং পাসওয়ার্ড দিন':'Please enter email and password');return;}
+    btn.disabled=true; btnText.innerHTML=`<span class="spinner"></span>${T[lang].loading}`; errEl.style.display='none';
+    const{error}=await supabase.auth.signInWithPassword({email,password});
+    if(error){showError(lang==='bn'?'ইমেইল বা পাসওয়ার্ড ভুল':'Invalid email or password');btn.disabled=false;btnText.textContent=T[lang].btn;return;}
+    window.location.href='dashboard.html';
+  }
+  function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';}
+  document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
+  supabase.auth.getSession().then(({data})=>{if(data.session)window.location.href='dashboard.html';});
+</script>
+</body>
+</html>
