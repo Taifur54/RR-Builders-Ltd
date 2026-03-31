@@ -141,9 +141,12 @@
     const btnText=document.getElementById('btn-text');
     if(!email||!password){showError(lang==='bn'?'ইমেইল এবং পাসওয়ার্ড দিন':'Please enter email and password');return;}
     btn.disabled=true; btnText.innerHTML=`<span class="spinner"></span>${T[lang].loading}`; errEl.style.display='none';
-    const{error}=await supabase.auth.signInWithPassword({email,password});
-    if(error){showError(lang==='bn'?'ইমেইল বা পাসওয়ার্ড ভুল':'Invalid email or password');btn.disabled=false;btnText.textContent=T[lang].btn;return;}
-    window.location.href='dashboard.html';
+    try {
+      const{data,error}=await supabase.auth.signInWithPassword({email,password});
+      if(error){showError('Error: '+error.message);btn.disabled=false;btnText.textContent=T[lang].btn;return;}
+      if(!data.session){showError('No session returned. Check Supabase settings.');btn.disabled=false;btnText.textContent=T[lang].btn;return;}
+      window.location.href='dashboard.html';
+    } catch(e){showError('Unexpected error: '+e.message);btn.disabled=false;btnText.textContent=T[lang].btn;}
   }
   function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';}
   document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
