@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>R.R Builders Ltd — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f0e9dc;
+    --bg2: #e6ddd0;
+    --surface: #faf6ef;
+    --surface2: #ede7da;
+    --surface3: #e4ddd0;
+    --border: #d4cab8;
+    --border2: #c0b49f;
+    --accent: #1a2d6b;
+    --accent2: #243d94;
+    --accentlight: rgba(26,45,107,0.08);
+    --accentborder: rgba(26,45,107,0.2);
+    --text: #18182a;
+    --muted: #7a6e5e;
+    --danger: #a83030;
+    --dangerbg: rgba(168,48,48,0.08);
+    --success: #2d7a50;
+    --successbg: rgba(45,122,80,0.08);
+    --info: #1a5080;
+    --infobg: rgba(26,80,128,0.08);
+    --warn: #8a5a10;
+    --warnbg: rgba(138,90,16,0.1);
+    --gold: #9a7228;
+    --sidebar-w: 252px;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Jost',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; overflow-x:hidden; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    width:var(--sidebar-w); min-height:100vh;
+    background:var(--accent);
+    display:flex; flex-direction:column;
+    position:fixed; left:0; top:0; bottom:0; z-index:100; transition:transform 0.3s;
+  }
+  .sidebar-logo {
+    padding:28px 20px 22px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    display:flex; align-items:center; gap:12px;
+  }
+  .sidebar-logo svg { width:36px; height:36px; flex-shrink:0; }
+  .sidebar-logo-text .name { font-family:'Cormorant Garamond',serif; font-weight:700; font-size:16px; color:#fff; line-height:1.1; }
+  .sidebar-logo-text .sub { font-size:10px; color:rgba(255,255,255,0.5); letter-spacing:1px; margin-top:2px; }
+  .sidebar-nav { flex:1; padding:18px 12px; overflow-y:auto; }
+  .nav-section { margin-bottom:24px; }
+  .nav-label { font-size:9.5px; font-weight:600; letter-spacing:2px; color:rgba(255,255,255,0.35); padding:0 10px; margin-bottom:6px; text-transform:uppercase; }
+  .nav-item {
+    display:flex; align-items:center; gap:11px;
+    padding:9px 10px; border-radius:3px;
+    cursor:pointer; font-size:13.5px; color:rgba(255,255,255,0.65);
+    transition:all 0.15s; margin-bottom:1px; font-weight:400;
+  }
+  .nav-item:hover { background:rgba(255,255,255,0.1); color:#fff; }
+  .nav-item.active { background:rgba(255,255,255,0.15); color:#fff; border-left:2px solid rgba(255,255,255,0.6); }
+  .nav-item svg { width:16px; height:16px; flex-shrink:0; opacity:0.75; }
+  .nav-item.active svg { opacity:1; }
+  .sidebar-footer { padding:16px; border-top:1px solid rgba(255,255,255,0.12); }
+  .user-badge { display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.1); border-radius:3px; }
+  .user-avatar { width:32px; height:32px; border-radius:2px; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:13px; color:#fff; flex-shrink:0; }
+  .user-info .name { font-size:13px; font-weight:500; color:#fff; }
+  .user-info .role { font-size:11px; color:rgba(255,255,255,0.5); }
+  .btn-logout { margin-top:10px; width:100%; padding:8px; background:none; border:1px solid rgba(255,255,255,0.2); border-radius:2px; color:rgba(255,255,255,0.5); font-size:11.5px; cursor:pointer; font-family:'Jost',sans-serif; transition:all 0.2s; letter-spacing:1px; text-transform:uppercase; }
+  .btn-logout:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
+
+  /* ===== MAIN ===== */
+  .main { margin-left:var(--sidebar-w); flex:1; min-height:100vh; display:flex; flex-direction:column; }
+  .topbar {
+    height:60px; background:var(--surface); border-bottom:1px solid var(--border);
+    display:flex; align-items:center; padding:0 24px; gap:14px;
+    position:sticky; top:0; z-index:50;
+    box-shadow:0 1px 4px rgba(0,0,0,0.05);
+  }
+  .topbar-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; flex:1; color:var(--accent); }
+  .lang-toggle { display:flex; background:var(--surface2); border-radius:2px; overflow:hidden; border:1px solid var(--border); }
+  .lang-btn { padding:6px 14px; font-size:11.5px; cursor:pointer; background:none; border:none; color:var(--muted); font-family:'Jost',sans-serif; transition:all 0.15s; letter-spacing:0.5px; }
+  .lang-btn.active { background:var(--accent); color:#fff; }
+  .notif-btn { position:relative; width:34px; height:34px; background:var(--surface2); border:1px solid var(--border); border-radius:2px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .notif-btn svg { width:17px; height:17px; color:var(--muted); }
+  .notif-badge { position:absolute; top:-4px; right:-4px; width:16px; height:16px; background:var(--danger); border-radius:50%; font-size:9px; display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; }
+  .hamburger { display:none; width:34px; height:34px; background:var(--surface2); border:1px solid var(--border); border-radius:2px; align-items:center; justify-content:center; cursor:pointer; }
+
+  /* ===== CONTENT ===== */
+  .content { flex:1; padding:24px; }
+  .page { display:none; }
+  .page.active { display:block; }
+  .page-header { margin-bottom:22px; }
+  .page-header h2 { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:700; color:var(--accent); }
+  .page-header p { font-size:13px; color:var(--muted); margin-top:3px; font-weight:300; }
+  .page-header-row { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:22px; }
+  .page-header-row .page-header { margin-bottom:0; }
+
+  /* ===== STAT CARDS ===== */
+  .stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; margin-bottom:22px; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .stat-card .label { font-size:11px; color:var(--muted); margin-bottom:10px; font-weight:500; letter-spacing:0.5px; text-transform:uppercase; }
+  .stat-card .value { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:700; color:var(--accent); }
+  .stat-card .sub { font-size:12px; color:var(--muted); margin-top:4px; font-weight:300; }
+  .stat-card.accent-card { border-top:3px solid var(--accent); }
+  .stat-card.danger-card { border-top:3px solid var(--danger); }
+  .stat-card.success-card { border-top:3px solid var(--success); }
+  .stat-card.warn-card { border-top:3px solid var(--gold); }
+
+  /* ===== TABLES ===== */
+  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; margin-bottom:22px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+  .table-header { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--surface2); }
+  .table-header h3 { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:var(--accent); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { padding:11px 16px; text-align:left; font-size:10.5px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--muted); border-bottom:1px solid var(--border); background:var(--surface2); }
+  td { padding:12px 16px; border-bottom:1px solid rgba(212,202,184,0.4); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(26,45,107,0.02); }
+  .overflow-x { overflow-x:auto; }
+
+  /* ===== BADGES ===== */
+  .badge { display:inline-flex; align-items:center; padding:3px 9px; border-radius:2px; font-size:11px; font-weight:600; letter-spacing:0.5px; }
+  .badge-success { background:var(--successbg); color:var(--success); border:1px solid rgba(45,122,80,0.2); }
+  .badge-danger { background:var(--dangerbg); color:var(--danger); border:1px solid rgba(168,48,48,0.2); }
+  .badge-warn { background:var(--warnbg); color:var(--warn); border:1px solid rgba(138,90,16,0.2); }
+  .badge-info { background:var(--infobg); color:var(--info); border:1px solid rgba(26,80,128,0.2); }
+  .badge-muted { background:rgba(122,110,94,0.08); color:var(--muted); border:1px solid rgba(122,110,94,0.15); }
+
+  /* ===== BUTTONS ===== */
+  .btn { padding:8px 16px; border-radius:2px; font-size:12px; font-weight:600; cursor:pointer; border:none; font-family:'Jost',sans-serif; transition:all 0.15s; letter-spacing:0.5px; }
+  .btn-accent { background:var(--accent); color:#fff; }
+  .btn-accent:hover { background:var(--accent2); }
+  .btn-ghost { background:var(--surface2); border:1px solid var(--border); color:var(--text); }
+  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+  .btn-sm { padding:5px 10px; font-size:11.5px; }
+
+  /* ===== MODAL ===== */
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; display:none; align-items:center; justify-content:center; padding:16px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-radius:3px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.15); }
+  .modal-head { padding:18px 22px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:var(--surface2); z-index:1; }
+  .modal-head h3 { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--accent); }
+  .modal-close { width:28px; height:28px; border-radius:2px; background:var(--surface); border:1px solid var(--border); color:var(--muted); cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+  .modal-body { padding:22px; }
+  .modal-footer { padding:14px 22px; border-top:1px solid var(--border); display:flex; gap:10px; justify-content:flex-end; background:var(--surface2); }
+
+  /* ===== FORM ===== */
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .field { margin-bottom:0; }
+  .field label { display:block; font-size:10.5px; font-weight:600; color:var(--muted); margin-bottom:6px; letter-spacing:1.5px; text-transform:uppercase; }
+  .field input, .field select, .field textarea { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:2px; padding:9px 12px; color:var(--text); font-size:13.5px; font-family:'Jost',sans-serif; outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(26,45,107,0.08); }
+  .field select option { background:var(--surface); }
+  .field textarea { min-height:80px; resize:vertical; }
+  .field-full { grid-column:1 / -1; }
+
+  /* ===== TABS ===== */
+  .tabs { display:flex; gap:0; border:1px solid var(--border); border-radius:2px; overflow:hidden; margin-bottom:18px; width:fit-content; }
+  .tab { padding:8px 18px; font-size:12px; cursor:pointer; color:var(--muted); transition:all 0.15s; border:none; border-right:1px solid var(--border); background:var(--surface2); font-family:'Jost',sans-serif; font-weight:500; letter-spacing:0.5px; }
+  .tab:last-child { border-right:none; }
+  .tab.active { background:var(--accent); color:#fff; }
+
+  /* ===== EMPTY STATE ===== */
+  .empty { text-align:center; padding:48px 24px; color:var(--muted); }
+  .empty svg { width:40px; height:40px; margin:0 auto 14px; display:block; opacity:0.3; }
+  .empty p { font-size:14px; font-weight:300; }
+
+  /* ===== TOAST ===== */
+  .toast { position:fixed; bottom:24px; right:24px; z-index:999; background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:13px 18px; font-size:13px; max-width:320px; box-shadow:0 8px 32px rgba(0,0,0,0.12); transform:translateY(80px); opacity:0; transition:all 0.3s; }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast.success { border-left:3px solid var(--success); }
+  .toast.error { border-left:3px solid var(--danger); }
+
+  /* ===== FILTERS ===== */
+  .filter-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .filter-row input, .filter-row select { background:var(--surface); border:1px solid var(--border); border-radius:2px; padding:7px 12px; color:var(--text); font-size:13px; font-family:'Jost',sans-serif; outline:none; }
+  .filter-row input:focus, .filter-row select:focus { border-color:var(--accent); }
+
+  /* ===== NOTIFICATION PANEL ===== */
+  .notif-panel { position:fixed; top:60px; right:0; width:340px; max-height:calc(100vh - 60px); background:var(--surface); border-left:1px solid var(--border); z-index:90; overflow-y:auto; transform:translateX(100%); transition:transform 0.3s; box-shadow:-4px 0 20px rgba(0,0,0,0.08); }
+  .notif-panel.open { transform:translateX(0); }
+  .notif-item { padding:14px 16px; border-bottom:1px solid var(--border); cursor:pointer; }
+  .notif-item:hover { background:var(--surface2); }
+  .notif-item.unread { border-left:3px solid var(--accent); }
+  .notif-item .title { font-size:13px; font-weight:500; }
+  .notif-item .msg { font-size:12px; color:var(--muted); margin-top:3px; font-weight:300; }
+  .notif-item .time { font-size:11px; color:var(--muted); margin-top:4px; }
+
+  /* ===== MOBILE ===== */
+  @media (max-width:768px) {
+    .sidebar { transform:translateX(-100%); }
+    .sidebar.open { transform:translateX(0); }
+    .main { margin-left:0; }
+    .hamburger { display:flex; }
+    .stat-grid { grid-template-columns:1fr 1fr; }
+    .form-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:480px) { .stat-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <svg viewBox="0 0 100 95" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 84 Q50 96 88 84" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="3.8" stroke-linecap="round"/>
+      <rect x="22" y="14" width="34" height="66" fill="rgba(255,255,255,0.9)" rx="1"/>
+      <line x1="29" y1="19" x2="29" y2="77" stroke="#1a2d6b" stroke-width="1.6"/>
+      <line x1="35" y1="19" x2="35" y2="77" stroke="#1a2d6b" stroke-width="1.6"/>
+      <line x1="41" y1="19" x2="41" y2="77" stroke="#1a2d6b" stroke-width="1.6"/>
+      <line x1="47" y1="19" x2="47" y2="77" stroke="#1a2d6b" stroke-width="1.6"/>
+      <rect x="55" y="32" width="22" height="48" fill="rgba(255,255,255,0.9)" rx="1"/>
+      <rect x="60" y="52" width="12" height="16" fill="#1a2d6b" rx="6"/>
+      <rect x="55" y="25" width="9" height="9" fill="rgba(255,255,255,0.9)"/>
+    </svg>
+    <div class="sidebar-logo-text">
+      <div class="name">R.R Builders Ltd.</div>
+      <div class="sub">Management System</div>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-label" data-t="overview">Overview</div>
+      <div class="nav-item active" onclick="navigate('dashboard')">
+        <!-- Grid/Dashboard icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span data-t="nav_dashboard">Dashboard</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="rentals">Rentals</div>
+      <div class="nav-item" onclick="navigate('tenants')">
+        <!-- Person icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span data-t="nav_tenants">Tenants</span>
+      </div>
+      <div class="nav-item" onclick="navigate('rent')">
+        <!-- Banknote icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+        <span data-t="nav_rent">Rent Collection</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="sales_label">Sales</div>
+      <div class="nav-item" onclick="navigate('sales')">
+        <!-- Home icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span data-t="nav_sales">Apartment Sales</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="construction">Construction</div>
+      <div class="nav-item" onclick="navigate('expenses')">
+        <!-- Receipt icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span data-t="nav_expenses">Expenses</span>
+      </div>
+      <div class="nav-item" onclick="navigate('materials')">
+        <!-- Truck icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span data-t="nav_materials">Materials</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="people">People</div>
+      <div class="nav-item" onclick="navigate('employees')">
+        <!-- Hard hat / briefcase icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span data-t="nav_employees">Employees</span>
+      </div>
+      <div class="nav-item" onclick="navigate('salary')">
+        <!-- Credit card icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span data-t="nav_salary">Salaries</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="properties">Properties</div>
+      <div class="nav-item" onclick="navigate('buildings')">
+        <!-- Building icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><rect x="9" y="16" width="6" height="6"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="12" y1="7" x2="12" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="11" x2="9" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="15" y1="11" x2="15" y2="11.01"/></svg>
+        <span data-t="nav_buildings">Buildings</span>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label" data-t="reports_label">Reports</div>
+      <div class="nav-item" onclick="navigate('reports')">
+        <!-- Bar chart icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        <span data-t="nav_reports">Reports</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-badge">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <div class="user-info">
+        <div class="name" id="user-name">Loading...</div>
+        <div class="role" id="user-role">Admin</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()" data-t="logout">Sign Out</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="hamburger" onclick="toggleSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="topbar-title" id="page-title" data-t="nav_dashboard">Dashboard</div>
+    <div style="flex:1"></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('bn')">বাং</button>
+    </div>
+    <div class="notif-btn" onclick="toggleNotif()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-badge" id="notif-badge" style="display:none">0</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header"><h2 data-t="nav_dashboard">Dashboard</h2><p data-t="dash_sub">Overview of all operations</p></div>
+      <div class="stat-grid">
+        <div class="stat-card accent-card"><div class="label" data-t="total_rent">Rent Collected (This Month)</div><div class="value" id="stat-rent">৳0</div><div class="sub" id="stat-rent-sub">—</div></div>
+        <div class="stat-card danger-card"><div class="label" data-t="pending_rent">Pending Rent</div><div class="value" id="stat-pending">৳0</div><div class="sub" id="stat-pending-sub">—</div></div>
+        <div class="stat-card warn-card"><div class="label" data-t="total_expenses">Construction Expenses (This Month)</div><div class="value" id="stat-expenses">৳0</div><div class="sub" id="stat-exp-sub">—</div></div>
+        <div class="stat-card success-card"><div class="label" data-t="total_salary">Salary Paid (This Month)</div><div class="value" id="stat-salary">৳0</div><div class="sub" id="stat-sal-sub">—</div></div>
+        <div class="stat-card"><div class="label" data-t="active_tenants">Active Tenants</div><div class="value" id="stat-tenants">0</div><div class="sub" id="stat-ten-sub">active leases</div></div>
+        <div class="stat-card"><div class="label" data-t="pending_materials">Materials Pending Delivery</div><div class="value" id="stat-materials">0</div><div class="sub" id="stat-mat-sub">awaiting delivery</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><h3 data-t="recent_payments">Recent Rent Payments</h3></div>
+        <div class="overflow-x">
+          <table><thead><tr><th data-t="tenant">Tenant</th><th data-t="building">Building</th><th data-t="amount">Amount</th><th data-t="method">Method</th><th data-t="status">Status</th><th data-t="date">Date</th></tr></thead>
+          <tbody id="dash-payments-body"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><h3 data-t="pending_deliveries">Pending Material Deliveries</h3></div>
+        <div class="overflow-x">
+          <table><thead><tr><th data-t="material">Material</th><th data-t="building">Building</th><th data-t="ordered">Ordered</th><th data-t="delivered">Delivered</th><th data-t="remaining">Remaining</th><th data-t="status">Status</th></tr></thead>
+          <tbody id="dash-materials-body"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUILDINGS -->
+    <div class="page" id="page-buildings">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_buildings">Buildings</h2><p data-t="buildings_sub">Manage all properties</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-building')" data-t="add_building">+ Add Building</button>
+      </div>
+      <div id="buildings-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px"></div>
+    </div>
+
+    <!-- TENANTS -->
+    <div class="page" id="page-tenants">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_tenants">Tenants</h2><p data-t="tenants_sub">All active and past tenants</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-tenant')" data-t="add_tenant">+ Add Tenant</button>
+      </div>
+      <div class="filter-row">
+        <input type="text" id="tenant-search" placeholder="Search name or phone..." oninput="filterTenants()" style="min-width:200px" />
+        <select id="tenant-building-filter" onchange="filterTenants()"><option value="">All Buildings</option></select>
+        <select id="tenant-status-filter" onchange="filterTenants()"><option value="">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option></select>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="name">Name</th><th data-t="apartment">Apartment</th><th data-t="monthly_rent">Monthly Rent</th><th data-t="advance">Advance</th><th data-t="phone">Phone</th><th data-t="status">Status</th><th>Action</th></tr></thead>
+        <tbody id="tenants-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- RENT -->
+    <div class="page" id="page-rent">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_rent">Rent Collection</h2><p data-t="rent_sub">Track monthly rent payments</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-rent')" data-t="add_payment">+ Record Payment</button>
+      </div>
+      <div class="filter-row">
+        <select id="rent-month-filter" onchange="loadRent()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+        <select id="rent-year-filter" onchange="loadRent()"></select>
+        <select id="rent-building-filter" onchange="loadRent()"><option value="">All Buildings</option></select>
+        <select id="rent-status-filter" onchange="loadRent()"><option value="">All Status</option><option value="paid">Paid</option><option value="partial">Partial</option><option value="unpaid">Unpaid</option></select>
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+        <div class="stat-card"><div class="label" data-t="total_due">Total Due</div><div class="value" id="r-total-due">৳0</div></div>
+        <div class="stat-card success-card"><div class="label" data-t="collected">Collected</div><div class="value" id="r-collected">৳0</div></div>
+        <div class="stat-card danger-card"><div class="label" data-t="outstanding">Outstanding</div><div class="value" id="r-outstanding">৳0</div></div>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="tenant">Tenant</th><th data-t="apartment">Apt</th><th data-t="building">Building</th><th data-t="due">Due</th><th data-t="paid">Paid</th><th data-t="method">Method</th><th data-t="deposited">Deposited To</th><th data-t="status">Status</th><th>Action</th></tr></thead>
+        <tbody id="rent-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- SALES -->
+    <div class="page" id="page-sales">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_sales">Apartment Sales</h2><p data-t="sales_sub">Track sold apartments and payments</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-sale')" data-t="add_sale">+ Record Sale</button>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="buyer">Buyer</th><th data-t="apartment">Apartment</th><th data-t="sale_price">Sale Price</th><th data-t="advance">Advance</th><th data-t="remaining">Remaining</th><th data-t="method">Method</th><th data-t="deposited">Deposited To</th><th data-t="registry">Registry</th></tr></thead>
+        <tbody id="sales-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- EXPENSES -->
+    <div class="page" id="page-expenses">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_expenses">Construction Expenses</h2><p data-t="exp_sub">Track all construction costs</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-expense')" data-t="add_expense">+ Add Expense</button>
+      </div>
+      <div class="filter-row">
+        <select id="exp-building-filter" onchange="loadExpenses()"><option value="">All Buildings</option></select>
+        <select id="exp-category-filter" onchange="loadExpenses()"><option value="">All Categories</option><option value="materials">Materials</option><option value="labor">Labor</option><option value="equipment">Equipment</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="finishing">Finishing</option><option value="design">Design</option><option value="permits">Permits</option><option value="transport">Transport</option><option value="other">Other</option></select>
+        <input type="month" id="exp-month-filter" onchange="loadExpenses()" />
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+        <div class="stat-card accent-card"><div class="label" data-t="total_expenses">Total Expenses</div><div class="value" id="exp-total">৳0</div></div>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="date">Date</th><th data-t="building">Building</th><th data-t="floor_label">Floor</th><th data-t="category">Category</th><th data-t="description">Description</th><th data-t="vendor">Vendor</th><th data-t="amount">Amount</th><th data-t="method">Method</th></tr></thead>
+        <tbody id="expenses-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- MATERIALS -->
+    <div class="page" id="page-materials">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_materials">Materials & Procurement</h2><p data-t="mat_sub">Track orders and deliveries</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-material')" data-t="add_material">+ Add Order</button>
+      </div>
+      <div class="filter-row">
+        <select id="mat-building-filter" onchange="loadMaterials()"><option value="">All Buildings</option></select>
+        <select id="mat-status-filter" onchange="loadMaterials()"><option value="">All Status</option><option value="ordered">Ordered</option><option value="confirmed">Confirmed</option><option value="in_transit">In Transit</option><option value="partially_delivered">Partial</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="material">Material</th><th data-t="building">Building</th><th data-t="supplier">Supplier</th><th data-t="ordered">Ordered</th><th data-t="delivered">Delivered</th><th data-t="remaining">Remaining</th><th data-t="total_cost">Total Cost</th><th data-t="advance">Advance</th><th data-t="balance">Balance</th><th data-t="status">Status</th><th>Action</th></tr></thead>
+        <tbody id="materials-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- EMPLOYEES -->
+    <div class="page" id="page-employees">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_employees">Employees</h2><p data-t="emp_sub">Staff, guards and workers</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-employee')" data-t="add_employee">+ Add Employee</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="filterEmployees('all')" data-t="all">All</button>
+        <button class="tab" onclick="filterEmployees('staff')" data-t="staff">Staff</button>
+        <button class="tab" onclick="filterEmployees('guard')" data-t="guard">Guards</button>
+        <button class="tab" onclick="filterEmployees('worker')" data-t="worker">Workers</button>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="name">Name</th><th data-t="type">Type</th><th data-t="building">Building</th><th data-t="monthly_salary">Monthly Salary</th><th data-t="phone">Phone</th><th data-t="status">Status</th></tr></thead>
+        <tbody id="employees-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- SALARY -->
+    <div class="page" id="page-salary">
+      <div class="page-header-row">
+        <div class="page-header"><h2 data-t="nav_salary">Salary Payments</h2><p data-t="sal_sub">Monthly salary records</p></div>
+        <button class="btn btn-accent" onclick="openModal('modal-salary')" data-t="pay_salary">+ Pay Salary</button>
+      </div>
+      <div class="filter-row">
+        <select id="sal-month-filter" onchange="loadSalary()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+        <select id="sal-year-filter" onchange="loadSalary()"></select>
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+        <div class="stat-card"><div class="label" data-t="total_due">Total Due</div><div class="value" id="sal-total-due">৳0</div></div>
+        <div class="stat-card success-card"><div class="label" data-t="paid">Paid</div><div class="value" id="sal-paid">৳0</div></div>
+        <div class="stat-card danger-card"><div class="label" data-t="unpaid">Unpaid</div><div class="value" id="sal-unpaid">৳0</div></div>
+      </div>
+      <div class="table-wrap"><div class="overflow-x">
+        <table><thead><tr><th data-t="employee">Employee</th><th data-t="type">Type</th><th data-t="due">Due</th><th data-t="paid">Paid</th><th data-t="method">Method</th><th data-t="date">Date</th><th data-t="status">Status</th></tr></thead>
+        <tbody id="salary-body"></tbody></table>
+      </div></div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="page" id="page-reports">
+      <div class="page-header"><h2 data-t="nav_reports">Reports</h2><p data-t="rep_sub">Financial summaries and analytics</p></div>
+      <div class="filter-row">
+        <select id="rep-building-filter" onchange="loadReports()"><option value="">All Buildings</option></select>
+        <select id="rep-year-filter" onchange="loadReports()"></select>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card accent-card"><div class="label" data-t="yearly_rent">Yearly Rent Collected</div><div class="value" id="rep-rent">৳0</div></div>
+        <div class="stat-card danger-card"><div class="label" data-t="yearly_expenses">Yearly Construction Expenses</div><div class="value" id="rep-expenses">৳0</div></div>
+        <div class="stat-card warn-card"><div class="label" data-t="yearly_salary">Yearly Salaries</div><div class="value" id="rep-salary">৳0</div></div>
+        <div class="stat-card success-card"><div class="label" data-t="apartment_sales">Apartment Sales Revenue</div><div class="value" id="rep-sales">৳0</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-header"><h3 data-t="monthly_breakdown">Monthly Breakdown</h3></div>
+        <div class="overflow-x">
+          <table><thead><tr><th data-t="month">Month</th><th data-t="rent_collected">Rent Collected</th><th data-t="expenses">Expenses</th><th data-t="salaries">Salaries</th><th data-t="net">Net</th></tr></thead>
+          <tbody id="reports-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notif-panel">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface2)">
+    <strong style="font-size:14px;font-family:'Cormorant Garamond',serif;color:var(--accent)" data-t="notifications">Notifications</strong>
+    <button onclick="markAllRead()" class="btn btn-ghost btn-sm" data-t="mark_read">Mark all read</button>
+  </div>
+  <div id="notif-list"></div>
+</div>
+
+<div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99" onclick="closeSidebar()"></div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- Building Modal -->
+<div class="modal-overlay" id="modal-building" onclick="if(event.target===this)closeModal('modal-building')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_building">Add Building</h3><button class="modal-close" onclick="closeModal('modal-building')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field field-full"><label data-t="building_name">Building Name</label><input id="b-name" placeholder="e.g. Mirpur Tower A" /></div>
+        <div class="field field-full"><label data-t="address">Address</label><input id="b-address" placeholder="Full address" /></div>
+        <div class="field"><label data-t="total_floors">Total Floors</label><input type="number" id="b-floors" placeholder="7" /></div>
+        <div class="field"><label data-t="status">Status</label><select id="b-status"><option value="under_construction">Under Construction</option><option value="completed">Completed</option><option value="partial">Partial</option></select></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="b-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-building')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveBuilding()" data-t="save">Save Building</button></div>
+  </div>
+</div>
+
+<!-- Tenant Modal -->
+<div class="modal-overlay" id="modal-tenant" onclick="if(event.target===this)closeModal('modal-tenant')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_tenant">Add Tenant</h3><button class="modal-close" onclick="closeModal('modal-tenant')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="full_name">Full Name</label><input id="t-name" /></div>
+        <div class="field"><label data-t="phone">Phone</label><input id="t-phone" /></div>
+        <div class="field"><label data-t="nid">NID Number</label><input id="t-nid" /></div>
+        <div class="field"><label data-t="email">Email</label><input type="email" id="t-email" /></div>
+        <div class="field"><label data-t="building">Building</label><select id="t-building" onchange="loadApartments('t-apartment',this.value)"><option value="">Select Building</option></select></div>
+        <div class="field"><label data-t="apartment">Apartment</label><select id="t-apartment"><option value="">Select Apartment</option></select></div>
+        <div class="field"><label data-t="monthly_rent">Monthly Rent (৳)</label><input type="number" id="t-rent" /></div>
+        <div class="field"><label data-t="advance">Advance Amount (৳)</label><input type="number" id="t-advance" /></div>
+        <div class="field"><label data-t="security_deposit">Security Deposit (৳)</label><input type="number" id="t-deposit" /></div>
+        <div class="field"><label data-t="lease_start">Lease Start</label><input type="date" id="t-lease-start" /></div>
+        <div class="field"><label data-t="lease_end">Lease End</label><input type="date" id="t-lease-end" /></div>
+        <div class="field"><label data-t="emergency">Emergency Contact</label><input id="t-emergency" /></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="t-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-tenant')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveTenant()" data-t="save">Save Tenant</button></div>
+  </div>
+</div>
+
+<!-- Rent Payment Modal -->
+<div class="modal-overlay" id="modal-rent" onclick="if(event.target===this)closeModal('modal-rent')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_payment">Record Rent Payment</h3><button class="modal-close" onclick="closeModal('modal-rent')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field field-full"><label data-t="tenant">Tenant</label><select id="rp-tenant"><option value="">Select Tenant</option></select></div>
+        <div class="field"><label data-t="month">Month</label><select id="rp-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+        <div class="field"><label data-t="year">Year</label><input type="number" id="rp-year" /></div>
+        <div class="field"><label data-t="amount_due">Amount Due (৳)</label><input type="number" id="rp-due" /></div>
+        <div class="field"><label data-t="amount_paid">Amount Paid (৳)</label><input type="number" id="rp-paid" /></div>
+        <div class="field"><label data-t="late_fee">Late Fee (৳)</label><input type="number" id="rp-late" value="0" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="rp-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label data-t="cheque_no">Cheque Number</label><input id="rp-cheque" /></div>
+        <div class="field"><label data-t="deposited_to">Deposited To</label><select id="rp-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div>
+        <div class="field"><label data-t="payment_date">Payment Date</label><input type="date" id="rp-date" /></div>
+        <div class="field"><label data-t="due_date">Due Date</label><input type="date" id="rp-due-date" /></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="rp-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-rent')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveRentPayment()" data-t="save">Save Payment</button></div>
+  </div>
+</div>
+
+<!-- Sale Modal -->
+<div class="modal-overlay" id="modal-sale" onclick="if(event.target===this)closeModal('modal-sale')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_sale">Record Apartment Sale</h3><button class="modal-close" onclick="closeModal('modal-sale')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="building">Building</label><select id="s-building" onchange="loadApartments('s-apartment',this.value)"><option value="">Select</option></select></div>
+        <div class="field"><label data-t="apartment">Apartment</label><select id="s-apartment"><option value="">Select</option></select></div>
+        <div class="field"><label data-t="buyer_name">Buyer Name</label><input id="s-buyer" /></div>
+        <div class="field"><label data-t="buyer_phone">Buyer Phone</label><input id="s-phone" /></div>
+        <div class="field"><label data-t="buyer_nid">Buyer NID</label><input id="s-nid" /></div>
+        <div class="field"><label data-t="sale_price">Sale Price (৳)</label><input type="number" id="s-price" /></div>
+        <div class="field"><label data-t="advance">Advance Paid (৳)</label><input type="number" id="s-advance" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="s-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option><option value="installment">Installment</option></select></div>
+        <div class="field"><label data-t="cheque_no">Cheque Number</label><input id="s-cheque" /></div>
+        <div class="field"><label data-t="deposited_to">Deposited To</label><select id="s-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div>
+        <div class="field"><label data-t="sale_date">Sale Date</label><input type="date" id="s-date" /></div>
+        <div class="field"><label data-t="registry">Registry Done?</label><select id="s-registry"><option value="false">No</option><option value="true">Yes</option></select></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="s-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-sale')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveSale()" data-t="save">Save Sale</button></div>
+  </div>
+</div>
+
+<!-- Expense Modal -->
+<div class="modal-overlay" id="modal-expense" onclick="if(event.target===this)closeModal('modal-expense')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_expense">Add Expense</h3><button class="modal-close" onclick="closeModal('modal-expense')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="building">Building</label><select id="e-building" onchange="loadFloors('e-floor',this.value)"><option value="">Select</option></select></div>
+        <div class="field"><label data-t="floor_label">Floor (optional)</label><select id="e-floor"><option value="">Whole Building</option></select></div>
+        <div class="field"><label data-t="category">Category</label><select id="e-category"><option value="materials">Materials</option><option value="labor">Labor</option><option value="equipment">Equipment</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="finishing">Finishing</option><option value="design">Design</option><option value="permits">Permits</option><option value="transport">Transport</option><option value="other">Other</option></select></div>
+        <div class="field"><label data-t="expense_date">Date</label><input type="date" id="e-date" /></div>
+        <div class="field field-full"><label data-t="description">Description</label><input id="e-desc" placeholder="What was this for?" /></div>
+        <div class="field"><label data-t="amount">Amount (৳)</label><input type="number" id="e-amount" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="e-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label data-t="vendor">Vendor Name</label><input id="e-vendor" /></div>
+        <div class="field"><label data-t="receipt_no">Receipt Number</label><input id="e-receipt" /></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="e-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-expense')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveExpense()" data-t="save">Save Expense</button></div>
+  </div>
+</div>
+
+<!-- Material Modal -->
+<div class="modal-overlay" id="modal-material" onclick="if(event.target===this)closeModal('modal-material')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_material">Add Material Order</h3><button class="modal-close" onclick="closeModal('modal-material')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="building">Building</label><select id="m-building" onchange="loadFloors('m-floor',this.value)"><option value="">Select</option></select></div>
+        <div class="field"><label data-t="floor_label">Floor (optional)</label><select id="m-floor"><option value="">General / Whole Building</option></select></div>
+        <div class="field"><label data-t="material_type">Material Type</label><select id="m-type"><option value="bricks">Bricks</option><option value="cement">Cement</option><option value="rebar">Rebar</option><option value="sand">Sand</option><option value="stone_chips">Stone Chips</option><option value="wood">Wood</option><option value="tiles">Tiles</option><option value="paint">Paint</option><option value="electrical_wire">Electrical Wire</option><option value="pipes">Pipes</option><option value="glass">Glass</option><option value="doors">Doors</option><option value="windows">Windows</option><option value="fixtures">Fixtures</option><option value="other">Other</option></select></div>
+        <div class="field"><label data-t="custom_type">Custom Type (if Other)</label><input id="m-custom" /></div>
+        <div class="field"><label data-t="supplier">Supplier Name</label><input id="m-supplier" /></div>
+        <div class="field"><label data-t="supplier_phone">Supplier Phone</label><input id="m-sup-phone" /></div>
+        <div class="field"><label data-t="qty_ordered">Quantity Ordered</label><input type="number" id="m-qty" /></div>
+        <div class="field"><label data-t="unit">Unit</label><input id="m-unit" placeholder="bags / tons / pieces / ft" /></div>
+        <div class="field"><label data-t="unit_price">Unit Price (৳)</label><input type="number" id="m-unit-price" /></div>
+        <div class="field"><label data-t="total_cost">Total Amount (৳)</label><input type="number" id="m-total" /></div>
+        <div class="field"><label data-t="advance">Advance Paid (৳)</label><input type="number" id="m-advance" value="0" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="m-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label data-t="order_date">Order Date</label><input type="date" id="m-order-date" /></div>
+        <div class="field"><label data-t="expected_delivery">Expected Delivery</label><input type="date" id="m-exp-delivery" /></div>
+        <div class="field"><label data-t="deposited_to">Payment Deposited To</label><select id="m-deposited"><option value="supplier">Supplier</option><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="m-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-material')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveMaterial()" data-t="save">Save Order</button></div>
+  </div>
+</div>
+
+<!-- Delivery Modal -->
+<div class="modal-overlay" id="modal-delivery" onclick="if(event.target===this)closeModal('modal-delivery')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="update_delivery">Update Delivery</h3><button class="modal-close" onclick="closeModal('modal-delivery')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="qty_delivered">Quantity Delivered</label><input type="number" id="d-qty" /></div>
+        <div class="field"><label data-t="delivery_date">Delivery Date</label><input type="date" id="d-date" /></div>
+        <div class="field"><label data-t="delivery_time">Delivery Time</label><input type="time" id="d-time" /></div>
+        <div class="field"><label data-t="payment_made">Payment Made (৳)</label><input type="number" id="d-payment" value="0" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="d-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="d-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-delivery')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveDelivery()" data-t="save">Update Delivery</button></div>
+  </div>
+</div>
+
+<!-- Employee Modal -->
+<div class="modal-overlay" id="modal-employee" onclick="if(event.target===this)closeModal('modal-employee')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="add_employee">Add Employee</h3><button class="modal-close" onclick="closeModal('modal-employee')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label data-t="full_name">Full Name</label><input id="em-name" /></div>
+        <div class="field"><label data-t="type">Type</label><select id="em-type"><option value="staff">Staff</option><option value="guard">Guard</option><option value="worker">Worker</option><option value="engineer">Engineer</option><option value="manager">Manager</option></select></div>
+        <div class="field"><label data-t="phone">Phone</label><input id="em-phone" /></div>
+        <div class="field"><label data-t="nid">NID</label><input id="em-nid" /></div>
+        <div class="field"><label data-t="monthly_salary">Monthly Salary (৳)</label><input type="number" id="em-salary" /></div>
+        <div class="field"><label data-t="building">Assigned Building</label><select id="em-building"><option value="">All / General</option></select></div>
+        <div class="field"><label data-t="join_date">Join Date</label><input type="date" id="em-join" /></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="em-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-employee')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveEmployee()" data-t="save">Save Employee</button></div>
+  </div>
+</div>
+
+<!-- Salary Modal -->
+<div class="modal-overlay" id="modal-salary" onclick="if(event.target===this)closeModal('modal-salary')">
+  <div class="modal">
+    <div class="modal-head"><h3 data-t="pay_salary">Pay Salary</h3><button class="modal-close" onclick="closeModal('modal-salary')">×</button></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field field-full"><label data-t="employee">Employee</label><select id="sp-employee" onchange="autoFillSalary()"><option value="">Select Employee</option></select></div>
+        <div class="field"><label data-t="month">Month</label><select id="sp-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div>
+        <div class="field"><label data-t="year">Year</label><input type="number" id="sp-year" /></div>
+        <div class="field"><label data-t="amount_due">Amount Due (৳)</label><input type="number" id="sp-due" /></div>
+        <div class="field"><label data-t="amount_paid">Amount Paid (৳)</label><input type="number" id="sp-paid" /></div>
+        <div class="field"><label data-t="payment_method">Payment Method</label><select id="sp-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label data-t="payment_date">Payment Date</label><input type="date" id="sp-date" /></div>
+        <div class="field field-full"><label data-t="notes">Notes</label><textarea id="sp-notes"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modal-salary')" data-t="cancel">Cancel</button><button class="btn btn-accent" onclick="saveSalaryPayment()" data-t="save">Save Payment</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://atxhshirummpenfqtwku.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser=null, userProfile=null, buildings=[], employees=[], tenants=[], currentDeliveryId=null;
+let lang = localStorage.getItem('bt_lang')||'en';
+
+const T = {
+  en:{ overview:'Overview',rentals:'Rentals',sales_label:'Sales',construction:'Construction',people:'People',properties:'Properties',reports_label:'Reports',nav_dashboard:'Dashboard',nav_tenants:'Tenants',nav_rent:'Rent Collection',nav_sales:'Apartment Sales',nav_expenses:'Expenses',nav_materials:'Materials',nav_employees:'Employees',nav_salary:'Salaries',nav_buildings:'Buildings',nav_reports:'Reports',logout:'Sign Out',notifications:'Notifications',mark_read:'Mark all read',add_building:'+ Add Building',add_tenant:'+ Add Tenant',add_payment:'+ Record Payment',add_sale:'+ Record Sale',add_expense:'+ Add Expense',add_material:'+ Add Order',add_employee:'+ Add Employee',pay_salary:'+ Pay Salary',dash_sub:'Overview of all operations',total_rent:'Rent Collected (This Month)',pending_rent:'Pending Rent',total_expenses:'Expenses (This Month)',total_salary:'Salary Paid (This Month)',active_tenants:'Active Tenants',pending_materials:'Materials Pending Delivery',recent_payments:'Recent Rent Payments',pending_deliveries:'Pending Deliveries',name:'Name',tenant:'Tenant',building:'Building',amount:'Amount',method:'Method',status:'Status',date:'Date',apartment:'Apt',monthly_rent:'Monthly Rent',advance:'Advance',phone:'Phone',material:'Material',ordered:'Ordered',delivered:'Delivered',remaining:'Remaining',supplier:'Supplier',total_cost:'Total Cost',balance:'Balance',employee:'Employee',type:'Type',due:'Due',paid:'Paid',unpaid:'Unpaid',month:'Month',year:'Year',amount_due:'Amount Due',amount_paid:'Amount Paid',late_fee:'Late Fee',payment_method:'Payment Method',cheque_no:'Cheque Number',deposited_to:'Deposited To',payment_date:'Payment Date',due_date:'Due Date',notes:'Notes',full_name:'Full Name',nid:'NID Number',email:'Email',lease_start:'Lease Start',lease_end:'Lease End',security_deposit:'Security Deposit',emergency:'Emergency Contact',building_name:'Building Name',address:'Address',total_floors:'Total Floors',floor_label:'Floor',category:'Category',description:'Description',vendor:'Vendor',receipt_no:'Receipt Number',expense_date:'Date',material_type:'Material Type',custom_type:'Custom Type',supplier_phone:'Supplier Phone',qty_ordered:'Qty Ordered',unit:'Unit',unit_price:'Unit Price',total_amount:'Total Amount',order_date:'Order Date',expected_delivery:'Expected Delivery',qty_delivered:'Qty Delivered',delivery_date:'Delivery Date',delivery_time:'Delivery Time',payment_made:'Payment Made',update_delivery:'Update Delivery',join_date:'Join Date',monthly_salary:'Monthly Salary',buyer_name:'Buyer Name',buyer_phone:'Buyer Phone',buyer_nid:'Buyer NID',sale_price:'Sale Price',sale_date:'Sale Date',registry:'Registry Done?',registry_done:'Registry',deposited:'Deposited To',buyer:'Buyer',all:'All',staff:'Staff',guard:'Guards',worker:'Workers',save:'Save',cancel:'Cancel',total_due:'Total Due',collected:'Collected',outstanding:'Outstanding',monthly_breakdown:'Monthly Breakdown',yearly_rent:'Yearly Rent',yearly_expenses:'Yearly Expenses',yearly_salary:'Yearly Salaries',apartment_sales:'Sales Revenue',rent_collected:'Rent Collected',expenses:'Expenses',salaries:'Salaries',net:'Net',buildings_sub:'Manage all properties',tenants_sub:'All active and past tenants',rent_sub:'Track monthly rent payments',sales_sub:'Track sold apartments',exp_sub:'Track all construction costs',mat_sub:'Track orders and deliveries',emp_sub:'Staff, guards and workers',sal_sub:'Monthly salary records',rep_sub:'Financial summaries' },
+  bn:{ overview:'সংক্ষিপ্ত',rentals:'ভাড়া',sales_label:'বিক্রয়',construction:'নির্মাণ',people:'জনবল',properties:'সম্পত্তি',reports_label:'রিপোর্ট',nav_dashboard:'ড্যাশবোর্ড',nav_tenants:'ভাড়াটে',nav_rent:'ভাড়া সংগ্রহ',nav_sales:'ফ্ল্যাট বিক্রয়',nav_expenses:'খরচ',nav_materials:'মালামাল',nav_employees:'কর্মচারী',nav_salary:'বেতন',nav_buildings:'ভবন',nav_reports:'রিপোর্ট',logout:'বের হন',notifications:'বিজ্ঞপ্তি',mark_read:'সব পড়েছি',add_building:'+ ভবন যোগ',add_tenant:'+ ভাড়াটে যোগ',add_payment:'+ পেমেন্ট রেকর্ড',add_sale:'+ বিক্রয় রেকর্ড',add_expense:'+ খরচ যোগ',add_material:'+ অর্ডার যোগ',add_employee:'+ কর্মচারী যোগ',pay_salary:'+ বেতন দিন',dash_sub:'সকল কার্যক্রমের সংক্ষিপ্ত বিবরণ',total_rent:'ভাড়া সংগ্রহ (এই মাস)',pending_rent:'বকেয়া ভাড়া',total_expenses:'নির্মাণ খরচ (এই মাস)',total_salary:'বেতন প্রদান (এই মাস)',active_tenants:'সক্রিয় ভাড়াটে',pending_materials:'সরবরাহের অপেক্ষায়',recent_payments:'সাম্প্রতিক ভাড়া পেমেন্ট',pending_deliveries:'অপেক্ষামাণ ডেলিভারি',name:'নাম',tenant:'ভাড়াটে',building:'ভবন',amount:'পরিমাণ',method:'পদ্ধতি',status:'অবস্থা',date:'তারিখ',apartment:'ফ্ল্যাট',monthly_rent:'মাসিক ভাড়া',advance:'অগ্রিম',phone:'ফোন',material:'মালামাল',ordered:'অর্ডার',delivered:'সরবরাহ',remaining:'বাকি',supplier:'সরবরাহকারী',total_cost:'মোট খরচ',balance:'অবশিষ্ট',employee:'কর্মচারী',type:'ধরন',due:'বাকি',paid:'পরিশোধ',unpaid:'অপরিশোধিত',month:'মাস',year:'বছর',amount_due:'বাকি পরিমাণ',amount_paid:'পরিশোধিত',late_fee:'বিলম্ব ফি',payment_method:'পেমেন্ট পদ্ধতি',cheque_no:'চেক নম্বর',deposited_to:'জমার স্থান',payment_date:'পেমেন্টের তারিখ',due_date:'নির্ধারিত তারিখ',notes:'মন্তব্য',full_name:'পূর্ণ নাম',nid:'জাতীয় পরিচয়পত্র',email:'ইমেইল',lease_start:'চুক্তি শুরু',lease_end:'চুক্তি শেষ',security_deposit:'নিরাপত্তা জমা',emergency:'জরুরি যোগাযোগ',building_name:'ভবনের নাম',address:'ঠিকানা',total_floors:'মোট তলা',floor_label:'তলা',category:'বিভাগ',description:'বিবরণ',vendor:'বিক্রেতা',receipt_no:'রসিদ নং',expense_date:'তারিখ',material_type:'মালামালের ধরন',custom_type:'অন্য ধরন',supplier_phone:'সরবরাহকারীর ফোন',qty_ordered:'অর্ডার পরিমাণ',unit:'একক',unit_price:'একক মূল্য',total_amount:'মোট পরিমাণ',order_date:'অর্ডারের তারিখ',expected_delivery:'প্রত্যাশিত ডেলিভারি',qty_delivered:'সরবরাহকৃত',delivery_date:'ডেলিভারি তারিখ',delivery_time:'ডেলিভারি সময়',payment_made:'পেমেন্ট করা হয়েছে',update_delivery:'ডেলিভারি আপডেট',join_date:'যোগদানের তারিখ',monthly_salary:'মাসিক বেতন',buyer_name:'ক্রেতার নাম',buyer_phone:'ক্রেতার ফোন',buyer_nid:'ক্রেতার NID',sale_price:'বিক্রয় মূল্য',sale_date:'বিক্রয়ের তারিখ',registry:'রেজিস্ট্রি হয়েছে?',registry_done:'রেজিস্ট্রি',deposited:'জমার স্থান',buyer:'ক্রেতা',all:'সব',staff:'স্টাফ',guard:'গার্ড',worker:'শ্রমিক',save:'সংরক্ষণ',cancel:'বাতিল',total_due:'মোট বাকি',collected:'সংগৃহীত',outstanding:'বকেয়া',monthly_breakdown:'মাসিক বিবরণ',yearly_rent:'বার্ষিক ভাড়া',yearly_expenses:'বার্ষিক খরচ',yearly_salary:'বার্ষিক বেতন',apartment_sales:'বিক্রয় আয়',rent_collected:'ভাড়া সংগৃহীত',expenses:'খরচ',salaries:'বেতন',net:'নীট',buildings_sub:'সকল সম্পত্তি ব্যবস্থাপনা',tenants_sub:'সকল ভাড়াটের তালিকা',rent_sub:'মাসিক ভাড়া পেমেন্ট ট্র্যাক করুন',sales_sub:'বিক্রীত ফ্ল্যাট ট্র্যাক করুন',exp_sub:'নির্মাণ খরচের রেকর্ড',mat_sub:'অর্ডার ও ডেলিভারি ট্র্যাক',emp_sub:'স্টাফ, গার্ড ও শ্রমিক',sal_sub:'মাসিক বেতনের রেকর্ড',rep_sub:'আর্থিক সারসংক্ষেপ' }
+};
+
+function t(key){return T[lang][key]||T['en'][key]||key;}
+function setLang(l){
+  lang=l;localStorage.setItem('bt_lang',l);
+  document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&l==='en')||(i===1&&l==='bn')));
+  document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=t(k);else el.textContent=t(k);});
+}
+
+async function init(){
+  const{data:{session}}=await supabase.auth.getSession();
+  if(!session){window.location.href='index.html';return;}
+  currentUser=session.user;
+  const{data:profile}=await supabase.from('user_profiles').select('*').eq('id',currentUser.id).single();
+  userProfile=profile;
+  if(profile){document.getElementById('user-name').textContent=profile.full_name||currentUser.email;document.getElementById('user-role').textContent=profile.role||'staff';document.getElementById('user-avatar').textContent=(profile.full_name||'U')[0].toUpperCase();}
+  else{document.getElementById('user-name').textContent=currentUser.email;}
+  const yr=new Date().getFullYear();
+  // Populate year selects (dropdowns)
+  ['rent-year-filter','sal-year-filter','rep-year-filter','sp-year'].forEach(id=>{const el=document.getElementById(id);if(!el)return;for(let y=yr;y>=yr-5;y--){const o=document.createElement('option');o.value=y;o.textContent=y;el.appendChild(o);}});
+  // rp-year is a plain input, just set default value
+  const rpYearEl=document.getElementById('rp-year');
+  if(rpYearEl)rpYearEl.value=yr;
+  const now=new Date();
+  ['rent-month-filter','sal-month-filter'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=now.getMonth()+1;});
+  ['sp-month','rp-month'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=now.getMonth()+1;});
+  // Set rep-year default
+  const repYr=document.getElementById('rep-year-filter');
+  if(repYr&&repYr.options.length>0)repYr.value=yr;
+  await loadBuildings();await loadDashboard();await loadNotifications();setLang(lang);
+}
+
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')===`navigate('${page}')`)n.classList.add('active');});
+  document.getElementById('page-title').textContent=t('nav_'+page);
+  closeSidebar();
+  const loaders={buildings:loadBuildingsPage,tenants:loadTenants,rent:loadRent,sales:loadSales,expenses:loadExpenses,materials:loadMaterials,employees:loadEmployees,salary:loadSalary,reports:loadReports};
+  if(loaders[page])loaders[page]();
+}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').style.display=document.getElementById('sidebar').classList.contains('open')?'block':'none';}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').style.display='none';}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function showToast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.classList.remove('show'),3000);}
+function fmt(n){return '৳'+Number(n||0).toLocaleString('en-BD');}
+function fmtDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function monthName(m){return['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];}
+function statusBadge(s){const map={paid:'badge-success',partial:'badge-warn',unpaid:'badge-danger',delivered:'badge-success',ordered:'badge-info',in_transit:'badge-warn',partially_delivered:'badge-warn',cancelled:'badge-danger',confirmed:'badge-info',active:'badge-success',inactive:'badge-muted',under_construction:'badge-warn',completed:'badge-success'};return `<span class="badge ${map[s]||'badge-muted'}">${s.replace(/_/g,' ')}</span>`;}
+
+async function loadBuildings(){
+  const{data}=await supabase.from('buildings').select('*').order('created_at');
+  buildings=data||[];
+  ['t-building','s-building','e-building','m-building','em-building','rent-building-filter','exp-building-filter','mat-building-filter','rep-building-filter','tenant-building-filter'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const keepFirst=el.children[0];el.innerHTML='';if(keepFirst)el.appendChild(keepFirst);
+    buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;el.appendChild(o);});
+  });
+}
+async function loadBuildingsPage(){
+  const grid=document.getElementById('buildings-grid');
+  if(!buildings.length){grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="1"/></svg><p>No buildings yet</p></div>';return;}
+  grid.innerHTML=buildings.map(b=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div><div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--accent)">${b.name}</div><div style="font-size:12px;color:var(--muted);margin-top:3px;font-weight:300">${b.address||'No address'}</div></div>${statusBadge(b.status)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px;color:var(--muted)"><span>Floors</span><span style="color:var(--text);font-weight:500">${b.total_floors||'—'}</span></div>${b.notes?`<div style="font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-weight:300">${b.notes}</div>`:''}</div>`).join('');
+}
+async function saveBuilding(){
+  const payload={name:document.getElementById('b-name').value,address:document.getElementById('b-address').value,total_floors:parseInt(document.getElementById('b-floors').value)||0,status:document.getElementById('b-status').value,notes:document.getElementById('b-notes').value};
+  if(!payload.name){showToast('Name required','error');return;}
+  const{error}=await supabase.from('buildings').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Building saved!');closeModal('modal-building');
+  ['b-name','b-address','b-floors','b-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('b-status').value='under_construction';
+  await loadBuildings();loadBuildingsPage();
+}
+async function loadFloors(selectId,buildingId){
+  const el=document.getElementById(selectId);if(!el)return;
+  el.innerHTML='<option value="">Whole Building</option>';if(!buildingId)return;
+  const{data}=await supabase.from('floors').select('*').eq('building_id',buildingId).order('floor_number');
+  (data||[]).forEach(f=>{const o=document.createElement('option');o.value=f.id;o.textContent=`Floor ${f.floor_number}${f.label?' – '+f.label:''}`;el.appendChild(o);});
+}
+async function loadApartments(selectId,buildingId){
+  const el=document.getElementById(selectId);if(!el)return;
+  el.innerHTML='<option value="">Select Apartment</option>';if(!buildingId)return;
+  const{data}=await supabase.from('apartments').select('*, floors(floor_number)').eq('building_id',buildingId).order('apartment_number');
+  (data||[]).forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=`${a.apartment_number}${a.floors?' (Floor '+a.floors.floor_number+')':''}`;el.appendChild(o);});
+}
+async function loadTenants(){
+  const{data}=await supabase.from('tenants').select('*, apartments(apartment_number, buildings(id, name))').order('created_at',{ascending:false});
+  tenants=data||[];renderTenants(tenants);
+  const rpTenant=document.getElementById('rp-tenant');
+  if(rpTenant){rpTenant.innerHTML='<option value="">Select Tenant</option>';tenants.filter(t2=>t2.is_active).forEach(t2=>{const o=document.createElement('option');o.value=t2.id;o.textContent=t2.full_name;rpTenant.appendChild(o);});}
+}
+function renderTenants(list){
+  const body=document.getElementById('tenants-body');
+  if(!list.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No tenants yet</p></div></td></tr>';return;}
+  body.innerHTML=list.map(t2=>`<tr><td><strong>${t2.full_name}</strong></td><td>${t2.apartments?.apartment_number||'—'}</td><td>${fmt(t2.monthly_rent)}</td><td>${fmt(t2.advance_amount)}</td><td>${t2.phone||'—'}</td><td>${statusBadge(t2.is_active?'active':'inactive')}</td><td><button class="btn btn-ghost btn-sm" onclick="toggleTenant('${t2.id}',${t2.is_active})">${t2.is_active?'Deactivate':'Activate'}</button></td></tr>`).join('');
+}
+function filterTenants(){
+  const search=document.getElementById('tenant-search').value.toLowerCase();
+  const building=document.getElementById('tenant-building-filter').value;
+  const status=document.getElementById('tenant-status-filter').value;
+  let list=tenants;
+  if(search)list=list.filter(t2=>t2.full_name.toLowerCase().includes(search)||(t2.phone||'').includes(search));
+  if(status==='active')list=list.filter(t2=>t2.is_active);
+  if(status==='inactive')list=list.filter(t2=>!t2.is_active);
+  renderTenants(list);
+}
+async function saveTenant(){
+  const apt=document.getElementById('t-apartment').value;
+  const payload={full_name:document.getElementById('t-name').value,phone:document.getElementById('t-phone').value,nid:document.getElementById('t-nid').value,email:document.getElementById('t-email').value,apartment_id:apt||null,monthly_rent:parseFloat(document.getElementById('t-rent').value)||0,advance_amount:parseFloat(document.getElementById('t-advance').value)||0,security_deposit:parseFloat(document.getElementById('t-deposit').value)||0,lease_start:document.getElementById('t-lease-start').value||null,lease_end:document.getElementById('t-lease-end').value||null,emergency_contact:document.getElementById('t-emergency').value,notes:document.getElementById('t-notes').value};
+  if(!payload.full_name){showToast('Name required','error');return;}
+  const{error}=await supabase.from('tenants').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  if(apt)await supabase.from('apartments').update({status:'rented'}).eq('id',apt);
+  showToast('Tenant saved!');closeModal('modal-tenant');
+  ['t-name','t-phone','t-nid','t-email','t-rent','t-advance','t-deposit','t-lease-start','t-lease-end','t-emergency','t-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadTenants();
+}
+async function toggleTenant(id,current){await supabase.from('tenants').update({is_active:!current}).eq('id',id);loadTenants();}
+async function loadRent(){
+  const month=document.getElementById('rent-month-filter').value;
+  const year=document.getElementById('rent-year-filter').value;
+  const building=document.getElementById('rent-building-filter').value;
+  const status=document.getElementById('rent-status-filter').value;
+  let q=supabase.from('rent_payments').select('*, tenants(full_name), apartments(apartment_number), buildings(name)').eq('month',month).eq('year',year);
+  if(building)q=q.eq('building_id',building);if(status)q=q.eq('payment_status',status);
+  const{data}=await q.order('created_at',{ascending:false});
+  const payments=data||[];
+  const totalDue=payments.reduce((s,p)=>s+Number(p.amount_due),0);
+  const totalPaid=payments.reduce((s,p)=>s+Number(p.amount_paid),0);
+  document.getElementById('r-total-due').textContent=fmt(totalDue);
+  document.getElementById('r-collected').textContent=fmt(totalPaid);
+  document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
+  const body=document.getElementById('rent-body');
+  if(!payments.length){body.innerHTML='<tr><td colspan="9"><div class="empty"><p>No payments for this period</p></div></td></tr>';return;}
+  body.innerHTML=payments.map(p=>`<tr><td><strong>${p.tenants?.full_name||'—'}</strong></td><td>${p.apartments?.apartment_number||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_due)}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${p.deposited_to||'—'}</td><td>${statusBadge(p.payment_status)}</td><td><button class="btn btn-ghost btn-sm" onclick="editRent('${p.id}')">Edit</button></td></tr>`).join('');
+}
+async function saveRentPayment(){
+  const tenantId=document.getElementById('rp-tenant').value;
+  if(!tenantId){showToast('Select tenant','error');return;}
+  const tenant=tenants.find(t2=>t2.id===tenantId);
+  const paid=parseFloat(document.getElementById('rp-paid').value)||0;
+  const due=parseFloat(document.getElementById('rp-due').value)||0;
+  const status=paid>=due?'paid':paid>0?'partial':'unpaid';
+  const payload={tenant_id:tenantId,apartment_id:tenant?.apartment_id||null,building_id:null,month:parseInt(document.getElementById('rp-month').value),year:parseInt(document.getElementById('rp-year').value),amount_due:due,amount_paid:paid,late_fee:parseFloat(document.getElementById('rp-late').value)||0,payment_status:status,payment_method:document.getElementById('rp-method').value,cheque_number:document.getElementById('rp-cheque').value,deposited_to:document.getElementById('rp-deposited').value,payment_date:document.getElementById('rp-date').value||null,due_date:document.getElementById('rp-due-date').value||null,notes:document.getElementById('rp-notes').value,recorded_by:currentUser.id};
+  if(tenant?.apartment_id){const{data:apt}=await supabase.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();if(apt)payload.building_id=apt.building_id;}
+  const{error}=await supabase.from('rent_payments').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Payment recorded!');closeModal('modal-rent');
+  ['rp-cheque','rp-date','rp-due-date','rp-notes','rp-due','rp-paid','rp-late'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('rp-late').value='0';
+  loadRent();
+}
+async function editRent(id){
+  const{data}=await supabase.from('rent_payments').select('*').eq('id',id).single();if(!data)return;
+  const newStatus=data.payment_status==='paid'?'unpaid':'paid';
+  await supabase.from('rent_payments').update({payment_status:newStatus,amount_paid:newStatus==='paid'?data.amount_due:0}).eq('id',id);
+  loadRent();
+}
+async function loadSales(){
+  const{data}=await supabase.from('apartment_sales').select('*, apartments(apartment_number), buildings(name)').order('created_at',{ascending:false});
+  const sales=data||[];const body=document.getElementById('sales-body');
+  if(!sales.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No sales yet</p></div></td></tr>';return;}
+  body.innerHTML=sales.map(s=>`<tr><td><strong>${s.buyer_name}</strong><div style="font-size:11px;color:var(--muted)">${s.buyer_phone||''}</div></td><td>${s.apartments?.apartment_number||'—'}<div style="font-size:11px;color:var(--muted)">${s.buildings?.name||''}</div></td><td>${fmt(s.sale_price)}</td><td>${fmt(s.advance_paid)}</td><td>${fmt(s.remaining_amount)}</td><td>${s.payment_method||'—'}</td><td>${s.deposited_to||'—'}</td><td>${s.registry_done?'<span class="badge badge-success">Done</span>':'<span class="badge badge-warn">Pending</span>'}</td></tr>`).join('');
+}
+async function saveSale(){
+  const apt=document.getElementById('s-apartment').value;const bld=document.getElementById('s-building').value;
+  if(!apt||!bld){showToast('Select building and apartment','error');return;}
+  const payload={apartment_id:apt,building_id:bld,buyer_name:document.getElementById('s-buyer').value,buyer_phone:document.getElementById('s-phone').value,buyer_nid:document.getElementById('s-nid').value,sale_price:parseFloat(document.getElementById('s-price').value)||0,advance_paid:parseFloat(document.getElementById('s-advance').value)||0,payment_method:document.getElementById('s-method').value,cheque_number:document.getElementById('s-cheque').value,deposited_to:document.getElementById('s-deposited').value,sale_date:document.getElementById('s-date').value||null,registry_done:document.getElementById('s-registry').value==='true',notes:document.getElementById('s-notes').value,recorded_by:currentUser.id};
+  if(!payload.buyer_name){showToast('Buyer name required','error');return;}
+  const{error}=await supabase.from('apartment_sales').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  await supabase.from('apartments').update({status:'sold'}).eq('id',apt);
+  showToast('Sale recorded!');closeModal('modal-sale');
+  ['s-buyer','s-phone','s-nid','s-price','s-advance','s-cheque','s-date','s-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadSales();
+}
+async function loadExpenses(){
+  const building=document.getElementById('exp-building-filter').value;
+  const category=document.getElementById('exp-category-filter').value;
+  const month=document.getElementById('exp-month-filter').value;
+  let q=supabase.from('construction_expenses').select('*, buildings(name), floors(floor_number)');
+  if(building)q=q.eq('building_id',building);if(category)q=q.eq('category',category);
+  if(month){const[y,m]=month.split('-');q=q.gte('expense_date',`${y}-${m}-01`).lte('expense_date',`${y}-${m}-31`);}
+  const{data}=await q.order('expense_date',{ascending:false});
+  const expenses=data||[];
+  document.getElementById('exp-total').textContent=fmt(expenses.reduce((s,e)=>s+Number(e.amount),0));
+  const body=document.getElementById('expenses-body');
+  if(!expenses.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No expenses yet</p></div></td></tr>';return;}
+  body.innerHTML=expenses.map(e=>`<tr><td>${fmtDate(e.expense_date)}</td><td>${e.buildings?.name||'—'}</td><td>${e.floors?'Floor '+e.floors.floor_number:'All'}</td><td><span class="badge badge-info">${e.category}</span></td><td>${e.description}</td><td>${e.vendor_name||'—'}</td><td><strong>${fmt(e.amount)}</strong></td><td>${e.payment_method||'—'}</td></tr>`).join('');
+}
+async function saveExpense(){
+  const payload={building_id:document.getElementById('e-building').value,floor_id:document.getElementById('e-floor').value||null,category:document.getElementById('e-category').value,description:document.getElementById('e-desc').value,amount:parseFloat(document.getElementById('e-amount').value)||0,payment_method:document.getElementById('e-method').value,expense_date:document.getElementById('e-date').value,vendor_name:document.getElementById('e-vendor').value,receipt_number:document.getElementById('e-receipt').value,notes:document.getElementById('e-notes').value,recorded_by:currentUser.id};
+  if(!payload.building_id||!payload.description||!payload.amount){showToast('Fill required fields','error');return;}
+  const{error}=await supabase.from('construction_expenses').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Expense saved!');closeModal('modal-expense');
+  ['e-desc','e-amount','e-vendor','e-receipt','e-notes','e-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadExpenses();
+}
+async function loadMaterials(){
+  const building=document.getElementById('mat-building-filter').value;
+  const status=document.getElementById('mat-status-filter').value;
+  let q=supabase.from('materials').select('*, buildings(name), floors(floor_number)');
+  if(building)q=q.eq('building_id',building);if(status)q=q.eq('delivery_status',status);
+  const{data}=await q.order('created_at',{ascending:false});
+  const mats=data||[];const body=document.getElementById('materials-body');
+  if(!mats.length){body.innerHTML='<tr><td colspan="11"><div class="empty"><p>No material orders yet</p></div></td></tr>';return;}
+  body.innerHTML=mats.map(m=>`<tr><td><strong>${m.material_type==='other'?m.custom_type||'Other':m.material_type}</strong></td><td>${m.buildings?.name||'—'}</td><td>${m.supplier_name||'—'}<div style="font-size:11px;color:var(--muted)">${m.supplier_phone||''}</div></td><td>${m.quantity_ordered} ${m.quantity_unit}</td><td>${m.quantity_delivered} ${m.quantity_unit}</td><td>${m.quantity_remaining} ${m.quantity_unit}</td><td>${fmt(m.total_amount)}</td><td>${fmt(m.advance_paid)}</td><td style="color:${m.amount_remaining>0?'var(--danger)':'var(--success)'}"><strong>${fmt(m.amount_remaining)}</strong></td><td>${statusBadge(m.delivery_status)}</td><td><button class="btn btn-accent btn-sm" onclick="openDelivery('${m.id}')">Update</button></td></tr>`).join('');
+}
+async function saveMaterial(){
+  const payload={building_id:document.getElementById('m-building').value,floor_id:document.getElementById('m-floor').value||null,material_type:document.getElementById('m-type').value,custom_type:document.getElementById('m-custom').value,supplier_name:document.getElementById('m-supplier').value,supplier_phone:document.getElementById('m-sup-phone').value,quantity_ordered:parseFloat(document.getElementById('m-qty').value)||0,quantity_unit:document.getElementById('m-unit').value,unit_price:parseFloat(document.getElementById('m-unit-price').value)||null,total_amount:parseFloat(document.getElementById('m-total').value)||0,advance_paid:parseFloat(document.getElementById('m-advance').value)||0,payment_method:document.getElementById('m-method').value,order_date:document.getElementById('m-order-date').value,expected_delivery:document.getElementById('m-exp-delivery').value||null,deposited_to:document.getElementById('m-deposited').value,notes:document.getElementById('m-notes').value,recorded_by:currentUser.id};
+  if(!payload.building_id||!payload.quantity_ordered){showToast('Fill required fields','error');return;}
+  const{error}=await supabase.from('materials').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Order saved!');closeModal('modal-material');
+  ['m-custom','m-supplier','m-sup-phone','m-qty','m-unit','m-unit-price','m-total','m-order-date','m-exp-delivery','m-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('m-advance').value='0';
+  loadMaterials();
+}
+function openDelivery(materialId){currentDeliveryId=materialId;document.getElementById('d-date').value=new Date().toISOString().slice(0,10);openModal('modal-delivery');}
+async function saveDelivery(){
+  const qty=parseFloat(document.getElementById('d-qty').value)||0;
+  const payment=parseFloat(document.getElementById('d-payment').value)||0;
+  const delivDate=document.getElementById('d-date').value;
+  const delivTime=document.getElementById('d-time').value;
+  const{error:logErr}=await supabase.from('material_deliveries').insert({material_id:currentDeliveryId,quantity_delivered:qty,delivery_date:delivDate||null,delivery_time:delivTime||null,payment_made:payment,payment_method:document.getElementById('d-method').value,notes:document.getElementById('d-notes').value,recorded_by:currentUser.id});
+  if(logErr){showToast('Error: '+logErr.message,'error');return;}
+  const{data:mat}=await supabase.from('materials').select('*').eq('id',currentDeliveryId).single();
+  if(mat){
+    const newQty=Number(mat.quantity_delivered)+qty;
+    const newAdv=Number(mat.advance_paid)+payment;
+    const newStatus=newQty>=Number(mat.quantity_ordered)?'delivered':newQty>0?'partially_delivered':mat.delivery_status;
+    await supabase.from('materials').update({quantity_delivered:newQty,advance_paid:newAdv,delivery_status:newStatus,actual_delivery_date:delivDate||mat.actual_delivery_date,actual_delivery_time:delivTime||mat.actual_delivery_time}).eq('id',currentDeliveryId);
+    if(mat.notify_on_delivery)await supabase.from('notifications').insert({user_id:currentUser.id,title:'Material Delivered',message:`${mat.material_type} delivery: ${qty} ${mat.quantity_unit} received`,type:'delivery',related_id:currentDeliveryId,related_table:'materials'});
+  }
+  showToast('Delivery updated!');closeModal('modal-delivery');
+  ['d-qty','d-time','d-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('d-payment').value='0';
+  loadMaterials();loadNotifications();
+}
+async function loadEmployees(typeFilter='all'){
+  let q=supabase.from('employees').select('*, buildings(name)');
+  if(typeFilter!=='all')q=q.eq('type',typeFilter);
+  const{data}=await q.order('created_at',{ascending:false});
+  employees=data||[];renderEmployees(employees);
+  const spEmp=document.getElementById('sp-employee');
+  if(spEmp){spEmp.innerHTML='<option value="">Select Employee</option>';employees.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.full_name+' ('+e.type+')';spEmp.appendChild(o);});}
+}
+function renderEmployees(list){
+  const body=document.getElementById('employees-body');
+  if(!list.length){body.innerHTML='<tr><td colspan="6"><div class="empty"><p>No employees yet</p></div></td></tr>';return;}
+  body.innerHTML=list.map(e=>`<tr><td><strong>${e.full_name}</strong></td><td><span class="badge badge-info">${e.type}</span></td><td>${e.buildings?.name||'All'}</td><td>${fmt(e.monthly_salary)}</td><td>${e.phone||'—'}</td><td>${statusBadge(e.is_active?'active':'inactive')}</td></tr>`).join('');
+}
+function filterEmployees(type){
+  document.querySelectorAll('.tab').forEach((t2,i)=>{const types=['all','staff','guard','worker'];t2.classList.toggle('active',types[i]===type);});
+  loadEmployees(type);
+}
+async function saveEmployee(){
+  const payload={full_name:document.getElementById('em-name').value,type:document.getElementById('em-type').value,phone:document.getElementById('em-phone').value,nid:document.getElementById('em-nid').value,monthly_salary:parseFloat(document.getElementById('em-salary').value)||0,building_id:document.getElementById('em-building').value||null,join_date:document.getElementById('em-join').value||null,notes:document.getElementById('em-notes').value};
+  if(!payload.full_name){showToast('Name required','error');return;}
+  const{error}=await supabase.from('employees').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Employee saved!');closeModal('modal-employee');
+  ['em-name','em-phone','em-nid','em-salary','em-join','em-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadEmployees();
+}
+async function loadSalary(){
+  // Make sure employee list is populated for salary modal
+  if(employees.length===0){await loadEmployees();}
+  const month=document.getElementById('sal-month-filter').value;
+  const year=document.getElementById('sal-year-filter').value;
+  const{data}=await supabase.from('salary_payments').select('*, employees(full_name, type)').eq('month',month).eq('year',year).order('created_at',{ascending:false});
+  const payments=data||[];
+  const totalDue=payments.reduce((s,p)=>s+Number(p.amount_due),0);
+  const totalPaid=payments.reduce((s,p)=>s+Number(p.amount_paid),0);
+  document.getElementById('sal-total-due').textContent=fmt(totalDue);
+  document.getElementById('sal-paid').textContent=fmt(totalPaid);
+  document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);
+  const body=document.getElementById('salary-body');
+  if(!payments.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No salary payments this period</p></div></td></tr>';return;}
+  body.innerHTML=payments.map(p=>`<tr><td><strong>${p.employees?.full_name||'—'}</strong></td><td><span class="badge badge-info">${p.employees?.type||'—'}</span></td><td>${fmt(p.amount_due)}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${fmtDate(p.payment_date)}</td><td>${statusBadge(p.amount_paid>=p.amount_due?'paid':'partial')}</td></tr>`).join('');
+}
+function autoFillSalary(){
+  const empId=document.getElementById('sp-employee').value;
+  if(!empId)return;
+  const emp=employees.find(e=>e.id===empId);
+  if(emp&&emp.monthly_salary){document.getElementById('sp-due').value=emp.monthly_salary;document.getElementById('sp-paid').value=emp.monthly_salary;}
+}
+async function saveSalaryPayment(){
+  const empId=document.getElementById('sp-employee').value;
+  if(!empId){showToast('Select employee','error');return;}
+  const payload={employee_id:empId,month:parseInt(document.getElementById('sp-month').value),year:parseInt(document.getElementById('sp-year').value),amount_due:parseFloat(document.getElementById('sp-due').value)||0,amount_paid:parseFloat(document.getElementById('sp-paid').value)||0,payment_method:document.getElementById('sp-method').value,payment_date:document.getElementById('sp-date').value||null,notes:document.getElementById('sp-notes').value,paid_by:currentUser.id};
+  const{error}=await supabase.from('salary_payments').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Salary payment saved!');closeModal('modal-salary');
+  ['sp-due','sp-paid','sp-date','sp-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  loadSalary();
+}
+async function loadDashboard(){
+  const now=new Date();const month=now.getMonth()+1;const year=now.getFullYear();
+  const{data:rent}=await supabase.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',month).eq('year',year);
+  const rentCollected=(rent||[]).reduce((s,r)=>s+Number(r.amount_paid),0);
+  const rentDue=(rent||[]).reduce((s,r)=>s+Number(r.amount_due),0);
+  document.getElementById('stat-rent').textContent=fmt(rentCollected);
+  document.getElementById('stat-rent-sub').textContent=`of ${fmt(rentDue)} due`;
+  document.getElementById('stat-pending').textContent=fmt(rentDue-rentCollected);
+  document.getElementById('stat-pending-sub').textContent=`${(rent||[]).filter(r=>r.payment_status==='unpaid').length} unpaid units`;
+  const startM=`${year}-${String(month).padStart(2,'0')}-01`;const endM=`${year}-${String(month).padStart(2,'0')}-31`;
+  const{data:exp}=await supabase.from('construction_expenses').select('amount').gte('expense_date',startM).lte('expense_date',endM);
+  document.getElementById('stat-expenses').textContent=fmt((exp||[]).reduce((s,e)=>s+Number(e.amount),0));
+  document.getElementById('stat-exp-sub').textContent=`${(exp||[]).length} transactions`;
+  const{data:sal}=await supabase.from('salary_payments').select('amount_paid').eq('month',month).eq('year',year);
+  document.getElementById('stat-salary').textContent=fmt((sal||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
+  document.getElementById('stat-sal-sub').textContent=`${(sal||[]).length} payments`;
+  const{count:tenantCount}=await supabase.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);
+  document.getElementById('stat-tenants').textContent=tenantCount||0;
+  const{count:matCount}=await supabase.from('materials').select('*',{count:'exact',head:true}).not('delivery_status','in','("delivered","cancelled")');
+  document.getElementById('stat-materials').textContent=matCount||0;
+  const{data:recentP}=await supabase.from('rent_payments').select('*, tenants(full_name), buildings(name)').order('created_at',{ascending:false}).limit(6);
+  const pBody=document.getElementById('dash-payments-body');
+  pBody.innerHTML=(recentP||[]).map(p=>`<tr><td>${p.tenants?.full_name||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${statusBadge(p.payment_status)}</td><td>${fmtDate(p.payment_date)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No payments yet</td></tr>';
+  const{data:pendMat}=await supabase.from('materials').select('*, buildings(name)').not('delivery_status','in','("delivered","cancelled")').order('created_at',{ascending:false}).limit(6);
+  const mBody=document.getElementById('dash-materials-body');
+  mBody.innerHTML=(pendMat||[]).map(m=>`<tr><td>${m.material_type==='other'?m.custom_type||'Other':m.material_type}</td><td>${m.buildings?.name||'—'}</td><td>${m.quantity_ordered} ${m.quantity_unit}</td><td>${m.quantity_delivered} ${m.quantity_unit}</td><td>${m.quantity_remaining} ${m.quantity_unit}</td><td>${statusBadge(m.delivery_status)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No pending deliveries</td></tr>';
+}
+async function loadReports(){
+  const year=document.getElementById('rep-year-filter').value||new Date().getFullYear();
+  const building=document.getElementById('rep-building-filter').value;
+  let rq=supabase.from('rent_payments').select('amount_paid,month').eq('year',year);
+  if(building)rq=rq.eq('building_id',building);
+  const{data:rentData}=await rq;
+  document.getElementById('rep-rent').textContent=fmt((rentData||[]).reduce((s,r)=>s+Number(r.amount_paid),0));
+  let eq2=supabase.from('construction_expenses').select('amount,expense_date').gte('expense_date',`${year}-01-01`).lte('expense_date',`${year}-12-31`);
+  if(building)eq2=eq2.eq('building_id',building);
+  const{data:expData}=await eq2;
+  document.getElementById('rep-expenses').textContent=fmt((expData||[]).reduce((s,e)=>s+Number(e.amount),0));
+  const{data:salData}=await supabase.from('salary_payments').select('amount_paid,month').eq('year',year);
+  document.getElementById('rep-salary').textContent=fmt((salData||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
+  let sq=supabase.from('apartment_sales').select('advance_paid');if(building)sq=sq.eq('building_id',building);
+  const{data:salesData}=await sq;
+  document.getElementById('rep-sales').textContent=fmt((salesData||[]).reduce((s,s2)=>s+Number(s2.advance_paid),0));
+  const months=Array.from({length:12},(_,i)=>i+1);
+  document.getElementById('reports-body').innerHTML=months.map(m=>{
+    const mRent=(rentData||[]).filter(r=>r.month===m).reduce((s,r)=>s+Number(r.amount_paid),0);
+    const mExp=(expData||[]).filter(e=>new Date(e.expense_date).getMonth()===m-1).reduce((s,e)=>s+Number(e.amount),0);
+    const mSal=(salData||[]).filter(p=>p.month===m).reduce((s,p)=>s+Number(p.amount_paid),0);
+    const net=mRent-mExp-mSal;
+    return `<tr><td><strong>${monthName(m)} ${year}</strong></td><td style="color:var(--success)">${fmt(mRent)}</td><td style="color:var(--danger)">${fmt(mExp)}</td><td style="color:var(--warn)">${fmt(mSal)}</td><td style="color:${net>=0?'var(--success)':'var(--danger)'}"><strong>${fmt(net)}</strong></td></tr>`;
+  }).join('');
+}
+async function loadNotifications(){
+  const{data}=await supabase.from('notifications').select('*').order('created_at',{ascending:false}).limit(20);
+  const notifs=data||[];const unread=notifs.filter(n=>!n.is_read).length;
+  const badge=document.getElementById('notif-badge');badge.textContent=unread;badge.style.display=unread>0?'flex':'none';
+  document.getElementById('notif-list').innerHTML=notifs.map(n=>`<div class="notif-item ${n.is_read?'':'unread'}" onclick="readNotif('${n.id}')"><div class="title">${n.title}</div><div class="msg">${n.message}</div><div class="time">${fmtDate(n.created_at)}</div></div>`).join('')||'<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px">No notifications</div>';
+}
+function toggleNotif(e){if(e)e.stopPropagation();document.getElementById('notif-panel').classList.toggle('open');}
+document.addEventListener('click',function(e){const panel=document.getElementById('notif-panel');const btn=document.querySelector('.notif-btn');if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&btn&&!btn.contains(e.target)){panel.classList.remove('open');}});
+async function readNotif(id){await supabase.from('notifications').update({is_read:true}).eq('id',id);loadNotifications();}
+async function markAllRead(){await supabase.from('notifications').update({is_read:true}).eq('is_read',false);loadNotifications();}
+async function logout(){await supabase.auth.signOut();window.location.href='index.html';}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
