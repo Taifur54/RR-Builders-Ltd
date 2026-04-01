@@ -542,6 +542,47 @@ tr:hover td{background:rgba(28,28,26,.015)}
   <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-employee')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveEmployee()" data-t="save">Save Employee</button></div></div>
 </div>
 
+<!-- RENT FULL PAYMENT MODAL -->
+<div class="modal-overlay" id="modal-rent-paid" onclick="if(event.target===this)closeModal('modal-rent-paid')">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 id="rent-paid-title">Confirm Payment</h3><button class="mc-btn" onclick="closeModal('modal-rent-paid')">×</button></div>
+    <div class="mb">
+      <div style="background:var(--successbg);border:1px solid #b8dfc8;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">✓</span>
+        <div>
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Full Amount</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--success)" id="rent-paid-amount-display">৳0</div>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="field"><label>Payment Method</label>
+          <select id="rent-paid-method">
+            <option value="cash">Cash</option>
+            <option value="cheque">Cheque</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="bkash">bKash</option>
+            <option value="nagad">Nagad</option>
+          </select>
+        </div>
+        <div class="field"><label>Deposited To</label>
+          <select id="rent-paid-deposited">
+            <option value="bank">Bank</option>
+            <option value="managing_director">Managing Director</option>
+            <option value="director">Director</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Payment Date</label><input type="date" id="rent-paid-date"/></div>
+        <div class="field"><label>Notes (optional)</label><input type="text" id="rent-paid-notes" placeholder="Cheque no., reference…"/></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rent-paid')">Cancel</button>
+      <button class="btn btn-dark" onclick="saveFullRent()">✓ Confirm Paid</button>
+    </div>
+  </div>
+</div>
+
 <!-- SALARY CUSTOM AMOUNT MODAL -->
 <div class="modal-overlay" id="modal-sal-custom" onclick="if(event.target===this)closeModal('modal-sal-custom')">
   <div class="modal" style="max-width:420px">
@@ -783,7 +824,7 @@ async function loadRent(){
       <td>
         <div class="qa-row">
           <span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span>
-          <button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year})" title="Mark fully paid">✓ Paid</button>
+          <button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}' )" title="Mark fully paid">✓ Paid</button>
           <button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')" title="Enter partial amount">~ Partial</button>
           <button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})" title="Mark unpaid">✗ Unpaid</button>
         </div>
@@ -794,21 +835,41 @@ async function loadRent(){
   }).join('');
 }
 
-async function quickRentPaid(tenantId,existingId,monthlyRent,month,year){
-  const today=new Date().toISOString().slice(0,10);
-  const payload={tenant_id:tenantId,month,year,amount_due:monthlyRent,amount_paid:monthlyRent,payment_status:'paid',payment_method:'cash',payment_date:today,recorded_by:currentUser.id};
-  // Set building_id from tenant's apartment
+function quickRentPaid(tenantId,existingId,monthlyRent,month,year,name){
+  // Open a small modal to confirm method & date instead of assuming cash
+  currentRentContext={tenantId,existingId,monthlyRent,month,year,fullPay:true};
+  document.getElementById('rent-paid-title').textContent=`Confirm Payment — ${name}`;
+  document.getElementById('rent-paid-amount-display').textContent=fmt(monthlyRent);
+  document.getElementById('rent-paid-method').value='cash';
+  document.getElementById('rent-paid-deposited').value='bank';
+  document.getElementById('rent-paid-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('rent-paid-notes').value='';
+  openModal('modal-rent-paid');
+}
+
+async function saveFullRent(){
+  if(!currentRentContext)return;
+  const{tenantId,existingId,monthlyRent,month,year}=currentRentContext;
+  const method=document.getElementById('rent-paid-method').value;
+  const deposited=document.getElementById('rent-paid-deposited').value;
+  const date=document.getElementById('rent-paid-date').value;
+  const notes=document.getElementById('rent-paid-notes').value;
   const tenant=tenants.find(t2=>t2.id===tenantId);
+  let aptId=null,bldId=null;
   if(tenant?.apartment_id){
     const{data:apt}=await sbClient.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();
-    if(apt){payload.building_id=apt.building_id;payload.apartment_id=tenant.apartment_id;}
+    if(apt){aptId=tenant.apartment_id;bldId=apt.building_id;}
   }
   let error;
-  if(existingId){({error}=await sbClient.from('rent_payments').update({amount_paid:monthlyRent,payment_status:'paid',payment_date:today}).eq('id',existingId));}
-  else{({error}=await sbClient.from('rent_payments').insert(payload));}
+  if(existingId){
+    ({error}=await sbClient.from('rent_payments').update({amount_paid:monthlyRent,payment_status:'paid',payment_method:method,deposited_to:deposited,payment_date:date||null,notes}).eq('id',existingId));
+  } else {
+    ({error}=await sbClient.from('rent_payments').insert({tenant_id:tenantId,apartment_id:aptId,building_id:bldId,month,year,amount_due:monthlyRent,amount_paid:monthlyRent,payment_status:'paid',payment_method:method,deposited_to:deposited,payment_date:date||null,notes,recorded_by:currentUser.id}));
+  }
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast('Marked as paid ✓');
-  updateRentRowUI(tenantId,'paid',monthlyRent,'cash',today);
+  closeModal('modal-rent-paid');
+  updateRentRowUI(tenantId,'paid',monthlyRent,method,date);
 }
 
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
