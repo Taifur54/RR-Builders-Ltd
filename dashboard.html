@@ -114,6 +114,45 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--text)}
 .btn-ghost:hover{border-color:var(--text)}
 .btn-sm{padding:5px 12px;font-size:12px}
+.btn-success{background:var(--successbg);border:1px solid #b8dfc8;color:var(--success);font-weight:600}
+.btn-success:hover{background:#daf0e4}
+.btn-danger{background:var(--dangerbg);border:1px solid #f5c0c0;color:var(--danger);font-weight:600}
+.btn-danger:hover{background:#fde0e0}
+.btn-warn{background:var(--warnbg);border:1px solid #f0d8a0;color:var(--warn);font-weight:600}
+.btn-warn:hover{background:#fdf0cc}
+
+/* QUICK ACTION ROW STYLES */
+.qa-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.qa-btn{padding:4px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;letter-spacing:.2px;white-space:nowrap}
+.qa-paid{background:var(--successbg);border-color:#b8dfc8;color:var(--success)}
+.qa-paid:hover,.qa-paid.active{background:var(--success);color:#fff;border-color:var(--success)}
+.qa-partial{background:var(--warnbg);border-color:#f0d8a0;color:var(--warn)}
+.qa-partial:hover,.qa-partial.active{background:var(--warn);color:#fff;border-color:var(--warn)}
+.qa-unpaid{background:var(--dangerbg);border-color:#f5c0c0;color:var(--danger)}
+.qa-unpaid:hover,.qa-unpaid.active{background:var(--danger);color:#fff;border-color:var(--danger)}
+.qa-edit{background:var(--surface3);border-color:var(--border2);color:var(--muted);padding:4px 8px}
+.qa-edit:hover{background:var(--border);color:var(--text)}
+
+/* INLINE PARTIAL INPUT */
+.partial-inline{display:none;margin-top:6px;align-items:center;gap:6px;flex-wrap:wrap}
+.partial-inline.open{display:flex}
+.partial-inline input{width:120px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:6px;padding:4px 8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none}
+.partial-inline input:focus{border-color:var(--text)}
+
+/* SALARY QUICK ROW */
+.sal-amount-display{font-family:'DM Serif Display',serif;font-size:15px;color:var(--text)}
+.sal-amount-display.paid-amt{color:var(--success)}
+.sal-custom-wrap{display:none;align-items:center;gap:6px;margin-top:6px}
+.sal-custom-wrap.open{display:flex}
+.sal-custom-wrap input{width:130px;background:var(--surface2);border:1.5px solid var(--border2);border-radius:6px;padding:4px 8px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none}
+.sal-custom-wrap input:focus{border-color:var(--text)}
+
+/* STATUS PILL (larger, for table rows) */
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.sp-paid{background:var(--successbg);color:var(--success)}
+.sp-partial{background:var(--warnbg);color:var(--warn)}
+.sp-unpaid{background:var(--dangerbg);color:var(--danger)}
 
 /* MODALS */
 .modal-overlay{position:fixed;inset:0;background:rgba(28,28,26,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
@@ -165,6 +204,9 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .ni .nt{font-size:13px;font-weight:500}
 .ni .nm{font-size:12px;color:var(--muted);margin-top:2px;font-weight:300}
 .ni .nd{font-size:11px;color:var(--muted2);margin-top:4px}
+
+/* LOADING SPINNER */
+.loading-row td{text-align:center;color:var(--muted2);padding:32px;font-size:13px}
 
 /* RESPONSIVE */
 @media(max-width:768px){
@@ -317,21 +359,47 @@ tr:hover td{background:rgba(28,28,26,.015)}
       <div class="tw"><div class="ox"><table><thead><tr><th data-t="name">Name</th><th data-t="apartment">Apartment</th><th data-t="monthly_rent">Monthly Rent</th><th data-t="advance">Advance</th><th data-t="phone">Phone</th><th data-t="status">Status</th><th>Action</th></tr></thead><tbody id="tenants-body"></tbody></table></div></div>
     </div>
 
-    <!-- RENT -->
+    <!-- RENT COLLECTION (redesigned) -->
     <div class="page" id="page-rent">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_rent">Rent Collection</h2><p data-t="rent_sub">Track monthly rent payments</p></div><button class="btn btn-dark" onclick="openModal('modal-rent')" data-t="add_payment">+ Record Payment</button></div>
+      <div class="ph-row">
+        <div class="ph"><h2 data-t="nav_rent">Rent Collection</h2><p data-t="rent_sub">Track monthly rent payments</p></div>
+      </div>
       <div class="fr">
-        <select id="rent-month-filter" onchange="loadRent()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
+        <select id="rent-month-filter" onchange="loadRent()">
+          <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+        </select>
         <select id="rent-year-filter" onchange="loadRent()"></select>
         <select id="rent-building-filter" onchange="loadRent()"><option value="">All Buildings</option></select>
         <select id="rent-status-filter" onchange="loadRent()"><option value="">All Status</option><option value="paid">Paid</option><option value="partial">Partial</option><option value="unpaid">Unpaid</option></select>
       </div>
       <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
-        <div class="stat-card"><div class="lbl" data-t="total_due">Total Due</div><div class="val" id="r-total-due">৳0</div></div>
-        <div class="stat-card t-green"><div class="lbl" data-t="collected">Collected</div><div class="val" id="r-collected">৳0</div></div>
-        <div class="stat-card t-red"><div class="lbl" data-t="outstanding">Outstanding</div><div class="val" id="r-outstanding">৳0</div></div>
+        <div class="stat-card"><div class="lbl">Total Due</div><div class="val" id="r-total-due">৳0</div></div>
+        <div class="stat-card t-green"><div class="lbl">Collected</div><div class="val" id="r-collected">৳0</div></div>
+        <div class="stat-card t-red"><div class="lbl">Outstanding</div><div class="val" id="r-outstanding">৳0</div></div>
+        <div class="stat-card"><div class="lbl">Unpaid Units</div><div class="val" id="r-unpaid-count">0</div></div>
       </div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="tenant">Tenant</th><th data-t="apartment">Apt</th><th data-t="building">Building</th><th data-t="due">Due</th><th data-t="paid">Paid</th><th data-t="method">Method</th><th data-t="deposited">Deposited To</th><th data-t="status">Status</th><th>Action</th></tr></thead><tbody id="rent-body"></tbody></table></div></div>
+      <div class="tw">
+        <div class="th">
+          <h3>Rent Status</h3>
+          <div style="font-size:12px;color:var(--muted)">Click buttons on each row to update payment status</div>
+        </div>
+        <div class="ox">
+          <table>
+            <thead>
+              <tr>
+                <th>Tenant</th>
+                <th>Apt / Building</th>
+                <th>Monthly Rent</th>
+                <th>Paid Amount</th>
+                <th>Status & Actions</th>
+                <th>Method</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="rent-body"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- SALES -->
@@ -362,16 +430,46 @@ tr:hover td{background:rgba(28,28,26,.015)}
       <div class="tw"><div class="ox"><table><thead><tr><th data-t="name">Name</th><th data-t="type">Type</th><th data-t="building">Building</th><th data-t="monthly_salary">Monthly Salary</th><th data-t="phone">Phone</th><th data-t="status">Status</th></tr></thead><tbody id="employees-body"></tbody></table></div></div>
     </div>
 
-    <!-- SALARY -->
+    <!-- SALARY (redesigned) -->
     <div class="page" id="page-salary">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_salary">Salary Payments</h2><p data-t="sal_sub">Monthly salary records</p></div><button class="btn btn-dark" onclick="openModal('modal-salary')" data-t="pay_salary">+ Pay Salary</button></div>
-      <div class="fr"><select id="sal-month-filter" onchange="loadSalary()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select><select id="sal-year-filter" onchange="loadSalary()"></select></div>
-      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
-        <div class="stat-card"><div class="lbl" data-t="total_due">Total Due</div><div class="val" id="sal-total-due">৳0</div></div>
-        <div class="stat-card t-green"><div class="lbl" data-t="paid">Paid</div><div class="val" id="sal-paid">৳0</div></div>
-        <div class="stat-card t-red"><div class="lbl" data-t="unpaid">Unpaid</div><div class="val" id="sal-unpaid">৳0</div></div>
+      <div class="ph-row">
+        <div class="ph"><h2 data-t="nav_salary">Salary Payments</h2><p data-t="sal_sub">Monthly salary records</p></div>
       </div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="employee">Employee</th><th data-t="type">Type</th><th data-t="due">Due</th><th data-t="paid">Paid</th><th data-t="method">Method</th><th data-t="date">Date</th><th data-t="status">Status</th></tr></thead><tbody id="salary-body"></tbody></table></div></div>
+      <div class="fr">
+        <select id="sal-month-filter" onchange="loadSalary()">
+          <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+        </select>
+        <select id="sal-year-filter" onchange="loadSalary()"></select>
+        <select id="sal-type-filter" onchange="loadSalary()"><option value="">All Types</option><option value="staff">Staff</option><option value="guard">Guards</option><option value="worker">Workers</option><option value="engineer">Engineers</option><option value="manager">Managers</option></select>
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+        <div class="stat-card"><div class="lbl">Total Due</div><div class="val" id="sal-total-due">৳0</div></div>
+        <div class="stat-card t-green"><div class="lbl">Paid</div><div class="val" id="sal-paid">৳0</div></div>
+        <div class="stat-card t-red"><div class="lbl">Unpaid</div><div class="val" id="sal-unpaid">৳0</div></div>
+        <div class="stat-card"><div class="lbl">Remaining Staff</div><div class="val" id="sal-unpaid-count">0</div></div>
+      </div>
+      <div class="tw">
+        <div class="th">
+          <h3>Salary Status</h3>
+          <div style="font-size:12px;color:var(--muted)">Click <strong>Mark Paid</strong> for quick payment, or ✏️ to enter a custom amount</div>
+        </div>
+        <div class="ox">
+          <table>
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Type</th>
+                <th>Fixed Salary</th>
+                <th>Amount Paid</th>
+                <th>Status & Actions</th>
+                <th>Method</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="salary-body"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- REPORTS -->
@@ -414,12 +512,6 @@ tr:hover td{background:rgba(28,28,26,.015)}
   <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-tenant')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveTenant()" data-t="save">Save Tenant</button></div></div>
 </div>
 
-<div class="modal-overlay" id="modal-rent" onclick="if(event.target===this)closeModal('modal-rent')">
-  <div class="modal"><div class="mh"><h3 data-t="add_payment">Record Rent Payment</h3><button class="mc-btn" onclick="closeModal('modal-rent')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field ff"><label data-t="tenant">Tenant</label><select id="rp-tenant"><option value="">Select Tenant</option></select></div><div class="field"><label data-t="month">Month</label><select id="rp-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div><div class="field"><label data-t="year">Year</label><input type="number" id="rp-year"/></div><div class="field"><label data-t="amount_due">Amount Due (৳)</label><input type="number" id="rp-due"/></div><div class="field"><label data-t="amount_paid">Amount Paid (৳)</label><input type="number" id="rp-paid"/></div><div class="field"><label data-t="late_fee">Late Fee (৳)</label><input type="number" id="rp-late" value="0"/></div><div class="field"><label data-t="payment_method">Payment Method</label><select id="rp-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div><div class="field"><label data-t="cheque_no">Cheque Number</label><input id="rp-cheque"/></div><div class="field"><label data-t="deposited_to">Deposited To</label><select id="rp-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div><div class="field"><label data-t="payment_date">Payment Date</label><input type="date" id="rp-date"/></div><div class="field"><label data-t="due_date">Due Date</label><input type="date" id="rp-due-date"/></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="rp-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-rent')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveRentPayment()" data-t="save">Save Payment</button></div></div>
-</div>
-
 <div class="modal-overlay" id="modal-sale" onclick="if(event.target===this)closeModal('modal-sale')">
   <div class="modal"><div class="mh"><h3 data-t="add_sale">Record Apartment Sale</h3><button class="mc-btn" onclick="closeModal('modal-sale')">×</button></div>
   <div class="mb"><div class="fg"><div class="field"><label data-t="building">Building</label><select id="s-building" onchange="loadApartments('s-apartment',this.value)"><option value="">Select</option></select></div><div class="field"><label data-t="apartment">Apartment</label><select id="s-apartment"><option value="">Select</option></select></div><div class="field"><label data-t="buyer_name">Buyer Name</label><input id="s-buyer"/></div><div class="field"><label data-t="buyer_phone">Buyer Phone</label><input id="s-phone"/></div><div class="field"><label data-t="buyer_nid">Buyer NID</label><input id="s-nid"/></div><div class="field"><label data-t="sale_price">Sale Price (৳)</label><input type="number" id="s-price"/></div><div class="field"><label data-t="advance">Advance Paid (৳)</label><input type="number" id="s-advance"/></div><div class="field"><label data-t="payment_method">Payment Method</label><select id="s-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option><option value="installment">Installment</option></select></div><div class="field"><label data-t="cheque_no">Cheque Number</label><input id="s-cheque"/></div><div class="field"><label data-t="deposited_to">Deposited To</label><select id="s-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div><div class="field"><label data-t="sale_date">Sale Date</label><input type="date" id="s-date"/></div><div class="field"><label data-t="registry">Registry Done?</label><select id="s-registry"><option value="false">No</option><option value="true">Yes</option></select></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="s-notes"></textarea></div></div></div>
@@ -450,10 +542,44 @@ tr:hover td{background:rgba(28,28,26,.015)}
   <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-employee')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveEmployee()" data-t="save">Save Employee</button></div></div>
 </div>
 
-<div class="modal-overlay" id="modal-salary" onclick="if(event.target===this)closeModal('modal-salary')">
-  <div class="modal"><div class="mh"><h3 data-t="pay_salary">Pay Salary</h3><button class="mc-btn" onclick="closeModal('modal-salary')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field ff"><label data-t="employee">Employee</label><select id="sp-employee" onchange="autoFillSalary()"><option value="">Select Employee</option></select></div><div class="field"><label data-t="month">Month</label><select id="sp-month"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div><div class="field"><label data-t="year">Year</label><input type="number" id="sp-year"/></div><div class="field"><label data-t="amount_due">Amount Due (৳)</label><input type="number" id="sp-due"/></div><div class="field"><label data-t="amount_paid">Amount Paid (৳)</label><input type="number" id="sp-paid"/></div><div class="field"><label data-t="payment_method">Payment Method</label><select id="sp-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div><div class="field"><label data-t="payment_date">Payment Date</label><input type="date" id="sp-date"/></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="sp-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-salary')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveSalaryPayment()" data-t="save">Save Payment</button></div></div>
+<!-- SALARY CUSTOM AMOUNT MODAL -->
+<div class="modal-overlay" id="modal-sal-custom" onclick="if(event.target===this)closeModal('modal-sal-custom')">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 id="sal-custom-title">Custom Salary Payment</h3><button class="mc-btn" onclick="closeModal('modal-sal-custom')">×</button></div>
+    <div class="mb">
+      <div class="fg">
+        <div class="field"><label>Amount Paid (৳)</label><input type="number" id="sal-custom-amount" placeholder="Enter amount"/></div>
+        <div class="field"><label>Payment Method</label><select id="sal-custom-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label>Payment Date</label><input type="date" id="sal-custom-date"/></div>
+        <div class="field ff"><label>Notes</label><textarea id="sal-custom-notes" style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-sal-custom')">Cancel</button>
+      <button class="btn btn-dark" onclick="saveCustomSalary()">Save Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENT PARTIAL MODAL -->
+<div class="modal-overlay" id="modal-rent-partial" onclick="if(event.target===this)closeModal('modal-rent-partial')">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 id="rent-partial-title">Partial Rent Payment</h3><button class="mc-btn" onclick="closeModal('modal-rent-partial')">×</button></div>
+    <div class="mb">
+      <div class="fg">
+        <div class="field"><label>Amount Paid (৳)</label><input type="number" id="rent-partial-amount" placeholder="Enter amount paid"/></div>
+        <div class="field"><label>Late Fee (৳)</label><input type="number" id="rent-partial-late" value="0"/></div>
+        <div class="field"><label>Payment Method</label><select id="rent-partial-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label>Deposited To</label><select id="rent-partial-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div>
+        <div class="field"><label>Payment Date</label><input type="date" id="rent-partial-date"/></div>
+        <div class="field ff"><label>Notes</label><textarea id="rent-partial-notes" style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-rent-partial')">Cancel</button>
+      <button class="btn btn-dark" onclick="savePartialRent()">Save Payment</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -465,11 +591,13 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
 let currentUser=null, userProfile=null, buildings=[], employees=[], tenants=[], currentDeliveryId=null;
-let lang = localStorage.getItem('bt_lang')||'en';
+let currentSalaryContext=null; // {employeeId, month, year, fixedSalary, existingRecordId}
+let currentRentContext=null;   // {tenantId, month, year, monthlyRent, existingRecordId}
+let lang=localStorage.getItem('bt_lang')||'en';
 
-const T = {
-  en:{ overview:'Overview',rentals:'Rentals',sales_label:'Sales',construction:'Construction',people:'People',properties:'Properties',reports_label:'Reports',nav_dashboard:'Dashboard',nav_tenants:'Tenants',nav_rent:'Rent Collection',nav_sales:'Apartment Sales',nav_expenses:'Expenses',nav_materials:'Materials',nav_employees:'Employees',nav_salary:'Salaries',nav_buildings:'Buildings',nav_reports:'Reports',logout:'Sign Out',notifications:'Notifications',mark_read:'Mark all read',add_building:'+ Add Building',add_tenant:'+ Add Tenant',add_payment:'+ Record Payment',add_sale:'+ Record Sale',add_expense:'+ Add Expense',add_material:'+ Add Order',add_employee:'+ Add Employee',pay_salary:'+ Pay Salary',dash_sub:'Overview of all operations',total_rent:'Rent Collected (This Month)',pending_rent:'Pending Rent',total_expenses:'Expenses (This Month)',total_salary:'Salary Paid (This Month)',active_tenants:'Active Tenants',pending_materials:'Materials Pending Delivery',recent_payments:'Recent Rent Payments',pending_deliveries:'Pending Deliveries',name:'Name',tenant:'Tenant',building:'Building',amount:'Amount',method:'Method',status:'Status',date:'Date',apartment:'Apt',monthly_rent:'Monthly Rent',advance:'Advance',phone:'Phone',material:'Material',ordered:'Ordered',delivered:'Delivered',remaining:'Remaining',supplier:'Supplier',total_cost:'Total Cost',balance:'Balance',employee:'Employee',type:'Type',due:'Due',paid:'Paid',unpaid:'Unpaid',month:'Month',year:'Year',amount_due:'Amount Due',amount_paid:'Amount Paid',late_fee:'Late Fee',payment_method:'Payment Method',cheque_no:'Cheque Number',deposited_to:'Deposited To',payment_date:'Payment Date',due_date:'Due Date',notes:'Notes',full_name:'Full Name',nid:'NID Number',email:'Email',lease_start:'Lease Start',lease_end:'Lease End',security_deposit:'Security Deposit',emergency:'Emergency Contact',building_name:'Building Name',address:'Address',total_floors:'Total Floors',floor_label:'Floor',category:'Category',description:'Description',vendor:'Vendor',receipt_no:'Receipt Number',expense_date:'Date',material_type:'Material Type',custom_type:'Custom Type',supplier_phone:'Supplier Phone',qty_ordered:'Qty Ordered',unit:'Unit',unit_price:'Unit Price',total_amount:'Total Amount',order_date:'Order Date',expected_delivery:'Expected Delivery',qty_delivered:'Qty Delivered',delivery_date:'Delivery Date',delivery_time:'Delivery Time',payment_made:'Payment Made',update_delivery:'Update Delivery',join_date:'Join Date',monthly_salary:'Monthly Salary',buyer_name:'Buyer Name',buyer_phone:'Buyer Phone',buyer_nid:'Buyer NID',sale_price:'Sale Price',sale_date:'Sale Date',registry:'Registry Done?',registry_done:'Registry',deposited:'Deposited To',buyer:'Buyer',all:'All',staff:'Staff',guard:'Guards',worker:'Workers',save:'Save',cancel:'Cancel',total_due:'Total Due',collected:'Collected',outstanding:'Outstanding',monthly_breakdown:'Monthly Breakdown',yearly_rent:'Yearly Rent',yearly_expenses:'Yearly Expenses',yearly_salary:'Yearly Salaries',apartment_sales:'Sales Revenue',rent_collected:'Rent Collected',expenses:'Expenses',salaries:'Salaries',net:'Net',buildings_sub:'Manage all properties',tenants_sub:'All active and past tenants',rent_sub:'Track monthly rent payments',sales_sub:'Track sold apartments',exp_sub:'Track all construction costs',mat_sub:'Track orders and deliveries',emp_sub:'Staff, guards and workers',sal_sub:'Monthly salary records',rep_sub:'Financial summaries' },
-  bn:{ overview:'সংক্ষিপ্ত',rentals:'ভাড়া',sales_label:'বিক্রয়',construction:'নির্মাণ',people:'জনবল',properties:'সম্পত্তি',reports_label:'রিপোর্ট',nav_dashboard:'ড্যাশবোর্ড',nav_tenants:'ভাড়াটে',nav_rent:'ভাড়া সংগ্রহ',nav_sales:'ফ্ল্যাট বিক্রয়',nav_expenses:'খরচ',nav_materials:'মালামাল',nav_employees:'কর্মচারী',nav_salary:'বেতন',nav_buildings:'ভবন',nav_reports:'রিপোর্ট',logout:'বের হন',notifications:'বিজ্ঞপ্তি',mark_read:'সব পড়েছি',add_building:'+ ভবন যোগ',add_tenant:'+ ভাড়াটে যোগ',add_payment:'+ পেমেন্ট রেকর্ড',add_sale:'+ বিক্রয় রেকর্ড',add_expense:'+ খরচ যোগ',add_material:'+ অর্ডার যোগ',add_employee:'+ কর্মচারী যোগ',pay_salary:'+ বেতন দিন',dash_sub:'সকল কার্যক্রমের সংক্ষিপ্ত বিবরণ',total_rent:'ভাড়া সংগ্রহ (এই মাস)',pending_rent:'বকেয়া ভাড়া',total_expenses:'নির্মাণ খরচ (এই মাস)',total_salary:'বেতন প্রদান (এই মাস)',active_tenants:'সক্রিয় ভাড়াটে',pending_materials:'সরবরাহের অপেক্ষায়',recent_payments:'সাম্প্রতিক ভাড়া পেমেন্ট',pending_deliveries:'অপেক্ষামাণ ডেলিভারি',name:'নাম',tenant:'ভাড়াটে',building:'ভবন',amount:'পরিমাণ',method:'পদ্ধতি',status:'অবস্থা',date:'তারিখ',apartment:'ফ্ল্যাট',monthly_rent:'মাসিক ভাড়া',advance:'অগ্রিম',phone:'ফোন',material:'মালামাল',ordered:'অর্ডার',delivered:'সরবরাহ',remaining:'বাকি',supplier:'সরবরাহকারী',total_cost:'মোট খরচ',balance:'অবশিষ্ট',employee:'কর্মচারী',type:'ধরন',due:'বাকি',paid:'পরিশোধ',unpaid:'অপরিশোধিত',month:'মাস',year:'বছর',amount_due:'বাকি পরিমাণ',amount_paid:'পরিশোধিত',late_fee:'বিলম্ব ফি',payment_method:'পেমেন্ট পদ্ধতি',cheque_no:'চেক নম্বর',deposited_to:'জমার স্থান',payment_date:'পেমেন্টের তারিখ',due_date:'নির্ধারিত তারিখ',notes:'মন্তব্য',full_name:'পূর্ণ নাম',nid:'জাতীয় পরিচয়পত্র',email:'ইমেইল',lease_start:'চুক্তি শুরু',lease_end:'চুক্তি শেষ',security_deposit:'নিরাপত্তা জমা',emergency:'জরুরি যোগাযোগ',building_name:'ভবনের নাম',address:'ঠিকানা',total_floors:'মোট তলা',floor_label:'তলা',category:'বিভাগ',description:'বিবরণ',vendor:'বিক্রেতা',receipt_no:'রসিদ নং',expense_date:'তারিখ',material_type:'মালামালের ধরন',custom_type:'অন্য ধরন',supplier_phone:'সরবরাহকারীর ফোন',qty_ordered:'অর্ডার পরিমাণ',unit:'একক',unit_price:'একক মূল্য',total_amount:'মোট পরিমাণ',order_date:'অর্ডারের তারিখ',expected_delivery:'প্রত্যাশিত ডেলিভারি',qty_delivered:'সরবরাহকৃত',delivery_date:'ডেলিভারি তারিখ',delivery_time:'ডেলিভারি সময়',payment_made:'পেমেন্ট করা হয়েছে',update_delivery:'ডেলিভারি আপডেট',join_date:'যোগদানের তারিখ',monthly_salary:'মাসিক বেতন',buyer_name:'ক্রেতার নাম',buyer_phone:'ক্রেতার ফোন',buyer_nid:'ক্রেতার NID',sale_price:'বিক্রয় মূল্য',sale_date:'বিক্রয়ের তারিখ',registry:'রেজিস্ট্রি হয়েছে?',registry_done:'রেজিস্ট্রি',deposited:'জমার স্থান',buyer:'ক্রেতা',all:'সব',staff:'স্টাফ',guard:'গার্ড',worker:'শ্রমিক',save:'সংরক্ষণ',cancel:'বাতিল',total_due:'মোট বাকি',collected:'সংগৃহীত',outstanding:'বকেয়া',monthly_breakdown:'মাসিক বিবরণ',yearly_rent:'বার্ষিক ভাড়া',yearly_expenses:'বার্ষিক খরচ',yearly_salary:'বার্ষিক বেতন',apartment_sales:'বিক্রয় আয়',rent_collected:'ভাড়া সংগৃহীত',expenses:'খরচ',salaries:'বেতন',net:'নীট',buildings_sub:'সকল সম্পত্তি ব্যবস্থাপনা',tenants_sub:'সকল ভাড়াটের তালিকা',rent_sub:'মাসিক ভাড়া পেমেন্ট ট্র্যাক করুন',sales_sub:'বিক্রীত ফ্ল্যাট ট্র্যাক করুন',exp_sub:'নির্মাণ খরচের রেকর্ড',mat_sub:'অর্ডার ও ডেলিভারি ট্র্যাক',emp_sub:'স্টাফ, গার্ড ও শ্রমিক',sal_sub:'মাসিক বেতনের রেকর্ড',rep_sub:'আর্থিক সারসংক্ষেপ' }
+const T={
+  en:{overview:'Overview',rentals:'Rentals',sales_label:'Sales',construction:'Construction',people:'People',properties:'Properties',reports_label:'Reports',nav_dashboard:'Dashboard',nav_tenants:'Tenants',nav_rent:'Rent Collection',nav_sales:'Apartment Sales',nav_expenses:'Expenses',nav_materials:'Materials',nav_employees:'Employees',nav_salary:'Salaries',nav_buildings:'Buildings',nav_reports:'Reports',logout:'Sign Out',notifications:'Notifications',mark_read:'Mark all read',add_building:'+ Add Building',add_tenant:'+ Add Tenant',add_payment:'+ Record Payment',add_sale:'+ Record Sale',add_expense:'+ Add Expense',add_material:'+ Add Order',add_employee:'+ Add Employee',pay_salary:'+ Pay Salary',dash_sub:'Overview of all operations',total_rent:'Rent Collected (This Month)',pending_rent:'Pending Rent',total_expenses:'Expenses (This Month)',total_salary:'Salary Paid (This Month)',active_tenants:'Active Tenants',pending_materials:'Materials Pending Delivery',recent_payments:'Recent Rent Payments',pending_deliveries:'Pending Deliveries',name:'Name',tenant:'Tenant',building:'Building',amount:'Amount',method:'Method',status:'Status',date:'Date',apartment:'Apt',monthly_rent:'Monthly Rent',advance:'Advance',phone:'Phone',material:'Material',ordered:'Ordered',delivered:'Delivered',remaining:'Remaining',supplier:'Supplier',total_cost:'Total Cost',balance:'Balance',employee:'Employee',type:'Type',due:'Due',paid:'Paid',unpaid:'Unpaid',month:'Month',year:'Year',amount_due:'Amount Due',amount_paid:'Amount Paid',late_fee:'Late Fee',payment_method:'Payment Method',cheque_no:'Cheque Number',deposited_to:'Deposited To',payment_date:'Payment Date',due_date:'Due Date',notes:'Notes',full_name:'Full Name',nid:'NID Number',email:'Email',lease_start:'Lease Start',lease_end:'Lease End',security_deposit:'Security Deposit',emergency:'Emergency Contact',building_name:'Building Name',address:'Address',total_floors:'Total Floors',floor_label:'Floor',category:'Category',description:'Description',vendor:'Vendor',receipt_no:'Receipt Number',expense_date:'Date',material_type:'Material Type',custom_type:'Custom Type',supplier_phone:'Supplier Phone',qty_ordered:'Qty Ordered',unit:'Unit',unit_price:'Unit Price',total_amount:'Total Amount',order_date:'Order Date',expected_delivery:'Expected Delivery',qty_delivered:'Qty Delivered',delivery_date:'Delivery Date',delivery_time:'Delivery Time',payment_made:'Payment Made',update_delivery:'Update Delivery',join_date:'Join Date',monthly_salary:'Monthly Salary',buyer_name:'Buyer Name',buyer_phone:'Buyer Phone',buyer_nid:'Buyer NID',sale_price:'Sale Price',sale_date:'Sale Date',registry:'Registry Done?',registry_done:'Registry',deposited:'Deposited To',buyer:'Buyer',all:'All',staff:'Staff',guard:'Guards',worker:'Workers',save:'Save',cancel:'Cancel',total_due:'Total Due',collected:'Collected',outstanding:'Outstanding',monthly_breakdown:'Monthly Breakdown',yearly_rent:'Yearly Rent',yearly_expenses:'Yearly Expenses',yearly_salary:'Yearly Salaries',apartment_sales:'Sales Revenue',rent_collected:'Rent Collected',expenses:'Expenses',salaries:'Salaries',net:'Net',buildings_sub:'Manage all properties',tenants_sub:'All active and past tenants',rent_sub:'Track monthly rent payments',sales_sub:'Track sold apartments',exp_sub:'Track all construction costs',mat_sub:'Track orders and deliveries',emp_sub:'Staff, guards and workers',sal_sub:'Monthly salary records',rep_sub:'Financial summaries'},
+  bn:{overview:'সংক্ষিপ্ত',rentals:'ভাড়া',sales_label:'বিক্রয়',construction:'নির্মাণ',people:'জনবল',properties:'সম্পত্তি',reports_label:'রিপোর্ট',nav_dashboard:'ড্যাশবোর্ড',nav_tenants:'ভাড়াটে',nav_rent:'ভাড়া সংগ্রহ',nav_sales:'ফ্ল্যাট বিক্রয়',nav_expenses:'খরচ',nav_materials:'মালামাল',nav_employees:'কর্মচারী',nav_salary:'বেতন',nav_buildings:'ভবন',nav_reports:'রিপোর্ট',logout:'বের হন',notifications:'বিজ্ঞপ্তি',mark_read:'সব পড়েছি',add_building:'+ ভবন যোগ',add_tenant:'+ ভাড়াটে যোগ',add_payment:'+ পেমেন্ট রেকর্ড',add_sale:'+ বিক্রয় রেকর্ড',add_expense:'+ খরচ যোগ',add_material:'+ অর্ডার যোগ',add_employee:'+ কর্মচারী যোগ',pay_salary:'+ বেতন দিন',dash_sub:'সকল কার্যক্রমের সংক্ষিপ্ত বিবরণ',total_rent:'ভাড়া সংগ্রহ (এই মাস)',pending_rent:'বকেয়া ভাড়া',total_expenses:'নির্মাণ খরচ (এই মাস)',total_salary:'বেতন প্রদান (এই মাস)',active_tenants:'সক্রিয় ভাড়াটে',pending_materials:'সরবরাহের অপেক্ষায়',recent_payments:'সাম্প্রতিক ভাড়া পেমেন্ট',pending_deliveries:'অপেক্ষামাণ ডেলিভারি',name:'নাম',tenant:'ভাড়াটে',building:'ভবন',amount:'পরিমাণ',method:'পদ্ধতি',status:'অবস্থা',date:'তারিখ',apartment:'ফ্ল্যাট',monthly_rent:'মাসিক ভাড়া',advance:'অগ্রিম',phone:'ফোন',material:'মালামাল',ordered:'অর্ডার',delivered:'সরবরাহ',remaining:'বাকি',supplier:'সরবরাহকারী',total_cost:'মোট খরচ',balance:'অবশিষ্ট',employee:'কর্মচারী',type:'ধরন',due:'বাকি',paid:'পরিশোধ',unpaid:'অপরিশোধিত',month:'মাস',year:'বছর',amount_due:'বাকি পরিমাণ',amount_paid:'পরিশোধিত',late_fee:'বিলম্ব ফি',payment_method:'পেমেন্ট পদ্ধতি',cheque_no:'চেক নম্বর',deposited_to:'জমার স্থান',payment_date:'পেমেন্টের তারিখ',due_date:'নির্ধারিত তারিখ',notes:'মন্তব্য',full_name:'পূর্ণ নাম',nid:'জাতীয় পরিচয়পত্র',email:'ইমেইল',lease_start:'চুক্তি শুরু',lease_end:'চুক্তি শেষ',security_deposit:'নিরাপত্তা জমা',emergency:'জরুরি যোগাযোগ',building_name:'ভবনের নাম',address:'ঠিকানা',total_floors:'মোট তলা',floor_label:'তলা',category:'বিভাগ',description:'বিবরণ',vendor:'বিক্রেতা',receipt_no:'রসিদ নং',expense_date:'তারিখ',material_type:'মালামালের ধরন',custom_type:'অন্য ধরন',supplier_phone:'সরবরাহকারীর ফোন',qty_ordered:'অর্ডার পরিমাণ',unit:'একক',unit_price:'একক মূল্য',total_amount:'মোট পরিমাণ',order_date:'অর্ডারের তারিখ',expected_delivery:'প্রত্যাশিত ডেলিভারি',qty_delivered:'সরবরাহকৃত',delivery_date:'ডেলিভারি তারিখ',delivery_time:'ডেলিভারি সময়',payment_made:'পেমেন্ট করা হয়েছে',update_delivery:'ডেলিভারি আপডেট',join_date:'যোগদানের তারিখ',monthly_salary:'মাসিক বেতন',buyer_name:'ক্রেতার নাম',buyer_phone:'ক্রেতার ফোন',buyer_nid:'ক্রেতার NID',sale_price:'বিক্রয় মূল্য',sale_date:'বিক্রয়ের তারিখ',registry:'রেজিস্ট্রি হয়েছে?',registry_done:'রেজিস্ট্রি',deposited:'জমার স্থান',buyer:'ক্রেতা',all:'সব',staff:'স্টাফ',guard:'গার্ড',worker:'শ্রমিক',save:'সংরক্ষণ',cancel:'বাতিল',total_due:'মোট বাকি',collected:'সংগৃহীত',outstanding:'বকেয়া',monthly_breakdown:'মাসিক বিবরণ',yearly_rent:'বার্ষিক ভাড়া',yearly_expenses:'বার্ষিক খরচ',yearly_salary:'বার্ষিক বেতন',apartment_sales:'বিক্রয় আয়',rent_collected:'ভাড়া সংগৃহীত',expenses:'খরচ',salaries:'বেতন',net:'নীট',buildings_sub:'সকল সম্পত্তি ব্যবস্থাপনা',tenants_sub:'সকল ভাড়াটের তালিকা',rent_sub:'মাসিক ভাড়া পেমেন্ট ট্র্যাক করুন',sales_sub:'বিক্রীত ফ্ল্যাট ট্র্যাক করুন',exp_sub:'নির্মাণ খরচের রেকর্ড',mat_sub:'অর্ডার ও ডেলিভারি ট্র্যাক',emp_sub:'স্টাফ, গার্ড ও শ্রমিক',sal_sub:'মাসিক বেতনের রেকর্ড',rep_sub:'আর্থিক সারসংক্ষেপ'}
 };
 
 function t(key){return T[lang][key]||T['en'][key]||key;}
@@ -488,12 +616,13 @@ async function init(){
   if(profile){document.getElementById('user-name').textContent=profile.full_name||currentUser.email;document.getElementById('user-role').textContent=profile.role||'staff';document.getElementById('user-avatar').textContent=(profile.full_name||'U')[0].toUpperCase();}
   else{document.getElementById('user-name').textContent=currentUser.email;}
   const yr=new Date().getFullYear();
-  ['rent-year-filter','sal-year-filter','rep-year-filter','sp-year'].forEach(id=>{const el=document.getElementById(id);if(!el)return;for(let y=yr;y>=yr-5;y--){const o=document.createElement('option');o.value=y;o.textContent=y;el.appendChild(o);}});
-  const rpYearEl=document.getElementById('rp-year');if(rpYearEl)rpYearEl.value=yr;
+  ['rent-year-filter','sal-year-filter','rep-year-filter'].forEach(id=>{const el=document.getElementById(id);if(!el)return;for(let y=yr;y>=yr-5;y--){const o=document.createElement('option');o.value=y;o.textContent=y;el.appendChild(o);}});
   const now=new Date();
   ['rent-month-filter','sal-month-filter'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=now.getMonth()+1;});
-  ['sp-month','rp-month'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=now.getMonth()+1;});
   const repYr=document.getElementById('rep-year-filter');if(repYr&&repYr.options.length>0)repYr.value=yr;
+  // Set default dates for custom modals
+  document.getElementById('sal-custom-date').value=now.toISOString().slice(0,10);
+  document.getElementById('rent-partial-date').value=now.toISOString().slice(0,10);
   await loadBuildings();await loadDashboard();await loadNotifications();setLang(lang);
 }
 
@@ -517,6 +646,7 @@ function fmtDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('en
 function monthName(m){return['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];}
 function statusBadge(s){const map={paid:'badge-success',partial:'badge-warn',unpaid:'badge-danger',delivered:'badge-success',ordered:'badge-info',in_transit:'badge-warn',partially_delivered:'badge-warn',cancelled:'badge-danger',confirmed:'badge-info',active:'badge-success',inactive:'badge-muted',under_construction:'badge-warn',completed:'badge-success'};return `<span class="badge ${map[s]||'badge-muted'}">${s.replace(/_/g,' ')}</span>`;}
 
+// ─── BUILDINGS ────────────────────────────────────────────────
 async function loadBuildings(){
   const{data}=await sbClient.from('buildings').select('*').order('created_at');
   buildings=data||[];
@@ -553,11 +683,11 @@ async function loadApartments(selectId,buildingId){
   const{data}=await sbClient.from('apartments').select('*, floors(floor_number)').eq('building_id',buildingId).order('apartment_number');
   (data||[]).forEach(a=>{const o=document.createElement('option');o.value=a.id;o.textContent=`${a.apartment_number}${a.floors?' (Floor '+a.floors.floor_number+')':''}`;el.appendChild(o);});
 }
+
+// ─── TENANTS ────────────────────────────────────────────────
 async function loadTenants(){
   const{data}=await sbClient.from('tenants').select('*, apartments(apartment_number, buildings(id, name))').order('created_at',{ascending:false});
   tenants=data||[];renderTenants(tenants);
-  const rpTenant=document.getElementById('rp-tenant');
-  if(rpTenant){rpTenant.innerHTML='<option value="">Select Tenant</option>';tenants.filter(t2=>t2.is_active).forEach(t2=>{const o=document.createElement('option');o.value=t2.id;o.textContent=t2.full_name;rpTenant.appendChild(o);});}
 }
 function renderTenants(list){
   const body=document.getElementById('tenants-body');
@@ -587,46 +717,195 @@ async function saveTenant(){
   loadTenants();
 }
 async function toggleTenant(id,current){await sbClient.from('tenants').update({is_active:!current}).eq('id',id);loadTenants();}
+
+// ─── RENT COLLECTION (new smart logic) ────────────────────────
 async function loadRent(){
-  const month=document.getElementById('rent-month-filter').value;
-  const year=document.getElementById('rent-year-filter').value;
-  const building=document.getElementById('rent-building-filter').value;
-  const status=document.getElementById('rent-status-filter').value;
-  let q=sbClient.from('rent_payments').select('*, tenants(full_name), apartments(apartment_number), buildings(name)').eq('month',month).eq('year',year);
-  if(building)q=q.eq('building_id',building);if(status)q=q.eq('payment_status',status);
-  const{data}=await q.order('created_at',{ascending:false});
-  const payments=data||[];
-  const totalDue=payments.reduce((s,p)=>s+Number(p.amount_due),0);
-  const totalPaid=payments.reduce((s,p)=>s+Number(p.amount_paid),0);
+  const month=parseInt(document.getElementById('rent-month-filter').value);
+  const year=parseInt(document.getElementById('rent-year-filter').value);
+  const buildingFilter=document.getElementById('rent-building-filter').value;
+  const statusFilter=document.getElementById('rent-status-filter').value;
+  const body=document.getElementById('rent-body');
+  body.innerHTML='<tr class="loading-row"><td colspan="7">Loading…</td></tr>';
+
+  // Load active tenants
+  if(tenants.length===0)await loadTenants();
+  let activeTenants=tenants.filter(t2=>t2.is_active);
+  if(buildingFilter)activeTenants=activeTenants.filter(t2=>t2.apartments?.buildings?.id===buildingFilter);
+
+  // Load existing payment records for this month/year
+  const{data:existing}=await sbClient.from('rent_payments').select('*').eq('month',month).eq('year',year);
+  const paymentMap={};
+  (existing||[]).forEach(p=>{paymentMap[p.tenant_id]=p;});
+
+  // Build merged list
+  let rows=activeTenants.map(t2=>{
+    const rec=paymentMap[t2.id]||null;
+    return {
+      tenant:t2,
+      record:rec,
+      status:rec?rec.payment_status:'unpaid',
+      amountPaid:rec?Number(rec.amount_paid):0,
+      monthlyRent:Number(t2.monthly_rent||0),
+      method:rec?rec.payment_method:'',
+      paymentDate:rec?rec.payment_date:null,
+    };
+  });
+
+  // Apply status filter
+  if(statusFilter)rows=rows.filter(r=>r.status===statusFilter);
+
+  // Summaries
+  const totalDue=rows.reduce((s,r)=>s+r.monthlyRent,0);
+  const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
+  const unpaidCount=rows.filter(r=>r.status==='unpaid').length;
   document.getElementById('r-total-due').textContent=fmt(totalDue);
   document.getElementById('r-collected').textContent=fmt(totalPaid);
   document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
-  const body=document.getElementById('rent-body');
-  if(!payments.length){body.innerHTML='<tr><td colspan="9"><div class="empty"><p>No payments for this period</p></div></td></tr>';return;}
-  body.innerHTML=payments.map(p=>`<tr><td><strong>${p.tenants?.full_name||'—'}</strong></td><td>${p.apartments?.apartment_number||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_due)}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${p.deposited_to||'—'}</td><td>${statusBadge(p.payment_status)}</td><td><button class="btn btn-ghost btn-sm" onclick="editRent('${p.id}')">Edit</button></td></tr>`).join('');
+  document.getElementById('r-unpaid-count').textContent=unpaidCount;
+
+  if(!rows.length){
+    body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No active tenants found</p></div></td></tr>';
+    return;
+  }
+
+  body.innerHTML=rows.map(r=>{
+    const tid=r.tenant.id;
+    const rid=r.record?r.record.id:'';
+    const aptLabel=r.tenant.apartments?.apartment_number||'—';
+    const bldLabel=r.tenant.apartments?.buildings?.name||'—';
+    const statusClass=r.status==='paid'?'sp-paid':r.status==='partial'?'sp-partial':'sp-unpaid';
+    const statusLabel=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
+    return `<tr id="rent-row-${tid}">
+      <td><strong>${r.tenant.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.tenant.phone||''}</div></td>
+      <td>${aptLabel}<div style="font-size:11px;color:var(--muted)">${bldLabel}</div></td>
+      <td><strong>${fmt(r.monthlyRent)}</strong></td>
+      <td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
+      <td>
+        <div class="qa-row">
+          <span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span>
+          <button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year})" title="Mark fully paid">✓ Paid</button>
+          <button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')" title="Enter partial amount">~ Partial</button>
+          <button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})" title="Mark unpaid">✗ Unpaid</button>
+        </div>
+      </td>
+      <td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
+      <td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
+    </tr>`;
+  }).join('');
 }
-async function saveRentPayment(){
-  const tenantId=document.getElementById('rp-tenant').value;
-  if(!tenantId){showToast('Select tenant','error');return;}
+
+async function quickRentPaid(tenantId,existingId,monthlyRent,month,year){
+  const today=new Date().toISOString().slice(0,10);
+  const payload={tenant_id:tenantId,month,year,amount_due:monthlyRent,amount_paid:monthlyRent,payment_status:'paid',payment_method:'cash',payment_date:today,recorded_by:currentUser.id};
+  // Set building_id from tenant's apartment
   const tenant=tenants.find(t2=>t2.id===tenantId);
-  const paid=parseFloat(document.getElementById('rp-paid').value)||0;
-  const due=parseFloat(document.getElementById('rp-due').value)||0;
-  const status=paid>=due?'paid':paid>0?'partial':'unpaid';
-  const payload={tenant_id:tenantId,apartment_id:tenant?.apartment_id||null,building_id:null,month:parseInt(document.getElementById('rp-month').value),year:parseInt(document.getElementById('rp-year').value),amount_due:due,amount_paid:paid,late_fee:parseFloat(document.getElementById('rp-late').value)||0,payment_status:status,payment_method:document.getElementById('rp-method').value,cheque_number:document.getElementById('rp-cheque').value,deposited_to:document.getElementById('rp-deposited').value,payment_date:document.getElementById('rp-date').value||null,due_date:document.getElementById('rp-due-date').value||null,notes:document.getElementById('rp-notes').value,recorded_by:currentUser.id};
-  if(tenant?.apartment_id){const{data:apt}=await sbClient.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();if(apt)payload.building_id=apt.building_id;}
-  const{error}=await sbClient.from('rent_payments').insert(payload);
+  if(tenant?.apartment_id){
+    const{data:apt}=await sbClient.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();
+    if(apt){payload.building_id=apt.building_id;payload.apartment_id=tenant.apartment_id;}
+  }
+  let error;
+  if(existingId){({error}=await sbClient.from('rent_payments').update({amount_paid:monthlyRent,payment_status:'paid',payment_date:today}).eq('id',existingId));}
+  else{({error}=await sbClient.from('rent_payments').insert(payload));}
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Payment recorded!');closeModal('modal-rent');
-  ['rp-cheque','rp-date','rp-due-date','rp-notes','rp-due','rp-paid','rp-late'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('rp-late').value='0';
-  loadRent();
+  showToast('Marked as paid ✓');
+  updateRentRowUI(tenantId,'paid',monthlyRent,'cash',today);
 }
-async function editRent(id){
-  const{data}=await sbClient.from('rent_payments').select('*').eq('id',id).single();if(!data)return;
-  const newStatus=data.payment_status==='paid'?'unpaid':'paid';
-  await sbClient.from('rent_payments').update({payment_status:newStatus,amount_paid:newStatus==='paid'?data.amount_due:0}).eq('id',id);
-  loadRent();
+
+async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
+  if(existingId){
+    const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null}).eq('id',existingId);
+    if(error){showToast('Error: '+error.message,'error');return;}
+  }
+  showToast('Marked as unpaid');
+  updateRentRowUI(tenantId,'unpaid',0,'',null);
 }
+
+function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
+  currentRentContext={tenantId,existingId,monthlyRent,month,year};
+  document.getElementById('rent-partial-title').textContent=`Partial Payment — ${name}`;
+  document.getElementById('rent-partial-amount').value='';
+  document.getElementById('rent-partial-late').value='0';
+  document.getElementById('rent-partial-notes').value='';
+  document.getElementById('rent-partial-date').value=new Date().toISOString().slice(0,10);
+  openModal('modal-rent-partial');
+}
+
+async function savePartialRent(){
+  if(!currentRentContext)return;
+  const{tenantId,existingId,monthlyRent,month,year}=currentRentContext;
+  const paid=parseFloat(document.getElementById('rent-partial-amount').value)||0;
+  if(!paid){showToast('Enter amount paid','error');return;}
+  const method=document.getElementById('rent-partial-method').value;
+  const deposited=document.getElementById('rent-partial-deposited').value;
+  const date=document.getElementById('rent-partial-date').value;
+  const lateFee=parseFloat(document.getElementById('rent-partial-late').value)||0;
+  const notes=document.getElementById('rent-partial-notes').value;
+  const status=paid>=monthlyRent?'paid':'partial';
+
+  const tenant=tenants.find(t2=>t2.id===tenantId);
+  let aptId=null,bldId=null;
+  if(tenant?.apartment_id){
+    const{data:apt}=await sbClient.from('apartments').select('building_id').eq('id',tenant.apartment_id).single();
+    if(apt){aptId=tenant.apartment_id;bldId=apt.building_id;}
+  }
+
+  let error;
+  if(existingId){
+    ({error}=await sbClient.from('rent_payments').update({amount_paid:paid,payment_status:status,payment_method:method,deposited_to:deposited,payment_date:date||null,late_fee:lateFee,notes}).eq('id',existingId));
+  } else {
+    ({error}=await sbClient.from('rent_payments').insert({tenant_id:tenantId,apartment_id:aptId,building_id:bldId,month,year,amount_due:monthlyRent,amount_paid:paid,payment_status:status,payment_method:method,deposited_to:deposited,payment_date:date||null,late_fee:lateFee,notes,recorded_by:currentUser.id}));
+  }
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast(status==='paid'?'Marked as paid ✓':'Partial payment saved');
+  closeModal('modal-rent-partial');
+  updateRentRowUI(tenantId,status,paid,method,date);
+}
+
+function updateRentRowUI(tenantId,status,amountPaid,method,date){
+  const pill=document.getElementById(`rent-status-pill-${tenantId}`);
+  const paidCell=document.getElementById(`rent-paid-${tenantId}`);
+  const methodCell=document.getElementById(`rent-method-${tenantId}`);
+  const dateCell=document.getElementById(`rent-date-${tenantId}`);
+  if(!pill)return;
+  const classMap={paid:'sp-paid',partial:'sp-partial',unpaid:'sp-unpaid'};
+  const labelMap={paid:'✓ Paid',partial:'~ Partial',unpaid:'✗ Unpaid'};
+  pill.className=`status-pill ${classMap[status]}`;
+  pill.textContent=labelMap[status];
+  if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';
+  if(methodCell)methodCell.textContent=method||'—';
+  if(dateCell)dateCell.textContent=fmtDate(date);
+  // Update active states on buttons in that row
+  const row=document.getElementById(`rent-row-${tenantId}`);
+  if(row){
+    row.querySelectorAll('.qa-btn').forEach(btn=>{
+      btn.classList.remove('active');
+      if((status==='paid'&&btn.classList.contains('qa-paid'))||(status==='partial'&&btn.classList.contains('qa-partial'))||(status==='unpaid'&&btn.classList.contains('qa-unpaid'))){
+        btn.classList.add('active');
+      }
+    });
+  }
+  // Refresh summary stats
+  refreshRentSummary();
+}
+
+function refreshRentSummary(){
+  // Re-read from DOM to update summary
+  let totalDue=0,totalPaid=0,unpaidCount=0;
+  document.querySelectorAll('[id^="rent-row-"]').forEach(row=>{
+    const dueTd=row.querySelector('td:nth-child(3) strong');
+    const paidTd=row.querySelector('[id^="rent-paid-"]');
+    const pill=row.querySelector('[id^="rent-status-pill-"]');
+    if(dueTd){const v=parseFloat(dueTd.textContent.replace(/[^\d.]/g,''))||0;totalDue+=v;}
+    if(paidTd&&paidTd.textContent!=='—'){const v=parseFloat(paidTd.textContent.replace(/[^\d.]/g,''))||0;totalPaid+=v;}
+    if(pill&&pill.classList.contains('sp-unpaid'))unpaidCount++;
+  });
+  document.getElementById('r-total-due').textContent=fmt(totalDue);
+  document.getElementById('r-collected').textContent=fmt(totalPaid);
+  document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
+  document.getElementById('r-unpaid-count').textContent=unpaidCount;
+}
+
+// ─── SALES ────────────────────────────────────────────────────
 async function loadSales(){
   const{data}=await sbClient.from('apartment_sales').select('*, apartments(apartment_number), buildings(name)').order('created_at',{ascending:false});
   const sales=data||[];const body=document.getElementById('sales-body');
@@ -645,6 +924,8 @@ async function saveSale(){
   ['s-buyer','s-phone','s-nid','s-price','s-advance','s-cheque','s-date','s-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   loadSales();
 }
+
+// ─── EXPENSES ─────────────────────────────────────────────────
 async function loadExpenses(){
   const building=document.getElementById('exp-building-filter').value;
   const category=document.getElementById('exp-category-filter').value;
@@ -668,6 +949,8 @@ async function saveExpense(){
   ['e-desc','e-amount','e-vendor','e-receipt','e-notes','e-date'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   loadExpenses();
 }
+
+// ─── MATERIALS ────────────────────────────────────────────────
 async function loadMaterials(){
   const building=document.getElementById('mat-building-filter').value;
   const status=document.getElementById('mat-status-filter').value;
@@ -709,13 +992,13 @@ async function saveDelivery(){
   document.getElementById('d-payment').value='0';
   loadMaterials();loadNotifications();
 }
+
+// ─── EMPLOYEES ────────────────────────────────────────────────
 async function loadEmployees(typeFilter='all'){
   let q=sbClient.from('employees').select('*, buildings(name)');
   if(typeFilter!=='all')q=q.eq('type',typeFilter);
   const{data}=await q.order('created_at',{ascending:false});
   employees=data||[];renderEmployees(employees);
-  const spEmp=document.getElementById('sp-employee');
-  if(spEmp){spEmp.innerHTML='<option value="">Select Employee</option>';employees.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=e.full_name+' ('+e.type+')';spEmp.appendChild(o);});}
 }
 function renderEmployees(list){
   const body=document.getElementById('employees-body');
@@ -735,36 +1018,205 @@ async function saveEmployee(){
   ['em-name','em-phone','em-nid','em-salary','em-join','em-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   loadEmployees();
 }
+
+// ─── SALARY (new smart logic) ─────────────────────────────────
 async function loadSalary(){
-  if(employees.length===0){await loadEmployees();}
-  const month=document.getElementById('sal-month-filter').value;
-  const year=document.getElementById('sal-year-filter').value;
-  const{data}=await sbClient.from('salary_payments').select('*, employees(full_name, type)').eq('month',month).eq('year',year).order('created_at',{ascending:false});
-  const payments=data||[];
-  const totalDue=payments.reduce((s,p)=>s+Number(p.amount_due),0);
-  const totalPaid=payments.reduce((s,p)=>s+Number(p.amount_paid),0);
+  if(employees.length===0)await loadEmployees();
+  const month=parseInt(document.getElementById('sal-month-filter').value);
+  const year=parseInt(document.getElementById('sal-year-filter').value);
+  const typeFilter=document.getElementById('sal-type-filter').value;
+  const body=document.getElementById('salary-body');
+  body.innerHTML='<tr class="loading-row"><td colspan="7">Loading…</td></tr>';
+
+  let activeEmployees=employees.filter(e=>e.is_active!==false);
+  if(typeFilter)activeEmployees=activeEmployees.filter(e=>e.type===typeFilter);
+
+  // Load existing salary records for this month/year
+  const{data:existing}=await sbClient.from('salary_payments').select('*').eq('month',month).eq('year',year);
+  const salMap={};
+  (existing||[]).forEach(p=>{salMap[p.employee_id]=p;});
+
+  // Build merged list
+  const rows=activeEmployees.map(e=>{
+    const rec=salMap[e.id]||null;
+    return {
+      employee:e,
+      record:rec,
+      status:rec?(rec.amount_paid>=rec.amount_due?'paid':rec.amount_paid>0?'partial':'unpaid'):'unpaid',
+      amountPaid:rec?Number(rec.amount_paid):0,
+      fixedSalary:Number(e.monthly_salary||0),
+      method:rec?rec.payment_method:'',
+      paymentDate:rec?rec.payment_date:null,
+    };
+  });
+
+  // Summaries
+  const totalDue=rows.reduce((s,r)=>s+r.fixedSalary,0);
+  const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
+  const unpaidCount=rows.filter(r=>r.status==='unpaid').length;
   document.getElementById('sal-total-due').textContent=fmt(totalDue);
   document.getElementById('sal-paid').textContent=fmt(totalPaid);
   document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);
-  const body=document.getElementById('salary-body');
-  if(!payments.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No salary payments this period</p></div></td></tr>';return;}
-  body.innerHTML=payments.map(p=>`<tr><td><strong>${p.employees?.full_name||'—'}</strong></td><td><span class="badge badge-info">${p.employees?.type||'—'}</span></td><td>${fmt(p.amount_due)}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${fmtDate(p.payment_date)}</td><td>${statusBadge(p.amount_paid>=p.amount_due?'paid':'partial')}</td></tr>`).join('');
+  document.getElementById('sal-unpaid-count').textContent=unpaidCount;
+
+  if(!rows.length){
+    body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No active employees found</p></div></td></tr>';
+    return;
+  }
+
+  const today=new Date().toISOString().slice(0,10);
+  body.innerHTML=rows.map(r=>{
+    const eid=r.employee.id;
+    const rid=r.record?r.record.id:'';
+    const statusClass=r.status==='paid'?'sp-paid':r.status==='partial'?'sp-partial':'sp-unpaid';
+    const statusLabel=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
+    const isPaid=r.status==='paid';
+    return `<tr id="sal-row-${eid}">
+      <td><strong>${r.employee.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.employee.phone||''}</div></td>
+      <td><span class="badge badge-info">${r.employee.type}</span></td>
+      <td><strong>${fmt(r.fixedSalary)}</strong></td>
+      <td id="sal-paid-${eid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
+      <td>
+        <div class="qa-row">
+          <span class="status-pill ${statusClass}" id="sal-status-pill-${eid}">${statusLabel}</span>
+          ${!isPaid?`<button class="qa-btn qa-paid" onclick="quickSalaryPaid('${eid}','${rid}',${r.fixedSalary},${month},${year})" title="Mark paid at fixed salary">✓ Mark Paid</button>`:''}
+          <button class="qa-btn qa-edit" onclick="openCustomSalary('${eid}','${rid}',${r.fixedSalary},${month},${year},'${r.employee.full_name}')" title="Enter custom amount">✏️ Custom</button>
+          ${isPaid?`<button class="qa-btn qa-unpaid" onclick="quickSalaryUnpaid('${eid}','${rid}',${month},${year})" title="Undo payment">↩ Undo</button>`:''}
+        </div>
+      </td>
+      <td id="sal-method-${eid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
+      <td id="sal-date-${eid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
+    </tr>`;
+  }).join('');
 }
-function autoFillSalary(){
-  const empId=document.getElementById('sp-employee').value;if(!empId)return;
-  const emp=employees.find(e=>e.id===empId);
-  if(emp&&emp.monthly_salary){document.getElementById('sp-due').value=emp.monthly_salary;document.getElementById('sp-paid').value=emp.monthly_salary;}
-}
-async function saveSalaryPayment(){
-  const empId=document.getElementById('sp-employee').value;
-  if(!empId){showToast('Select employee','error');return;}
-  const payload={employee_id:empId,month:parseInt(document.getElementById('sp-month').value),year:parseInt(document.getElementById('sp-year').value),amount_due:parseFloat(document.getElementById('sp-due').value)||0,amount_paid:parseFloat(document.getElementById('sp-paid').value)||0,payment_method:document.getElementById('sp-method').value,payment_date:document.getElementById('sp-date').value||null,notes:document.getElementById('sp-notes').value,paid_by:currentUser.id};
-  const{error}=await sbClient.from('salary_payments').insert(payload);
+
+async function quickSalaryPaid(empId,existingId,fixedSalary,month,year){
+  const today=new Date().toISOString().slice(0,10);
+  let error;
+  if(existingId){
+    ({error}=await sbClient.from('salary_payments').update({amount_paid:fixedSalary,amount_due:fixedSalary,payment_date:today,payment_method:'cash'}).eq('id',existingId));
+  } else {
+    ({error}=await sbClient.from('salary_payments').insert({employee_id:empId,month,year,amount_due:fixedSalary,amount_paid:fixedSalary,payment_method:'cash',payment_date:today,paid_by:currentUser.id}));
+  }
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Salary payment saved!');closeModal('modal-salary');
-  ['sp-due','sp-paid','sp-date','sp-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  loadSalary();
+  showToast('Salary marked as paid ✓');
+  updateSalaryRowUI(empId,'paid',fixedSalary,'cash',today,month,year);
 }
+
+async function quickSalaryUnpaid(empId,existingId,month,year){
+  if(existingId){
+    const{error}=await sbClient.from('salary_payments').update({amount_paid:0,payment_date:null}).eq('id',existingId);
+    if(error){showToast('Error: '+error.message,'error');return;}
+  }
+  showToast('Salary marked as unpaid');
+  updateSalaryRowUI(empId,'unpaid',0,'',null,month,year);
+}
+
+function openCustomSalary(empId,existingId,fixedSalary,month,year,name){
+  currentSalaryContext={empId,existingId,fixedSalary,month,year};
+  document.getElementById('sal-custom-title').textContent=`Custom Payment — ${name}`;
+  document.getElementById('sal-custom-amount').value=fixedSalary||'';
+  document.getElementById('sal-custom-notes').value='';
+  document.getElementById('sal-custom-date').value=new Date().toISOString().slice(0,10);
+  openModal('modal-sal-custom');
+}
+
+async function saveCustomSalary(){
+  if(!currentSalaryContext)return;
+  const{empId,existingId,fixedSalary,month,year}=currentSalaryContext;
+  const paid=parseFloat(document.getElementById('sal-custom-amount').value)||0;
+  if(!paid){showToast('Enter amount','error');return;}
+  const method=document.getElementById('sal-custom-method').value;
+  const date=document.getElementById('sal-custom-date').value;
+  const notes=document.getElementById('sal-custom-notes').value;
+  const status=paid>=fixedSalary?'paid':'partial';
+  let error;
+  if(existingId){
+    ({error}=await sbClient.from('salary_payments').update({amount_paid:paid,amount_due:fixedSalary,payment_method:method,payment_date:date||null,notes}).eq('id',existingId));
+  } else {
+    ({error}=await sbClient.from('salary_payments').insert({employee_id:empId,month,year,amount_due:fixedSalary,amount_paid:paid,payment_method:method,payment_date:date||null,notes,paid_by:currentUser.id}));
+  }
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Payment saved ✓');
+  closeModal('modal-sal-custom');
+  updateSalaryRowUI(empId,status,paid,method,date,month,year);
+}
+
+function updateSalaryRowUI(empId,status,amountPaid,method,date,month,year){
+  const pill=document.getElementById(`sal-status-pill-${empId}`);
+  const paidCell=document.getElementById(`sal-paid-${empId}`);
+  const methodCell=document.getElementById(`sal-method-${empId}`);
+  const dateCell=document.getElementById(`sal-date-${empId}`);
+  const row=document.getElementById(`sal-row-${empId}`);
+  if(!pill||!row)return;
+
+  const classMap={paid:'sp-paid',partial:'sp-partial',unpaid:'sp-unpaid'};
+  const labelMap={paid:'✓ Paid',partial:'~ Partial',unpaid:'✗ Unpaid'};
+  pill.className=`status-pill ${classMap[status]}`;
+  pill.textContent=labelMap[status];
+  if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';
+  if(methodCell)methodCell.textContent=method||'—';
+  if(dateCell)dateCell.textContent=fmtDate(date);
+
+  // We need to rebuild the action buttons since they change based on paid state
+  // Get the employee's fixed salary from the row
+  const fixedSalaryCell=row.querySelector('td:nth-child(3) strong');
+  const fixedSalary=fixedSalaryCell?parseFloat(fixedSalaryCell.textContent.replace(/[^\d.]/g,''))||0:0;
+  const isPaid=status==='paid';
+  // Find existing record id — we'll reload just that row's buttons
+  // Since we don't have the id easily here, trigger a partial reload
+  const qaRow=row.querySelector('.qa-row');
+  if(qaRow){
+    // Keep pill, rebuild buttons
+    const pillEl=qaRow.querySelector('[id^="sal-status-pill-"]');
+    qaRow.innerHTML='';
+    if(pillEl)qaRow.appendChild(pillEl);
+    if(!isPaid){
+      const paidBtn=document.createElement('button');
+      paidBtn.className='qa-btn qa-paid';
+      paidBtn.title='Mark paid at fixed salary';
+      paidBtn.textContent='✓ Mark Paid';
+      paidBtn.onclick=()=>quickSalaryPaid(empId,'',fixedSalary,month,year);
+      qaRow.appendChild(paidBtn);
+    }
+    const customBtn=document.createElement('button');
+    customBtn.className='qa-btn qa-edit';
+    customBtn.title='Enter custom amount';
+    customBtn.textContent='✏️ Custom';
+    const emp=employees.find(e=>e.id===empId);
+    customBtn.onclick=()=>openCustomSalary(empId,'',fixedSalary,month,year,emp?emp.full_name:'Employee');
+    qaRow.appendChild(customBtn);
+    if(isPaid){
+      const undoBtn=document.createElement('button');
+      undoBtn.className='qa-btn qa-unpaid';
+      undoBtn.title='Undo payment';
+      undoBtn.textContent='↩ Undo';
+      undoBtn.onclick=()=>quickSalaryUnpaid(empId,'',month,year);
+      qaRow.appendChild(undoBtn);
+    }
+  }
+
+  // Refresh summary
+  refreshSalarySummary();
+}
+
+function refreshSalarySummary(){
+  let totalDue=0,totalPaid=0,unpaidCount=0;
+  document.querySelectorAll('[id^="sal-row-"]').forEach(row=>{
+    const dueTd=row.querySelector('td:nth-child(3) strong');
+    const paidTd=row.querySelector('[id^="sal-paid-"]');
+    const pill=row.querySelector('[id^="sal-status-pill-"]');
+    if(dueTd){const v=parseFloat(dueTd.textContent.replace(/[^\d.]/g,''))||0;totalDue+=v;}
+    if(paidTd&&paidTd.textContent!=='—'){const v=parseFloat(paidTd.textContent.replace(/[^\d.]/g,''))||0;totalPaid+=v;}
+    if(pill&&pill.classList.contains('sp-unpaid'))unpaidCount++;
+  });
+  document.getElementById('sal-total-due').textContent=fmt(totalDue);
+  document.getElementById('sal-paid').textContent=fmt(totalPaid);
+  document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);
+  document.getElementById('sal-unpaid-count').textContent=unpaidCount;
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard(){
   const now=new Date();const month=now.getMonth()+1;const year=now.getFullYear();
   const{data:rent}=await sbClient.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',month).eq('year',year);
@@ -792,6 +1244,8 @@ async function loadDashboard(){
   const mBody=document.getElementById('dash-materials-body');
   mBody.innerHTML=(pendMat||[]).map(m=>`<tr><td>${m.material_type==='other'?m.custom_type||'Other':m.material_type}</td><td>${m.buildings?.name||'—'}</td><td>${m.quantity_ordered} ${m.quantity_unit}</td><td>${m.quantity_delivered} ${m.quantity_unit}</td><td>${m.quantity_remaining} ${m.quantity_unit}</td><td>${statusBadge(m.delivery_status)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:20px">No pending deliveries</td></tr>';
 }
+
+// ─── REPORTS ──────────────────────────────────────────────────
 async function loadReports(){
   const year=document.getElementById('rep-year-filter').value||new Date().getFullYear();
   const building=document.getElementById('rep-building-filter').value;
@@ -817,6 +1271,8 @@ async function loadReports(){
     return `<tr><td><strong>${monthName(m)} ${year}</strong></td><td style="color:var(--success)">${fmt(mRent)}</td><td style="color:var(--danger)">${fmt(mExp)}</td><td style="color:var(--warn)">${fmt(mSal)}</td><td style="color:${net>=0?'var(--success)':'var(--danger)'}"><strong>${fmt(net)}</strong></td></tr>`;
   }).join('');
 }
+
+// ─── NOTIFICATIONS ────────────────────────────────────────────
 async function loadNotifications(){
   const{data}=await sbClient.from('notifications').select('*').order('created_at',{ascending:false}).limit(20);
   const notifs=data||[];const unread=notifs.filter(n=>!n.is_read).length;
@@ -828,6 +1284,7 @@ document.addEventListener('click',function(e){const panel=document.getElementByI
 async function readNotif(id){await sbClient.from('notifications').update({is_read:true}).eq('id',id);loadNotifications();}
 async function markAllRead(){await sbClient.from('notifications').update({is_read:true}).eq('is_read',false);loadNotifications();}
 async function logout(){await sbClient.auth.signOut();window.location.href='index.html';}
+
 document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
