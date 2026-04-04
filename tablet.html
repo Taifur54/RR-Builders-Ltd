@@ -1,9 +1,770 @@
-<!DOCTYPE html><html><head><title>RR Builders Tablet</title><meta name="mobile-web-app-capable" content="yes">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>RR Builders — Tablet</title>
+
+<!-- PWA Android -->
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#1c1c1a">
 <link rel="manifest" href="manifest.json">
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/RR-Builders-Ltd/sw.js'));}</script>
+
+<!-- PWA iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="RR Builders">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/RR-Builders-Ltd/sw.js'));}</script></head><body><p>Coming soon</p></body></html>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;--surface:#fff;--surface2:#f9f8f5;--border:#e8e5de;
+  --text:#1c1c1a;--muted:#7a7a6a;--gold:#8a6c2a;--gold2:#c8a84a;
+  --success:#1a5c38;--successbg:#e8f5ee;--danger:#7a2020;--dangerbg:#fdf0f0;
+  --warn:#7a5010;--warnbg:#fef7e8;
+  --fs-xl:48px;--fs-lg:36px;--fs-md:28px;--fs-sm:22px;--fs-xs:18px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* HOME */
+.home-header{background:var(--text);padding:28px 36px;display:flex;align-items:center;gap:20px}
+.home-logo{width:56px;height:56px;flex-shrink:0}
+.home-title{font-family:'DM Serif Display',serif;font-size:34px;color:#fff;line-height:1.1}
+.home-title em{font-style:italic;color:var(--gold2)}
+.home-time-block{margin-left:auto;text-align:right}
+.home-date-big{font-family:'DM Serif Display',serif;font-size:26px;color:#fff}
+.home-time-big{font-size:22px;color:var(--gold2);margin-top:4px}
+.home-body{flex:1;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-content:start}
+.menu-card{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:36px 32px;display:flex;flex-direction:column;gap:16px;cursor:pointer;transition:all .15s;min-height:180px;justify-content:center;-webkit-tap-highlight-color:transparent}
+.menu-card:active{transform:scale(0.97);background:var(--surface2)}
+.menu-icon{font-size:44px;line-height:1}
+.menu-label{font-family:'DM Serif Display',serif;font-size:var(--fs-lg);color:var(--text);line-height:1.1}
+.menu-sub{font-size:var(--fs-xs);color:var(--muted)}
+.menu-card.t-green{border-top:5px solid var(--success)}
+.menu-card.t-red{border-top:5px solid var(--danger)}
+.menu-card.t-gold{border-top:5px solid var(--gold2)}
+.menu-card.t-blue{border-top:5px solid #1a4870}
+.stat-strip{background:var(--surface);border-top:2px solid var(--border);padding:24px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.stat-box{text-align:center}
+.stat-lbl{font-size:var(--fs-xs);color:var(--muted);font-weight:500;margin-bottom:6px}
+.stat-val{font-family:'DM Serif Display',serif;font-size:var(--fs-lg);color:var(--text)}
+.stat-val.green{color:var(--success)}
+.stat-val.red{color:var(--danger)}
+
+/* PAGE HEADER */
+.page-header{background:var(--text);padding:24px 36px;display:flex;align-items:center;gap:20px;flex-shrink:0}
+.back-btn{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:14px 28px;color:#fff;font-size:var(--fs-sm);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.back-btn:active{background:rgba(255,255,255,.2)}
+.page-header-title{font-family:'DM Serif Display',serif;font-size:var(--fs-lg);color:#fff;flex:1;margin-left:8px}
+.page-header-sub{color:rgba(255,255,255,.55);font-size:var(--fs-xs)}
+
+/* FILTER BAR */
+.filter-bar{background:var(--surface2);border-bottom:2px solid var(--border);padding:18px 32px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;flex-shrink:0}
+.filter-bar select{font-family:'DM Sans',sans-serif;font-size:var(--fs-sm);background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:10px 16px;color:var(--text);outline:none;cursor:pointer}
+.filter-bar select:focus{border-color:var(--gold2)}
+.filter-label{font-size:var(--fs-xs);color:var(--muted);font-weight:600}
+
+/* SUMMARY BAR */
+.summary-bar{background:var(--surface);border-bottom:2px solid var(--border);padding:20px 32px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex-shrink:0}
+.sum-card{background:var(--surface2);border-radius:12px;padding:14px 18px;border:1.5px solid var(--border)}
+.sum-lbl{font-size:16px;color:var(--muted);margin-bottom:4px;font-weight:500}
+.sum-val{font-family:'DM Serif Display',serif;font-size:var(--fs-md)}
+
+/* TABLE */
+.table-area{flex:1;padding:24px 32px;overflow-y:auto}
+.data-table{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}
+.data-table th{padding:16px 18px;text-align:left;font-size:var(--fs-xs);font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border);background:var(--surface2)}
+.data-table td{padding:18px 18px;border-bottom:1.5px solid rgba(232,229,222,.6);vertical-align:middle}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(28,28,26,.02)}
+.tenant-name{font-size:var(--fs-sm);font-weight:600}
+.apt-label{font-size:var(--fs-xs);color:var(--muted);margin-top:4px}
+.amount-big{font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:var(--text)}
+
+/* ACTION BUTTONS */
+.action-row{display:flex;gap:10px;flex-wrap:wrap}
+.abtn{padding:12px 22px;border-radius:10px;font-size:var(--fs-xs);font-weight:700;cursor:pointer;border:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all .12s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.abtn:active{transform:scale(0.94)}
+.abtn-paid{background:var(--successbg);border-color:#a8d8bc;color:var(--success)}
+.abtn-paid.done{background:var(--success);color:#fff;border-color:var(--success)}
+.abtn-unpaid{background:var(--dangerbg);border-color:#f0b0b0;color:var(--danger)}
+.abtn-unpaid.done{background:var(--danger);color:#fff;border-color:var(--danger)}
+
+/* STATUS PILL */
+.spill{display:inline-flex;align-items:center;gap:7px;padding:7px 18px;border-radius:30px;font-size:var(--fs-xs);font-weight:700}
+.spill-paid{background:var(--successbg);color:var(--success)}
+.spill-partial{background:var(--warnbg);color:var(--warn)}
+.spill-unpaid{background:var(--dangerbg);color:var(--danger)}
+.spill-active{background:var(--successbg);color:var(--success)}
+
+/* MODAL — uses min-height wrapper trick for fixed-position avoidance */
+.modal-wrap{display:none;min-height:100vh;background:rgba(28,28,26,.55);align-items:center;justify-content:center;padding:32px;position:fixed;inset:0;z-index:200}
+.modal-wrap.open{display:flex}
+.modal{background:var(--surface);border-radius:24px;width:100%;max-width:680px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.2)}
+.modal-head{background:var(--text);padding:28px 36px;display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:#fff}
+.modal-close{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:10px;padding:10px 22px;color:#fff;font-size:var(--fs-sm);cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+.modal-body{padding:36px}
+.modal-amount-box{background:var(--successbg);border:2px solid #a8d8bc;border-radius:16px;padding:20px 28px;margin-bottom:28px}
+.modal-amount-lbl{font-size:var(--fs-xs);color:var(--muted);margin-bottom:6px}
+.modal-amount-val{font-family:'DM Serif Display',serif;font-size:var(--fs-xl);color:var(--success)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.form-field label{display:block;font-size:var(--fs-xs);font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.form-field select,.form-field input{width:100%;font-family:'DM Sans',sans-serif;font-size:var(--fs-sm);background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:12px 16px;color:var(--text);outline:none}
+.form-field select:focus,.form-field input:focus{border-color:var(--text)}
+.modal-foot{padding:24px 36px;border-top:2px solid var(--border);display:flex;gap:16px;justify-content:flex-end;background:var(--surface2)}
+.mbtn{padding:16px 36px;border-radius:12px;font-size:var(--fs-sm);font-weight:700;cursor:pointer;border:2px solid transparent;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+.mbtn:active{transform:scale(0.97)}
+.mbtn-cancel{background:var(--surface);border-color:var(--border);color:var(--muted)}
+.mbtn-confirm{background:var(--success);color:#fff;border-color:var(--success)}
+.mbtn-confirm-sal{background:#1a4870;color:#fff;border-color:#1a4870}
+
+/* TOAST */
+.toast{position:fixed;bottom:32px;right:32px;z-index:999;background:var(--text);color:#fff;border-radius:16px;padding:20px 32px;font-size:var(--fs-sm);font-weight:600;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.2);transform:translateY(100px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{background:var(--success)}
+.toast.err{background:var(--danger)}
+
+/* BUILDINGS GRID */
+.bld-card{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:32px}
+.bld-name{font-family:'DM Serif Display',serif;font-size:var(--fs-lg);margin-bottom:8px}
+.bld-addr{font-size:var(--fs-xs);color:var(--muted);margin-bottom:20px}
+.bld-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bld-meta-lbl{font-size:var(--fs-xs);color:var(--muted)}
+.bld-meta-val{font-size:var(--fs-sm);font-weight:700}
+
+/* LOADING */
+.loading-cell{text-align:center;padding:48px;color:var(--muted);font-size:var(--fs-sm)}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     HOME SCREEN
+══════════════════════════════════════════ -->
+<div class="screen active" id="s-home">
+  <div class="home-header">
+    <svg class="home-logo" viewBox="0 0 100 95" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 84 Q50 96 88 84" fill="none" stroke="rgba(200,168,74,.5)" stroke-width="3" stroke-linecap="round"/>
+      <rect x="22" y="14" width="34" height="66" fill="rgba(255,255,255,.9)" rx="2"/>
+      <line x1="29" y1="20" x2="29" y2="76" stroke="#1c1c1a" stroke-width="1.5"/>
+      <line x1="35" y1="20" x2="35" y2="76" stroke="#1c1c1a" stroke-width="1.5"/>
+      <line x1="41" y1="20" x2="41" y2="76" stroke="#1c1c1a" stroke-width="1.5"/>
+      <line x1="47" y1="20" x2="47" y2="76" stroke="#1c1c1a" stroke-width="1.5"/>
+      <rect x="55" y="32" width="22" height="48" fill="rgba(255,255,255,.9)" rx="2"/>
+      <rect x="60" y="52" width="12" height="16" fill="#1c1c1a" rx="6"/>
+    </svg>
+    <div>
+      <div class="home-title">R.R <em>Builders</em> Ltd.</div>
+      <div style="font-size:18px;color:rgba(255,255,255,.45);margin-top:4px">Property Management</div>
+    </div>
+    <div class="home-time-block">
+      <div class="home-date-big" id="home-date">—</div>
+      <div class="home-time-big" id="home-time">—</div>
+    </div>
+  </div>
+
+  <div class="home-body">
+    <div class="menu-card t-gold" onclick="go('rent')">
+      <div class="menu-icon">🏠</div>
+      <div class="menu-label">Rent Collection</div>
+      <div class="menu-sub">See who has paid this month</div>
+    </div>
+    <div class="menu-card t-green" onclick="go('salary')">
+      <div class="menu-icon">💰</div>
+      <div class="menu-label">Salaries</div>
+      <div class="menu-sub">Pay staff &amp; workers</div>
+    </div>
+    <div class="menu-card t-red" onclick="go('tenants')">
+      <div class="menu-icon">👥</div>
+      <div class="menu-label">Tenants</div>
+      <div class="menu-sub">View all tenant details</div>
+    </div>
+    <div class="menu-card t-blue" onclick="go('buildings')">
+      <div class="menu-icon">🏢</div>
+      <div class="menu-label">Buildings</div>
+      <div class="menu-sub">All your properties</div>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-box">
+      <div class="stat-lbl">Rent Collected This Month</div>
+      <div class="stat-val green" id="home-rent">৳ —</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">Still Unpaid</div>
+      <div class="stat-val red" id="home-unpaid">৳ —</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-lbl">Active Tenants</div>
+      <div class="stat-val" id="home-tenants">—</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     RENT COLLECTION
+══════════════════════════════════════════ -->
+<div class="screen" id="s-rent">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-header-title">Rent Collection</div>
+    <div class="page-header-sub" id="rent-header-month">—</div>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">Month:</span>
+    <select id="rent-month" onchange="loadRent()">
+      <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+      <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+      <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+      <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+    </select>
+    <select id="rent-year" onchange="loadRent()"></select>
+    <select id="rent-bld" onchange="loadRent()"><option value="">All Buildings</option></select>
+    <select id="rent-status" onchange="loadRent()">
+      <option value="">All Tenants</option>
+      <option value="unpaid">Unpaid Only</option>
+      <option value="paid">Paid Only</option>
+      <option value="partial">Partial Only</option>
+    </select>
+  </div>
+  <div class="summary-bar">
+    <div class="sum-card"><div class="sum-lbl">Total Due</div><div class="sum-val" id="r-due">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Collected</div><div class="sum-val" style="color:var(--success)" id="r-coll">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Outstanding</div><div class="sum-val" style="color:var(--danger)" id="r-out">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Unpaid Units</div><div class="sum-val" id="r-cnt">0</div></div>
+  </div>
+  <div class="table-area">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Tenant</th>
+          <th>Apartment</th>
+          <th>Monthly Rent</th>
+          <th>Amount Paid</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="rent-body">
+        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SALARY
+══════════════════════════════════════════ -->
+<div class="screen" id="s-salary">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-header-title">Salary Payments</div>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">Month:</span>
+    <select id="sal-month" onchange="loadSalary()">
+      <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+      <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+      <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+      <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+    </select>
+    <select id="sal-year" onchange="loadSalary()"></select>
+    <select id="sal-type" onchange="loadSalary()">
+      <option value="">All Types</option>
+      <option value="staff">Staff</option>
+      <option value="guard">Guard</option>
+      <option value="worker">Worker</option>
+      <option value="engineer">Engineer</option>
+      <option value="manager">Manager</option>
+    </select>
+  </div>
+  <div class="summary-bar">
+    <div class="sum-card"><div class="sum-lbl">Total Due</div><div class="sum-val" id="s-due">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Paid</div><div class="sum-val" style="color:var(--success)" id="s-paid-total">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Unpaid</div><div class="sum-val" style="color:var(--danger)" id="s-unpaid-total">৳0</div></div>
+    <div class="sum-card"><div class="sum-lbl">Still Owed</div><div class="sum-val" id="s-cnt">0 people</div></div>
+  </div>
+  <div class="table-area">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Type</th>
+          <th>Fixed Salary</th>
+          <th>Paid</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="sal-body">
+        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TENANTS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-tenants">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-header-title">Tenants</div>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">Building:</span>
+    <select id="ten-bld" onchange="loadTenants()"><option value="">All Buildings</option></select>
+  </div>
+  <div class="table-area">
+    <table class="data-table">
+      <thead>
+        <tr><th>Name</th><th>Apartment</th><th>Building</th><th>Monthly Rent</th><th>Phone</th><th>Status</th></tr>
+      </thead>
+      <tbody id="ten-body">
+        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BUILDINGS
+══════════════════════════════════════════ -->
+<div class="screen" id="s-buildings">
+  <div class="page-header">
+    <button class="back-btn" onclick="go('home')">← Back</button>
+    <div class="page-header-title">Buildings</div>
+  </div>
+  <div class="table-area">
+    <div id="bld-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;padding-top:8px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: CONFIRM RENT PAID
+══════════════════════════════════════════ -->
+<div class="modal-wrap" id="m-rent-paid">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="m-rent-title">Confirm Rent Payment</h2>
+      <button class="modal-close" onclick="closeM('m-rent-paid')">✕ Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-amount-box">
+        <div class="modal-amount-lbl">Full Rent Amount</div>
+        <div class="modal-amount-val" id="m-rent-amt">৳0</div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Payment Method</label>
+          <select id="m-rent-method">
+            <option value="cash">Cash</option>
+            <option value="bkash">bKash</option>
+            <option value="nagad">Nagad</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="cheque">Cheque</option>
+          </select>
+        </div>
+        <div class="form-field"><label>Date</label><input type="date" id="m-rent-date"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-field" style="grid-column:1/-1">
+          <label>Note (optional)</label>
+          <input type="text" id="m-rent-note" placeholder="e.g. Cheque #123"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mbtn mbtn-cancel" onclick="closeM('m-rent-paid')">Cancel</button>
+      <button class="mbtn mbtn-confirm" onclick="confirmRentPaid()">✓ Confirm Paid</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: CONFIRM SALARY PAID
+══════════════════════════════════════════ -->
+<div class="modal-wrap" id="m-sal-paid">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="m-sal-title">Confirm Salary Payment</h2>
+      <button class="modal-close" onclick="closeM('m-sal-paid')">✕ Close</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-amount-box" style="background:var(--infobg,#eef4fb);border-color:#a0c4e8">
+        <div class="modal-amount-lbl">Salary Amount</div>
+        <div class="modal-amount-val" style="color:#1a4870" id="m-sal-amt">৳0</div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Payment Method</label>
+          <select id="m-sal-method">
+            <option value="cash">Cash</option>
+            <option value="bkash">bKash</option>
+            <option value="bank_transfer">Bank Transfer</option>
+            <option value="cheque">Cheque</option>
+          </select>
+        </div>
+        <div class="form-field"><label>Date</label><input type="date" id="m-sal-date"/></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="mbtn mbtn-cancel" onclick="closeM('m-sal-paid')">Cancel</button>
+      <button class="mbtn mbtn-confirm-sal" onclick="confirmSalPaid()">✓ Confirm Paid</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL='https://atxhshirummpenfqtwku.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+let buildings=[],employees=[],tenants=[],currentUser=null;
+let rentCtx=null,salCtx=null;
+const now=new Date();
+const curM=now.getMonth()+1,curY=now.getFullYear();
+
+function fmt(n){return '৳'+Number(n||0).toLocaleString('en-BD');}
+function fmtD(d){if(!d)return '—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function mname(m){return['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];}
+
+function toast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className=`toast show ${type}`;
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+
+function go(page){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+page).classList.add('active');
+  if(page==='rent')loadRent();
+  if(page==='salary')loadSalary();
+  if(page==='tenants')renderTenants();
+  if(page==='buildings')renderBuildings();
+}
+
+// Clock
+function clock(){
+  const n=new Date();
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const d=document.getElementById('home-date');
+  const t=document.getElementById('home-time');
+  if(d)d.textContent=`${days[n.getDay()]}, ${n.getDate()} ${months[n.getMonth()]} ${n.getFullYear()}`;
+  if(t){let h=n.getHours(),m=String(n.getMinutes()).padStart(2,'0'),ap=h>=12?'PM':'AM';h=h%12||12;t.textContent=`${h}:${m} ${ap}`;}
+}
+setInterval(clock,1000);clock();
+
+// Year dropdowns
+function fillYears(){
+  ['rent-year','sal-year'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML='';
+    for(let y=curY;y>=curY-4;y--){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===curY)o.selected=true;el.appendChild(o);}
+  });
+  document.getElementById('rent-month').value=curM;
+  document.getElementById('sal-month').value=curM;
+}
+
+async function init(){
+  const{data:{session}}=await sb.auth.getSession();
+  if(!session){
+    document.body.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f4f0;flex-direction:column;gap:28px;padding:32px;text-align:center">
+        <svg width="72" height="68" viewBox="0 0 100 95"><path d="M12 84 Q50 96 88 84" fill="none" stroke="#c8a84a" stroke-width="3" stroke-linecap="round"/><rect x="22" y="14" width="34" height="66" fill="#1c1c1a" rx="2"/><line x1="29" y1="20" x2="29" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="35" y1="20" x2="35" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="41" y1="20" x2="41" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="47" y1="20" x2="47" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><rect x="55" y="32" width="22" height="48" fill="#1c1c1a" rx="2"/><rect x="60" y="52" width="12" height="16" fill="#f5f4f0" rx="6"/></svg>
+        <div style="font-family:'DM Serif Display',serif;font-size:48px;color:#1c1c1a">Please sign in first</div>
+        <div style="font-size:24px;color:#7a7a6a;max-width:500px">Open the main app and sign in, then return to this page.</div>
+        <a href="index.html" style="background:#1c1c1a;color:#fff;padding:18px 40px;border-radius:14px;font-size:24px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif">Go to Sign In</a>
+      </div>`;
+    return;
+  }
+  currentUser=session.user;
+  fillYears();
+
+  const{data:blds}=await sb.from('buildings').select('*').order('name');
+  buildings=blds||[];
+  ['rent-bld','ten-bld'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const first=el.children[0];el.innerHTML='';el.appendChild(first);
+    buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;el.appendChild(o);});
+  });
+
+  const{data:emps}=await sb.from('employees').select('*');
+  employees=emps||[];
+
+  const{data:tens}=await sb.from('tenants').select('*, apartments(apartment_number, buildings(id,name))');
+  tenants=tens||[];
+
+  await loadHomeSummary();
+}
+
+async function loadHomeSummary(){
+  const{data:rent}=await sb.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',curM).eq('year',curY);
+  const collected=(rent||[]).reduce((s,r)=>s+Number(r.amount_paid),0);
+  const due=(rent||[]).reduce((s,r)=>s+Number(r.amount_due),0);
+  document.getElementById('home-rent').textContent=fmt(collected);
+  document.getElementById('home-unpaid').textContent=fmt(due-collected);
+  document.getElementById('home-tenants').textContent=tenants.filter(t=>t.is_active).length+' active';
+}
+
+// ── RENT ──────────────────────────────────────────────────────
+async function loadRent(){
+  const month=parseInt(document.getElementById('rent-month').value);
+  const year=parseInt(document.getElementById('rent-year').value);
+  const bld=document.getElementById('rent-bld').value;
+  const sf=document.getElementById('rent-status').value;
+  document.getElementById('rent-header-month').textContent=mname(month)+' '+year;
+  const body=document.getElementById('rent-body');
+  body.innerHTML=`<tr><td colspan="6" class="loading-cell">Loading…</td></tr>`;
+
+  let active=tenants.filter(t=>t.is_active);
+  if(bld)active=active.filter(t=>t.apartments?.buildings?.id===bld);
+
+  const{data:existing}=await sb.from('rent_payments').select('*').eq('month',month).eq('year',year);
+  const pmap={};(existing||[]).forEach(p=>{pmap[p.tenant_id]=p;});
+
+  let rows=active.map(t=>{
+    const rec=pmap[t.id]||null;
+    return{t,rec,status:rec?rec.payment_status:'unpaid',paid:rec?Number(rec.amount_paid):0,due:Number(t.monthly_rent||0),method:rec?rec.payment_method:'',date:rec?rec.payment_date:null};
+  });
+  if(sf)rows=rows.filter(r=>r.status===sf);
+
+  const totalDue=rows.reduce((s,r)=>s+r.due,0);
+  const totalPaid=rows.reduce((s,r)=>s+r.paid,0);
+  const unpaidCnt=rows.filter(r=>r.status==='unpaid').length;
+  document.getElementById('r-due').textContent=fmt(totalDue);
+  document.getElementById('r-coll').textContent=fmt(totalPaid);
+  document.getElementById('r-out').textContent=fmt(totalDue-totalPaid);
+  document.getElementById('r-cnt').textContent=unpaidCnt;
+
+  if(!rows.length){
+    body.innerHTML=`<tr><td colspan="6" class="loading-cell">No tenants found</td></tr>`;
+    return;
+  }
+
+  body.innerHTML=rows.map(r=>{
+    const rid=r.rec?r.rec.id:'';
+    const apt=r.t.apartments?.apartment_number||'—';
+    const bldN=r.t.apartments?.buildings?.name||'—';
+    const sc=r.status==='paid'?'paid':r.status==='partial'?'partial':'unpaid';
+    const sl=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
+    return `<tr id="rrow-${r.t.id}">
+      <td><div class="tenant-name">${r.t.full_name}</div><div class="apt-label">${r.t.phone||''}</div></td>
+      <td><div style="font-size:var(--fs-sm);font-weight:600">${apt}</div><div class="apt-label">${bldN}</div></td>
+      <td><div class="amount-big">${fmt(r.due)}</div></td>
+      <td><div id="rpaid-${r.t.id}" style="font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</div></td>
+      <td><span class="spill spill-${sc}" id="rpill-${r.t.id}">${sl}</span></td>
+      <td>
+        <div class="action-row">
+          <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
+          <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function tapRentPaid(tid,rid,due,name,month,year){
+  rentCtx={tid,rid,due,month,year};
+  document.getElementById('m-rent-title').textContent='Confirm: '+name;
+  document.getElementById('m-rent-amt').textContent=fmt(due);
+  document.getElementById('m-rent-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('m-rent-note').value='';
+  openM('m-rent-paid');
+}
+
+async function confirmRentPaid(){
+  if(!rentCtx)return;
+  const{tid,rid,due,month,year}=rentCtx;
+  const method=document.getElementById('m-rent-method').value;
+  const date=document.getElementById('m-rent-date').value;
+  const notes=document.getElementById('m-rent-note').value;
+  const ten=tenants.find(x=>x.id===tid);
+  let aptId=null,bldId=null;
+  if(ten?.apartment_id){
+    const{data:a}=await sb.from('apartments').select('building_id').eq('id',ten.apartment_id).single();
+    if(a){aptId=ten.apartment_id;bldId=a.building_id;}
+  }
+  let err;
+  if(rid){
+    ({error:err}=await sb.from('rent_payments').update({amount_paid:due,payment_status:'paid',payment_method:method,payment_date:date||null,notes}).eq('id',rid));
+  } else {
+    ({error:err}=await sb.from('rent_payments').insert({tenant_id:tid,apartment_id:aptId,building_id:bldId,month,year,amount_due:due,amount_paid:due,payment_status:'paid',payment_method:method,payment_date:date||null,notes,recorded_by:currentUser.id}));
+  }
+  if(err){toast('Error: '+err.message,'err');return;}
+  toast('Marked as paid ✓','ok');
+  closeM('m-rent-paid');
+  updateRentRow(tid,'paid',due,method,date);
+}
+
+async function tapRentUnpaid(tid,rid,month,year){
+  if(rid){
+    const{error}=await sb.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null}).eq('id',rid);
+    if(error){toast('Error: '+error.message,'err');return;}
+  }
+  toast('Marked as unpaid');
+  updateRentRow(tid,'unpaid',0,'',null);
+}
+
+function updateRentRow(tid,status,paid){
+  const pill=document.getElementById('rpill-'+tid);
+  const paidEl=document.getElementById('rpaid-'+tid);
+  const row=document.getElementById('rrow-'+tid);
+  if(pill){pill.className=`spill spill-${status}`;pill.textContent=status==='paid'?'✓ Paid':status==='partial'?'~ Partial':'✗ Unpaid';}
+  if(paidEl){paidEl.textContent=paid>0?fmt(paid):'—';paidEl.style.color=paid>0?'var(--success)':'var(--muted)';}
+  if(row){
+    row.querySelectorAll('.abtn-paid').forEach(b=>b.classList.toggle('done',status==='paid'));
+    row.querySelectorAll('.abtn-unpaid').forEach(b=>b.classList.toggle('done',status==='unpaid'));
+  }
+}
+
+// ── SALARY ────────────────────────────────────────────────────
+async function loadSalary(){
+  const month=parseInt(document.getElementById('sal-month').value);
+  const year=parseInt(document.getElementById('sal-year').value);
+  const type=document.getElementById('sal-type').value;
+  const body=document.getElementById('sal-body');
+  body.innerHTML=`<tr><td colspan="6" class="loading-cell">Loading…</td></tr>`;
+
+  let emps=employees.filter(e=>e.is_active!==false);
+  if(type)emps=emps.filter(e=>e.type===type);
+
+  const{data:existing}=await sb.from('salary_payments').select('*').eq('month',month).eq('year',year);
+  const smap={};(existing||[]).forEach(p=>{smap[p.employee_id]=p;});
+
+  const rows=emps.map(e=>{
+    const rec=smap[e.id]||null;
+    const paid=rec?Number(rec.amount_paid):0;
+    const due=Number(e.monthly_salary||0);
+    const status=rec?(paid>=due?'paid':paid>0?'partial':'unpaid'):'unpaid';
+    return{e,rec,status,paid,due,method:rec?rec.payment_method:'',date:rec?rec.payment_date:null};
+  });
+
+  const totalDue=rows.reduce((s,r)=>s+r.due,0);
+  const totalPaid=rows.reduce((s,r)=>s+r.paid,0);
+  const unpaidCnt=rows.filter(r=>r.status==='unpaid').length;
+  document.getElementById('s-due').textContent=fmt(totalDue);
+  document.getElementById('s-paid-total').textContent=fmt(totalPaid);
+  document.getElementById('s-unpaid-total').textContent=fmt(totalDue-totalPaid);
+  document.getElementById('s-cnt').textContent=unpaidCnt+' people';
+
+  if(!rows.length){body.innerHTML=`<tr><td colspan="6" class="loading-cell">No employees found</td></tr>`;return;}
+
+  body.innerHTML=rows.map(r=>{
+    const rid=r.rec?r.rec.id:'';
+    const sc=r.status==='paid'?'paid':r.status==='partial'?'partial':'unpaid';
+    const sl=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
+    return `<tr id="srow-${r.e.id}" style="${r.status==='paid'?'background:rgba(234,246,240,.35)':''}">
+      <td><div class="tenant-name">${r.e.full_name}</div><div class="apt-label">${r.e.phone||''}</div></td>
+      <td><span style="background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:var(--fs-xs);font-weight:600">${r.e.type}</span></td>
+      <td><div class="amount-big">${fmt(r.due)}</div></td>
+      <td><div id="spaid-${r.e.id}" style="font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</div></td>
+      <td><span class="spill spill-${sc}" id="spill-${r.e.id}">${sl}</span></td>
+      <td>
+        ${r.status!=='paid'
+          ?`<button class="abtn abtn-paid" onclick="tapSalPaid('${r.e.id}','${rid}',${r.due},'${r.e.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Pay Now</button>`
+          :`<button class="abtn abtn-unpaid" onclick="tapSalUnpaid('${r.e.id}','${rid}',${month},${year})">↩ Undo</button>`
+        }
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function tapSalPaid(eid,rid,due,name,month,year){
+  salCtx={eid,rid,due,month,year};
+  document.getElementById('m-sal-title').textContent='Pay: '+name;
+  document.getElementById('m-sal-amt').textContent=fmt(due);
+  document.getElementById('m-sal-date').value=new Date().toISOString().slice(0,10);
+  openM('m-sal-paid');
+}
+
+async function confirmSalPaid(){
+  if(!salCtx)return;
+  const{eid,rid,due,month,year}=salCtx;
+  const method=document.getElementById('m-sal-method').value;
+  const date=document.getElementById('m-sal-date').value;
+  let err;
+  if(rid){
+    ({error:err}=await sb.from('salary_payments').update({amount_paid:due,amount_due:due,payment_method:method,payment_date:date||null}).eq('id',rid));
+  } else {
+    ({error:err}=await sb.from('salary_payments').insert({employee_id:eid,month,year,amount_due:due,amount_paid:due,payment_method:method,payment_date:date||null,paid_by:currentUser.id}));
+  }
+  if(err){toast('Error: '+err.message,'err');return;}
+  toast('Salary paid ✓','ok');
+  closeM('m-sal-paid');
+  const pill=document.getElementById('spill-'+eid);
+  const paidEl=document.getElementById('spaid-'+eid);
+  const row=document.getElementById('srow-'+eid);
+  if(pill){pill.className='spill spill-paid';pill.textContent='✓ Paid';}
+  if(paidEl){paidEl.textContent=fmt(due);paidEl.style.color='var(--success)';}
+  if(row)row.style.background='rgba(234,246,240,.35)';
+}
+
+async function tapSalUnpaid(eid,rid,month,year){
+  if(rid){
+    const{error}=await sb.from('salary_payments').update({amount_paid:0,payment_date:null}).eq('id',rid);
+    if(error){toast('Error: '+error.message,'err');return;}
+  }
+  toast('Marked as unpaid');
+  const pill=document.getElementById('spill-'+eid);
+  const paidEl=document.getElementById('spaid-'+eid);
+  const row=document.getElementById('srow-'+eid);
+  if(pill){pill.className='spill spill-unpaid';pill.textContent='✗ Unpaid';}
+  if(paidEl){paidEl.textContent='—';paidEl.style.color='var(--muted)';}
+  if(row)row.style.background='';
+}
+
+// ── TENANTS ───────────────────────────────────────────────────
+function renderTenants(){
+  const bld=document.getElementById('ten-bld').value;
+  let list=tenants.filter(t=>t.is_active);
+  if(bld)list=list.filter(t=>t.apartments?.buildings?.id===bld);
+  const body=document.getElementById('ten-body');
+  if(!list.length){body.innerHTML=`<tr><td colspan="6" class="loading-cell">No active tenants</td></tr>`;return;}
+  body.innerHTML=list.map(t=>`<tr>
+    <td><div class="tenant-name">${t.full_name}</div></td>
+    <td style="font-size:var(--fs-sm)">${t.apartments?.apartment_number||'—'}</td>
+    <td style="font-size:var(--fs-sm)">${t.apartments?.buildings?.name||'—'}</td>
+    <td><div class="amount-big">${fmt(t.monthly_rent)}</div></td>
+    <td style="font-size:var(--fs-sm)">${t.phone||'—'}</td>
+    <td><span class="spill spill-active">Active</span></td>
+  </tr>`).join('');
+}
+
+// ── BUILDINGS ─────────────────────────────────────────────────
+function renderBuildings(){
+  const grid=document.getElementById('bld-grid');
+  if(!buildings.length){grid.innerHTML='<p style="font-size:var(--fs-md);color:var(--muted)">No buildings found</p>';return;}
+  const sc={under_construction:'var(--warn)',completed:'var(--success)',partial:'var(--gold2)'};
+  grid.innerHTML=buildings.map(b=>`
+    <div class="bld-card" style="border-top:5px solid ${sc[b.status]||'var(--border)'}">
+      <div class="bld-name">${b.name}</div>
+      <div class="bld-addr">${b.address||'No address'}</div>
+      <div class="bld-meta">
+        <div class="bld-meta-lbl">Floors</div><div class="bld-meta-val">${b.total_floors||'—'}</div>
+        <div class="bld-meta-lbl">Status</div>
+        <div class="bld-meta-val" style="color:${sc[b.status]||'var(--muted)'}">${(b.status||'').replace(/_/g,' ')}</div>
+      </div>
+      ${b.notes?`<div style="font-size:var(--fs-xs);color:var(--muted);margin-top:16px;padding-top:16px;border-top:1.5px solid var(--border)">${b.notes}</div>`:''}
+    </div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
