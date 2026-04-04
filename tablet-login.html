@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>R.R Builders Ltd.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#fafaf8;color:#1c1c1a;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.bg{position:fixed;inset:0;background:linear-gradient(135deg,#fafaf8 0%,#f4f0e8 100%);z-index:0}
+.bg::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 80%,rgba(180,140,60,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(60,80,60,0.04) 0%,transparent 50%)}
+.wrap{position:relative;z-index:1;width:100%;max-width:420px;padding:24px}
+.brand{text-align:center;margin-bottom:44px}
+.logo{width:64px;height:64px;margin:0 auto 20px;display:block}
+.brand-name{font-family:'DM Serif Display',serif;font-size:28px;color:#1c1c1a;letter-spacing:-0.3px;line-height:1}
+.brand-name em{font-style:italic;color:#8a6c2a}
+.brand-rule{width:32px;height:1px;background:#c8b87a;margin:14px auto}
+.brand-sub{font-size:11px;color:#8a8a7a;letter-spacing:3px;text-transform:uppercase;font-weight:400}
+.card{background:#fff;border-radius:12px;padding:40px;box-shadow:0 1px 2px rgba(0,0,0,0.04),0 8px 40px rgba(0,0,0,0.07)}
+.lang-row{display:flex;gap:8px;margin-bottom:32px}
+.lang-btn{flex:1;padding:7px;border:1px solid #e8e4dc;border-radius:6px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:#8a8a7a;cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.lang-btn.active{background:#1c1c1a;border-color:#1c1c1a;color:#fff}
+.card-title{font-family:'DM Serif Display',serif;font-size:24px;color:#1c1c1a;margin-bottom:4px}
+.card-sub{font-size:13px;color:#8a8a7a;margin-bottom:28px;font-weight:300}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:11px;font-weight:600;color:#5a5a4a;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
+.field input{width:100%;background:#fafaf8;border:1.5px solid #e8e4dc;border-radius:8px;padding:11px 14px;color:#1c1c1a;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all .2s}
+.field input:focus{border-color:#1c1c1a;background:#fff;box-shadow:0 0 0 3px rgba(28,28,26,.06)}
+.field input::placeholder{color:#c0bfb0}
+.err{background:#fef5f5;border:1px solid #f0c8c8;border-radius:8px;padding:10px 14px;font-size:13px;color:#b04040;margin-bottom:16px;display:none}
+.btn{width:100%;padding:13px;background:#1c1c1a;border:none;border-radius:8px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;letter-spacing:.5px;margin-top:4px}
+.btn:hover{background:#2d2d2a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.hint{text-align:center;margin-top:20px;font-size:12px;color:#a0a090}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="wrap">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 100 95" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 84 Q50 96 88 84" fill="none" stroke="#c8b87a" stroke-width="3" stroke-linecap="round"/>
+      <rect x="22" y="14" width="34" height="66" fill="#1c1c1a" rx="2"/>
+      <line x1="29" y1="20" x2="29" y2="76" stroke="#fafaf8" stroke-width="1.5"/>
+      <line x1="35" y1="20" x2="35" y2="76" stroke="#fafaf8" stroke-width="1.5"/>
+      <line x1="41" y1="20" x2="41" y2="76" stroke="#fafaf8" stroke-width="1.5"/>
+      <line x1="47" y1="20" x2="47" y2="76" stroke="#fafaf8" stroke-width="1.5"/>
+      <rect x="55" y="32" width="22" height="48" fill="#1c1c1a" rx="2"/>
+      <rect x="60" y="52" width="12" height="16" fill="#fafaf8" rx="6"/>
+      <rect x="55" y="25" width="9" height="9" fill="#1c1c1a"/>
+    </svg>
+    <div class="brand-name">R.R <em>Builders</em> Ltd.</div>
+    <div class="brand-rule"></div>
+    <div class="brand-sub" id="brand-sub">Construction & Real Estate</div>
+  </div>
+  <div class="card">
+    <div class="lang-row">
+      <button class="lang-btn active" onclick="setLang('en')">English</button>
+      <button class="lang-btn" onclick="setLang('bn')">বাংলা</button>
+    </div>
+    <div class="card-title" id="card-title">Welcome back</div>
+    <div class="card-sub" id="card-sub">Sign in to your account</div>
+    <div class="err" id="err"></div>
+    <div class="field"><label id="lbl-e">Email</label><input type="email" id="email" placeholder="your@email.com"/></div>
+    <div class="field"><label id="lbl-p">Password</label><input type="password" id="password" placeholder="••••••••"/></div>
+    <button class="btn" id="btn" onclick="handleLogin()"><span id="btn-txt">Sign In</span></button>
+    <div class="hint" id="hint">Contact your administrator to create an account</div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://atxhshirummpenfqtwku.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
+const sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+let lang=localStorage.getItem('bt_lang')||'en';
+const T={
+  en:{sub:'Construction & Real Estate',title:'Welcome back',sub2:'Sign in to your account',e:'Email',p:'Password',btn:'Sign In',loading:'Signing in…',hint:'Contact your administrator to create an account'},
+  bn:{sub:'নির্মাণ ও রিয়েল এস্টেট',title:'স্বাগতম',sub2:'আপনার অ্যাকাউন্টে প্রবেশ করুন',e:'ইমেইল',p:'পাসওয়ার্ড',btn:'প্রবেশ করুন',loading:'লোড হচ্ছে…',hint:'অ্যাকাউন্টের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন'}
+};
+function setLang(l){
+  lang=l;localStorage.setItem('bt_lang',l);
+  document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&l==='en')||(i===1&&l==='bn')));
+  const t=T[l];
+  document.getElementById('brand-sub').textContent=t.sub;
+  document.getElementById('card-title').textContent=t.title;
+  document.getElementById('card-sub').textContent=t.sub2;
+  document.getElementById('lbl-e').textContent=t.e;
+  document.getElementById('lbl-p').textContent=t.p;
+  document.getElementById('btn-txt').textContent=t.btn;
+  document.getElementById('hint').textContent=t.hint;
+}
+setLang(lang);
+async function handleLogin(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const btn=document.getElementById('btn');
+  const errEl=document.getElementById('err');
+  const btnTxt=document.getElementById('btn-txt');
+  if(!email||!password){showErr(lang==='bn'?'ইমেইল এবং পাসওয়ার্ড দিন':'Please enter email and password');return;}
+  btn.disabled=true;btnTxt.innerHTML=`<span class="spin"></span>${T[lang].loading}`;errEl.style.display='none';
+  try{
+    const{data,error}=await sbClient.auth.signInWithPassword({email,password});
+    if(error){showErr('Error: '+error.message);btn.disabled=false;btnTxt.textContent=T[lang].btn;return;}
+    if(!data.session){showErr('No session returned. Check Supabase settings.');btn.disabled=false;btnTxt.textContent=T[lang].btn;return;}
+    window.location.href='tablet.html';
+  }catch(e){showErr('Unexpected error: '+e.message);btn.disabled=false;btnTxt.textContent=T[lang].btn;}
+}
+function showErr(msg){const el=document.getElementById('err');el.textContent=msg;el.style.display='block';}
+document.getElementById('password').addEventListener('keydown',e=>{if(e.key==='Enter')handleLogin();});
+sbClient.auth.getSession().then(({data})=>{if(data.session)window.location.href='tablet.html';});
+</script>
+</body>
+</html>

@@ -483,16 +483,7 @@ function fillYears(){
 
 async function init(){
   const{data:{session}}=await sb.auth.getSession();
-  if(!session){
-    document.body.innerHTML=`
-      <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f5f4f0;flex-direction:column;gap:28px;padding:32px;text-align:center">
-        <svg width="72" height="68" viewBox="0 0 100 95"><path d="M12 84 Q50 96 88 84" fill="none" stroke="#c8a84a" stroke-width="3" stroke-linecap="round"/><rect x="22" y="14" width="34" height="66" fill="#1c1c1a" rx="2"/><line x1="29" y1="20" x2="29" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="35" y1="20" x2="35" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="41" y1="20" x2="41" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><line x1="47" y1="20" x2="47" y2="76" stroke="#f5f4f0" stroke-width="1.5"/><rect x="55" y="32" width="22" height="48" fill="#1c1c1a" rx="2"/><rect x="60" y="52" width="12" height="16" fill="#f5f4f0" rx="6"/></svg>
-        <div style="font-family:'DM Serif Display',serif;font-size:48px;color:#1c1c1a">Please sign in first</div>
-        <div style="font-size:24px;color:#7a7a6a;max-width:500px">Open the main app and sign in, then return to this page.</div>
-        <a href="index.html" style="background:#1c1c1a;color:#fff;padding:18px 40px;border-radius:14px;font-size:24px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif">Go to Sign In</a>
-      </div>`;
-    return;
-  }
+  if(!session){window.location.replace('/RR-Builders-Ltd/tablet-login.html');return;}
   currentUser=session.user;
   fillYears();
 
