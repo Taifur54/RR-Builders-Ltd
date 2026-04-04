@@ -77,16 +77,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .sum-lbl{font-size:16px;color:var(--muted);margin-bottom:4px;font-weight:500}
 .sum-val{font-family:'DM Serif Display',serif;font-size:var(--fs-md)}
 
-/* TABLE */
+/* TABLE AREA & ROW CARDS */
 .table-area{flex:1;padding:24px 32px;overflow-y:auto}
-.data-table{width:100%;border-collapse:collapse;font-size:var(--fs-sm)}
-.data-table th{padding:16px 18px;text-align:left;font-size:var(--fs-xs);font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border);background:var(--surface2)}
-.data-table td{padding:18px 18px;border-bottom:1.5px solid rgba(232,229,222,.6);vertical-align:middle}
-.data-table tr:last-child td{border-bottom:none}
-.data-table tr:hover td{background:rgba(28,28,26,.02)}
-.tenant-name{font-size:var(--fs-sm);font-weight:600}
-.apt-label{font-size:var(--fs-xs);color:var(--muted);margin-top:4px}
-.amount-big{font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:var(--text)}
+.row-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px}
+.row-card-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.row-name{font-family:'DM Serif Display',serif;font-size:var(--fs-lg);color:var(--text)}
+.row-amount{font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:var(--text)}
+.row-card-mid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px;padding:16px;background:var(--surface2);border-radius:10px}
+.row-detail{display:flex;flex-direction:column;gap:4px}
+.row-detail-lbl{font-size:16px;color:var(--muted);font-weight:500}
+.row-detail-val{font-size:var(--fs-sm);font-weight:600;color:var(--text)}
+.row-card-actions{display:flex;gap:12px;flex-wrap:wrap}
 
 /* ACTION BUTTONS */
 .action-row{display:flex;gap:10px;flex-wrap:wrap}
@@ -243,21 +244,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="sum-card"><div class="sum-lbl">Unpaid Units</div><div class="sum-val" id="r-cnt">0</div></div>
   </div>
   <div class="table-area">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Tenant</th>
-          <th>Apartment</th>
-          <th>Monthly Rent</th>
-          <th>Amount Paid</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="rent-body">
-        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
-      </tbody>
-    </table>
+    <div id="rent-body"><div class="loading-cell">Loading…</div></div>
   </div>
 </div>
 
@@ -294,21 +281,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <div class="sum-card"><div class="sum-lbl">Still Owed</div><div class="sum-val" id="s-cnt">0 people</div></div>
   </div>
   <div class="table-area">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Employee</th>
-          <th>Type</th>
-          <th>Fixed Salary</th>
-          <th>Paid</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="sal-body">
-        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
-      </tbody>
-    </table>
+    <div id="sal-body"><div class="loading-cell">Loading…</div></div>
   </div>
 </div>
 
@@ -325,14 +298,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <select id="ten-bld" onchange="loadTenants()"><option value="">All Buildings</option></select>
   </div>
   <div class="table-area">
-    <table class="data-table">
-      <thead>
-        <tr><th>Name</th><th>Apartment</th><th>Building</th><th>Monthly Rent</th><th>Phone</th><th>Status</th></tr>
-      </thead>
-      <tbody id="ten-body">
-        <tr><td colspan="6" class="loading-cell">Loading…</td></tr>
-      </tbody>
-    </table>
+    <div id="ten-body"><div class="loading-cell">Loading…</div></div>
   </div>
 </div>
 
@@ -521,7 +487,7 @@ async function loadRent(){
   const sf=document.getElementById('rent-status').value;
   document.getElementById('rent-header-month').textContent=mname(month)+' '+year;
   const body=document.getElementById('rent-body');
-  body.innerHTML=`<tr><td colspan="6" class="loading-cell">Loading…</td></tr>`;
+  body.innerHTML='<div class="loading-cell">Loading…</div>';
 
   let active=tenants.filter(t=>t.is_active);
   if(bld)active=active.filter(t=>t.apartments?.buildings?.id===bld);
@@ -544,7 +510,7 @@ async function loadRent(){
   document.getElementById('r-cnt').textContent=unpaidCnt;
 
   if(!rows.length){
-    body.innerHTML=`<tr><td colspan="6" class="loading-cell">No tenants found</td></tr>`;
+    body.innerHTML='<div class="loading-cell">No tenants found</div>';
     return;
   }
 
@@ -554,19 +520,23 @@ async function loadRent(){
     const bldN=r.t.apartments?.buildings?.name||'—';
     const sc=r.status==='paid'?'paid':r.status==='partial'?'partial':'unpaid';
     const sl=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
-    return `<tr id="rrow-${r.t.id}">
-      <td><div class="tenant-name">${r.t.full_name}</div><div class="apt-label">${r.t.phone||''}</div></td>
-      <td><div style="font-size:var(--fs-sm);font-weight:600">${apt}</div><div class="apt-label">${bldN}</div></td>
-      <td><div class="amount-big">${fmt(r.due)}</div></td>
-      <td><div id="rpaid-${r.t.id}" style="font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</div></td>
-      <td><span class="spill spill-${sc}" id="rpill-${r.t.id}">${sl}</span></td>
-      <td>
-        <div class="action-row">
-          <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
-          <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
-        </div>
-      </td>
-    </tr>`;
+    return `<div class="row-card" id="rrow-${r.t.id}">
+      <div class="row-card-top">
+        <div class="row-name">${r.t.full_name}</div>
+        <div class="row-amount">${fmt(r.due)}</div>
+        <span class="spill spill-${sc}" id="rpill-${r.t.id}">${sl}</span>
+      </div>
+      <div class="row-card-mid">
+        <div class="row-detail"><span class="row-detail-lbl">Apartment</span><span class="row-detail-val">${apt}</span></div>
+        <div class="row-detail"><span class="row-detail-lbl">Building</span><span class="row-detail-val">${bldN}</span></div>
+        <div class="row-detail"><span class="row-detail-lbl">Phone</span><span class="row-detail-val">${r.t.phone||'—'}</span></div>
+        <div class="row-detail"><span class="row-detail-lbl">Paid</span><span class="row-detail-val" id="rpaid-${r.t.id}" style="color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</span></div>
+      </div>
+      <div class="row-card-actions">
+        <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
+        <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -630,7 +600,7 @@ async function loadSalary(){
   const year=parseInt(document.getElementById('sal-year').value);
   const type=document.getElementById('sal-type').value;
   const body=document.getElementById('sal-body');
-  body.innerHTML=`<tr><td colspan="6" class="loading-cell">Loading…</td></tr>`;
+  body.innerHTML='<div class="loading-cell">Loading…</div>';
 
   let emps=employees.filter(e=>e.is_active!==false);
   if(type)emps=emps.filter(e=>e.type===type);
@@ -654,25 +624,30 @@ async function loadSalary(){
   document.getElementById('s-unpaid-total').textContent=fmt(totalDue-totalPaid);
   document.getElementById('s-cnt').textContent=unpaidCnt+' people';
 
-  if(!rows.length){body.innerHTML=`<tr><td colspan="6" class="loading-cell">No employees found</td></tr>`;return;}
+  if(!rows.length){body.innerHTML='<div class="loading-cell">No employees found</div>';return;}
 
   body.innerHTML=rows.map(r=>{
     const rid=r.rec?r.rec.id:'';
     const sc=r.status==='paid'?'paid':r.status==='partial'?'partial':'unpaid';
     const sl=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
-    return `<tr id="srow-${r.e.id}" style="${r.status==='paid'?'background:rgba(234,246,240,.35)':''}">
-      <td><div class="tenant-name">${r.e.full_name}</div><div class="apt-label">${r.e.phone||''}</div></td>
-      <td><span style="background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:6px 14px;font-size:var(--fs-xs);font-weight:600">${r.e.type}</span></td>
-      <td><div class="amount-big">${fmt(r.due)}</div></td>
-      <td><div id="spaid-${r.e.id}" style="font-family:'DM Serif Display',serif;font-size:var(--fs-md);color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</div></td>
-      <td><span class="spill spill-${sc}" id="spill-${r.e.id}">${sl}</span></td>
-      <td>
+    return `<div class="row-card" id="srow-${r.e.id}"${r.status==='paid'?' style="border-color:#a8d8bc"':''}>
+      <div class="row-card-top">
+        <div class="row-name">${r.e.full_name}</div>
+        <div class="row-amount" id="spaid-${r.e.id}" style="color:${r.paid>0?'var(--success)':'var(--text)'}">${r.paid>0?fmt(r.paid):fmt(r.due)}</div>
+        <span class="spill spill-${sc}" id="spill-${r.e.id}">${sl}</span>
+      </div>
+      <div class="row-card-mid">
+        <div class="row-detail"><span class="row-detail-lbl">Type</span><span class="row-detail-val">${r.e.type}</span></div>
+        <div class="row-detail"><span class="row-detail-lbl">Fixed Salary</span><span class="row-detail-val">${fmt(r.due)}</span></div>
+        <div class="row-detail"><span class="row-detail-lbl">Phone</span><span class="row-detail-val">${r.e.phone||'—'}</span></div>
+      </div>
+      <div class="row-card-actions">
         ${r.status!=='paid'
           ?`<button class="abtn abtn-paid" onclick="tapSalPaid('${r.e.id}','${rid}',${r.due},'${r.e.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Pay Now</button>`
           :`<button class="abtn abtn-unpaid" onclick="tapSalUnpaid('${r.e.id}','${rid}',${month},${year})">↩ Undo</button>`
         }
-      </td>
-    </tr>`;
+      </div>
+    </div>`;
   }).join('');
 }
 
@@ -703,7 +678,7 @@ async function confirmSalPaid(){
   const row=document.getElementById('srow-'+eid);
   if(pill){pill.className='spill spill-paid';pill.textContent='✓ Paid';}
   if(paidEl){paidEl.textContent=fmt(due);paidEl.style.color='var(--success)';}
-  if(row)row.style.background='rgba(234,246,240,.35)';
+  if(row)row.style.borderColor='#a8d8bc';
 }
 
 async function tapSalUnpaid(eid,rid,month,year){
@@ -717,7 +692,7 @@ async function tapSalUnpaid(eid,rid,month,year){
   const row=document.getElementById('srow-'+eid);
   if(pill){pill.className='spill spill-unpaid';pill.textContent='✗ Unpaid';}
   if(paidEl){paidEl.textContent='—';paidEl.style.color='var(--muted)';}
-  if(row)row.style.background='';
+  if(row)row.style.borderColor='';
 }
 
 // ── TENANTS ───────────────────────────────────────────────────
@@ -726,15 +701,19 @@ function renderTenants(){
   let list=tenants.filter(t=>t.is_active);
   if(bld)list=list.filter(t=>t.apartments?.buildings?.id===bld);
   const body=document.getElementById('ten-body');
-  if(!list.length){body.innerHTML=`<tr><td colspan="6" class="loading-cell">No active tenants</td></tr>`;return;}
-  body.innerHTML=list.map(t=>`<tr>
-    <td><div class="tenant-name">${t.full_name}</div></td>
-    <td style="font-size:var(--fs-sm)">${t.apartments?.apartment_number||'—'}</td>
-    <td style="font-size:var(--fs-sm)">${t.apartments?.buildings?.name||'—'}</td>
-    <td><div class="amount-big">${fmt(t.monthly_rent)}</div></td>
-    <td style="font-size:var(--fs-sm)">${t.phone||'—'}</td>
-    <td><span class="spill spill-active">Active</span></td>
-  </tr>`).join('');
+  if(!list.length){body.innerHTML='<div class="loading-cell">No active tenants</div>';return;}
+  body.innerHTML=list.map(t=>`<div class="row-card">
+    <div class="row-card-top">
+      <div class="row-name">${t.full_name}</div>
+      <div class="row-amount">${fmt(t.monthly_rent)}</div>
+      <span class="spill spill-active">Active</span>
+    </div>
+    <div class="row-card-mid">
+      <div class="row-detail"><span class="row-detail-lbl">Apartment</span><span class="row-detail-val">${t.apartments?.apartment_number||'—'}</span></div>
+      <div class="row-detail"><span class="row-detail-lbl">Building</span><span class="row-detail-val">${t.apartments?.buildings?.name||'—'}</span></div>
+      <div class="row-detail"><span class="row-detail-lbl">Phone</span><span class="row-detail-val">${t.phone||'—'}</span></div>
+    </div>
+  </div>`).join('');
 }
 
 // ── BUILDINGS ─────────────────────────────────────────────────
