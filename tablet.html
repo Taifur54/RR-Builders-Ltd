@@ -170,6 +170,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="home-date-big" id="home-date">—</div>
       <div class="home-time-big" id="home-time">—</div>
     </div>
+    <div id="bell-wrap" style="position:relative;margin-left:16px;cursor:pointer" onclick="toggleNotif()">
+      <div style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:14px 20px;font-size:32px">🔔</div>
+      <div id="bell-badge" style="display:none;position:absolute;top:-8px;right:-8px;background:#c0392b;color:#fff;border-radius:50%;width:28px;height:28px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center">0</div>
+    </div>
   </div>
 
   <div class="home-body">
@@ -392,6 +396,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 
 <div class="toast" id="toast"></div>
 
+<div id="notif-panel" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(28,28,26,.55);align-items:flex-start;justify-content:flex-end;padding:24px">
+  <div style="background:#fff;border-radius:20px;width:100%;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.2)">
+    <div style="background:#1c1c1a;padding:24px 28px;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-family:'DM Serif Display',serif;font-size:32px;color:#fff">Notifications</span>
+      <button onclick="toggleNotif()" style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:10px;padding:10px 20px;color:#fff;font-size:20px;cursor:pointer;font-family:'DM Sans',sans-serif">✕ Close</button>
+    </div>
+    <div id="notif-list" style="padding:16px"></div>
+    <div style="padding:16px 24px;border-top:2px solid #e8e5de;background:#f9f8f5;border-radius:0 0 20px 20px">
+      <button onclick="markAllRead()" style="width:100%;padding:16px;background:#1c1c1a;color:#fff;border:none;border-radius:12px;font-size:22px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Mark All as Read</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SB_URL='https://atxhshirummpenfqtwku.supabase.co';
@@ -468,6 +485,8 @@ async function init(){
   tenants=tens||[];
 
   await loadHomeSummary();
+  await loadNotifications();
+  setInterval(loadNotifications,30000);
 }
 
 async function loadHomeSummary(){
@@ -732,6 +751,40 @@ function renderBuildings(){
       </div>
       ${b.notes?`<div style="font-size:var(--fs-xs);color:var(--muted);margin-top:16px;padding-top:16px;border-top:1.5px solid var(--border)">${b.notes}</div>`:''}
     </div>`).join('');
+}
+
+async function loadNotifications(){
+  const{data}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(30);
+  const notifs=data||[];
+  const unread=notifs.filter(n=>!n.is_read).length;
+  const badge=document.getElementById('bell-badge');
+  if(badge){badge.textContent=unread;badge.style.display=unread>0?'flex':'none';}
+  const list=document.getElementById('notif-list');
+  if(!list)return;
+  if(!notifs.length){list.innerHTML='<div style="padding:32px;text-align:center;color:#7a7a6a;font-size:22px">No notifications yet</div>';return;}
+  list.innerHTML=notifs.map(n=>`
+    <div onclick="readNotif('${n.id}')" style="padding:20px;border-bottom:1.5px solid #e8e5de;cursor:pointer;background:${n.is_read?'#fff':'#fef8ee'};${n.is_read?'':'border-left:4px solid #c8a84a'}">
+      <div style="font-size:22px;font-weight:700;color:#1c1c1a;margin-bottom:6px">${n.title}</div>
+      <div style="font-size:18px;color:#7a7a6a;margin-bottom:6px">${n.message}</div>
+      <div style="font-size:16px;color:#a8a898">${fmtD(n.created_at)}</div>
+    </div>`).join('');
+}
+
+function toggleNotif(){
+  const panel=document.getElementById('notif-panel');
+  const isOpen=panel.style.display==='flex';
+  panel.style.display=isOpen?'none':'flex';
+  if(!isOpen)loadNotifications();
+}
+
+async function readNotif(id){
+  await sb.from('notifications').update({is_read:true}).eq('id',id);
+  loadNotifications();
+}
+
+async function markAllRead(){
+  await sb.from('notifications').update({is_read:true}).eq('is_read',false);
+  loadNotifications();
 }
 
 document.addEventListener('DOMContentLoaded',init);
