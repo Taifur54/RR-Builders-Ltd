@@ -182,6 +182,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stat-lbl{font-size:16px;color:var(--muted);font-weight:500;margin-bottom:5px}
 .stat-val{font-family:'DM Serif Display',serif;font-size:32px;color:var(--text)}
 .stat-val.green{color:var(--success)}.stat-val.red{color:var(--danger)}
+.notif-banner{padding:20px 28px 8px}
+.notif-btn{width:100%;padding:20px;border:none;border-radius:16px;font-size:19px;font-weight:700;letter-spacing:0.2px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;transition:opacity 0.2s}
+.notif-btn.state-default{background:#1c7c54;color:#fff}
+.notif-btn.state-enabled{background:#e8f5ee;color:#1c7c54;cursor:default;border:2px solid #a8d8bc}
+.notif-btn.state-blocked{background:#fdf0f0;color:var(--danger);cursor:default;border:2px solid #f5b0b0}
+.notif-btn.state-busy{background:#ccc;color:#fff;cursor:not-allowed}
+.notif-btn:disabled{opacity:0.85}
 
 /* ── BUILDINGS GRID ── */
 .bld-card{background:var(--surface);border:2px solid var(--border);border-radius:20px;padding:28px}
@@ -319,6 +326,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="stat-lbl">Active Tenants</div>
       <div class="stat-val" id="home-tenants">—</div>
     </div>
+  </div>
+
+  <div class="notif-banner">
+    <button id="notif-btn" class="notif-btn state-default" onclick="setupPush()">
+      🔔 Tap to Enable Push Notifications
+    </button>
   </div>
 </div>
 
@@ -717,7 +730,7 @@ async function init(){
     await loadHomeSummary();
     await loadNotifications();
     setupRealtime();
-    await setupPush();
+    updatePushButton();
     return;
   }
 
@@ -742,7 +755,7 @@ async function init(){
   await loadHomeSummary();
   await loadNotifications();
   setupRealtime();
-  await setupPush();
+  updatePushButton();
 }
 
 // ── REALTIME: instant bell update when notifications table changes ──
@@ -790,61 +803,113 @@ function urlBase64ToUint8Array(base64String){
   return outputArray;
 }
 
+function updatePushButton(){
+  const btn=document.getElementById('notif-btn');
+  if(!btn)return;
+  if(!('Notification' in window)||!('PushManager' in window)){
+    btn.textContent='❌ Push notifications not supported on this browser';
+    btn.className='notif-btn state-blocked';btn.disabled=true;return;
+  }
+  const p=Notification.permission;
+  console.log('[Push] Current permission state:',p);
+  if(p==='granted'){
+    btn.textContent='✓ Notifications Enabled';
+    btn.className='notif-btn state-enabled';btn.disabled=true;
+  } else if(p==='denied'){
+    btn.textContent='🚫 Notifications blocked — go to browser settings to allow';
+    btn.className='notif-btn state-blocked';btn.disabled=true;
+  } else {
+    btn.textContent='🔔 Tap to Enable Push Notifications';
+    btn.className='notif-btn state-default';btn.disabled=false;
+  }
+}
+
 async function setupPush(){
-  // Don't try if VAPID key not set yet
-  if(VAPID_PUBLIC_KEY==='YOUR_VAPID_PUBLIC_KEY_HERE')return;
-  if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+  console.log('[Push] setupPush() called');
+  const btn=document.getElementById('notif-btn');
+
+  if(VAPID_PUBLIC_KEY==='YOUR_VAPID_PUBLIC_KEY_HERE'){
+    console.log('[Push] Aborted: VAPID key is still placeholder');return;
+  }
+  console.log('[Push] VAPID key is set ✓');
+
+  if(!('serviceWorker' in navigator)){
+    console.log('[Push] Aborted: serviceWorker not in navigator');
+    if(btn){btn.textContent='❌ Service workers not supported';btn.className='notif-btn state-blocked';btn.disabled=true;}
+    return;
+  }
+  if(!('PushManager' in window)){
+    console.log('[Push] Aborted: PushManager not in window');
+    if(btn){btn.textContent='❌ Push not supported on this browser';btn.className='notif-btn state-blocked';btn.disabled=true;}
+    return;
+  }
+  console.log('[Push] Browser supports serviceWorker + PushManager ✓');
+
+  if(Notification.permission==='denied'){
+    console.log('[Push] Aborted: permission already denied');
+    if(btn){btn.textContent='🚫 Blocked — enable in browser settings';btn.className='notif-btn state-blocked';btn.disabled=true;}
+    return;
+  }
+
+  if(btn){btn.textContent='⏳ Enabling…';btn.className='notif-btn state-busy';btn.disabled=true;}
 
   try{
+    console.log('[Push] Waiting for service worker to be ready…');
     const reg=await navigator.serviceWorker.ready;
+    console.log('[Push] Service worker ready, scope:',reg.scope);
 
-    // Ask for permission
+    console.log('[Push] Calling Notification.requestPermission()…');
     const permission=await Notification.requestPermission();
+    console.log('[Push] Permission result:',permission);
+
     if(permission!=='granted'){
-      console.log('Push permission denied');return;
+      console.log('[Push] Permission not granted — user dismissed or denied');
+      if(btn){btn.textContent='🔔 Tap to Enable Push Notifications';btn.className='notif-btn state-default';btn.disabled=false;}
+      return;
     }
 
-    // Subscribe
+    console.log('[Push] Permission granted, getting/creating subscription…');
     let sub=await reg.pushManager.getSubscription();
-    if(!sub){
-      sub=await reg.pushManager.subscribe({
-        userVisibleOnly:true,
-        applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-      });
+    if(sub){
+      console.log('[Push] Existing subscription found:',sub.endpoint.slice(0,60)+'…');
+    } else {
+      sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});
+      console.log('[Push] New subscription created:',sub.endpoint.slice(0,60)+'…');
     }
 
-    // Save subscription to Supabase
     const subJson=sub.toJSON();
     const deviceId=localStorage.getItem('device_id')||(()=>{const id=crypto.randomUUID();localStorage.setItem('device_id',id);return id;})();
+    console.log('[Push] Saving to Supabase, device_id:',deviceId);
 
     const{error:upsertErr}=await sb.from('push_subscriptions').upsert({
-      device_id: deviceId,
-      endpoint: subJson.endpoint,
-      p256dh: subJson.keys.p256dh,
-      auth: subJson.keys.auth,
-      user_label: isMD()?'Managing Director':(userProfile?.full_name||'Staff'),
-      updated_at: new Date().toISOString()
+      device_id:deviceId,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,
+      auth:subJson.keys.auth,user_label:isMD()?'Managing Director':(userProfile?.full_name||'Staff'),
+      updated_at:new Date().toISOString()
     },{onConflict:'device_id'});
 
-    if(upsertErr){console.warn('Push subscription save failed:',upsertErr.message);return;}
-    console.log('Push subscription saved ✓');
+    if(upsertErr){
+      console.warn('[Push] Upsert failed:',upsertErr.message);
+      if(btn){btn.textContent='⚠️ Enabled but not saved — tap to retry';btn.className='notif-btn state-default';btn.disabled=false;}
+      return;
+    }
 
-    // Listen for subscription changes from SW
+    console.log('[Push] Subscription saved to Supabase ✓');
+    if(btn){btn.textContent='✓ Notifications Enabled';btn.className='notif-btn state-enabled';btn.disabled=true;}
+
     navigator.serviceWorker.addEventListener('message',async e=>{
       if(e.data?.type==='PUSH_SUBSCRIPTION_CHANGED'){
-        const newSub=e.data.subscription.toJSON();
+        console.log('[Push] Subscription changed, re-saving…');
+        const n=e.data.subscription.toJSON();
         await sb.from('push_subscriptions').upsert({
-          device_id:deviceId,
-          endpoint:newSub.endpoint,
-          p256dh:newSub.keys.p256dh,
-          auth:newSub.keys.auth,
-          updated_at:new Date().toISOString()
+          device_id:deviceId,endpoint:n.endpoint,p256dh:n.keys.p256dh,
+          auth:n.keys.auth,updated_at:new Date().toISOString()
         },{onConflict:'device_id'});
       }
     });
 
   }catch(err){
-    console.warn('Push setup failed:',err);
+    console.warn('[Push] Setup failed:',err);
+    if(btn){btn.textContent='⚠️ Error — tap to try again';btn.className='notif-btn state-default';btn.disabled=false;}
   }
 }
 
