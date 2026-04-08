@@ -927,7 +927,7 @@ async function saveFullRent(){
 }
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
   if(existingId&&existingId!==''){
-    const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',existingId);
+    const{error}=await sbClient.from('rent_payments').delete().eq('id',existingId);
     if(error){showToast('Error: '+error.message,'error');return;}
   }
   showToast('Marked as unpaid');
