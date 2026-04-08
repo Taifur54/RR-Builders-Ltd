@@ -997,13 +997,9 @@ async function tapRentUnpaid(tid,rid,month,year){
   if(rid&&rid!==''){
     const{error}=await sb.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',rid);
     if(error){toast('Error: '+error.message,'err');return;}
-    toast('Marked as unpaid');
-    updateRentRow(tid,'unpaid',0);
-  } else {
-    // No record exists — already unpaid, just update UI
-    toast('Already unpaid');
-    updateRentRow(tid,'unpaid',0);
   }
+  toast('Marked as unpaid');
+  await loadRent();
 }
 
 function updateRentRow(tid,status,paid){
