@@ -408,7 +408,7 @@ tr:hover td{background:rgba(28,28,26,.015)}
       </div>
       <div class="tw">
         <div class="th"><h3>Rent Status</h3><div style="font-size:12px;color:var(--muted)">Click buttons on each row to update payment status</div></div>
-        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid Amount</th><th>Status & Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
+        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid Amount</th><th>Total Due (incl. arrears)</th><th>Status & Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
       </div>
     </div>
 
@@ -829,13 +829,41 @@ async function loadRent(){
   const buildingFilter=document.getElementById('rent-building-filter').value;
   const statusFilter=document.getElementById('rent-status-filter').value;
   const body=document.getElementById('rent-body');
-  body.innerHTML='<tr class="loading-row"><td colspan="7">Loading…</td></tr>';
+  body.innerHTML='<tr class="loading-row"><td colspan="8">Loading…</td></tr>';
   if(tenants.length===0)await loadTenants();
   let activeTenants=tenants.filter(t2=>t2.is_active);
   if(buildingFilter)activeTenants=activeTenants.filter(t2=>t2.apartments?.buildings?.id===buildingFilter);
+
+  // Fetch this month's payments
   const{data:existing}=await sbClient.from('rent_payments').select('*').eq('month',month).eq('year',year);
   const paymentMap={};(existing||[]).forEach(p=>{paymentMap[p.tenant_id]=p;});
-  let rows=activeTenants.map(t2=>{const rec=paymentMap[t2.id]||null;return{tenant:t2,record:rec,status:rec?rec.payment_status:'unpaid',amountPaid:rec?Number(rec.amount_paid):0,monthlyRent:Number(t2.monthly_rent||0),method:rec?rec.payment_method:'',paymentDate:rec?rec.payment_date:null};});
+
+  // Fetch all unpaid/partial records BEFORE this month to calculate arrears
+  // Build a date boundary: anything before year-month
+  const{data:pastUnpaid}=await sbClient.from('rent_payments')
+    .select('tenant_id,amount_due,amount_paid,month,year')
+    .in('payment_status',['unpaid','partial'])
+    .or(`year.lt.${year},and(year.eq.${year},month.lt.${month})`);
+
+  // Sum arrears per tenant
+  const arrearsMap={};
+  (pastUnpaid||[]).forEach(p=>{
+    const owed=Number(p.amount_due||0)-Number(p.amount_paid||0);
+    arrearsMap[p.tenant_id]=(arrearsMap[p.tenant_id]||0)+owed;
+  });
+
+  let rows=activeTenants.map(t2=>{
+    const rec=paymentMap[t2.id]||null;
+    const monthlyRent=Number(t2.monthly_rent||0);
+    const amountPaid=rec?Number(rec.amount_paid):0;
+    const status=rec?rec.payment_status:'unpaid';
+    const arrears=arrearsMap[t2.id]||0;
+    // Total due = this month's unpaid portion + arrears from past months
+    const thisMonthOwed=status==='paid'?0:monthlyRent-amountPaid;
+    const totalDueAmount=thisMonthOwed+arrears;
+    return{tenant:t2,record:rec,status,amountPaid,monthlyRent,arrears,totalDueAmount,method:rec?rec.payment_method:'',paymentDate:rec?rec.payment_date:null};
+  });
+
   if(statusFilter)rows=rows.filter(r=>r.status===statusFilter);
   const totalDue=rows.reduce((s,r)=>s+r.monthlyRent,0);
   const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
@@ -844,13 +872,31 @@ async function loadRent(){
   document.getElementById('r-collected').textContent=fmt(totalPaid);
   document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
   document.getElementById('r-unpaid-count').textContent=unpaidCount;
-  if(!rows.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
+  if(!rows.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
   body.innerHTML=rows.map(r=>{
-    const tid=r.tenant.id;const rid=r.record?r.record.id:'';
-    const aptLabel=r.tenant.apartments?.apartment_number||'—';const bldLabel=r.tenant.apartments?.buildings?.name||'—';
+    const tid=r.tenant.id;
+    const rid=r.record?r.record.id:'';
+    const aptLabel=r.tenant.apartments?.apartment_number||'—';
+    const bldLabel=r.tenant.apartments?.buildings?.name||'—';
     const statusClass=r.status==='paid'?'sp-paid':r.status==='partial'?'sp-partial':'sp-unpaid';
     const statusLabel=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
-    return `<tr id="rent-row-${tid}"><td><strong>${r.tenant.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.tenant.phone||''}</div></td><td>${aptLabel}<div style="font-size:11px;color:var(--muted)">${bldLabel}</div></td><td><strong>${fmt(r.monthlyRent)}</strong></td><td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td><td><div class="qa-row"><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button></div></td><td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td><td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td></tr>`;
+    // Due cell: show total due, with arrears breakdown if any
+    let dueCell='—';
+    if(r.status!=='paid'||r.arrears>0){
+      const hasArrears=r.arrears>0;
+      dueCell=`<strong style="color:${r.totalDueAmount>0?'var(--danger)':'var(--muted)'}">${fmt(r.totalDueAmount)}</strong>`;
+      if(hasArrears)dueCell+=`<div style="font-size:11px;color:var(--danger);margin-top:2px">incl. ${fmt(r.arrears)} arrears</div>`;
+    }
+    return `<tr id="rent-row-${tid}">
+      <td><strong>${r.tenant.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.tenant.phone||''}</div></td>
+      <td>${aptLabel}<div style="font-size:11px;color:var(--muted)">${bldLabel}</div></td>
+      <td><strong>${fmt(r.monthlyRent)}</strong></td>
+      <td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
+      <td id="rent-due-${tid}">${dueCell}</td>
+      <td><div class="qa-row"><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button></div></td>
+      <td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
+      <td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
+    </tr>`;
   }).join('');
 }
 function quickRentPaid(tenantId,existingId,monthlyRent,month,year,name){
@@ -880,8 +926,14 @@ async function saveFullRent(){
   showToast('Marked as paid ✓');closeModal('modal-rent-paid');updateRentRowUI(tenantId,'paid',monthlyRent,method,date);
 }
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
-  if(existingId){const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null}).eq('id',existingId);if(error){showToast('Error: '+error.message,'error');return;}}
-  showToast('Marked as unpaid');updateRentRowUI(tenantId,'unpaid',0,'',null);
+  // If there's an existing record, reset it to unpaid
+  if(existingId&&existingId!==''){
+    const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',existingId);
+    if(error){showToast('Error: '+error.message,'error');return;}
+  }
+  // If no record exists, tenant is already unpaid — just update UI
+  showToast('Marked as unpaid');
+  updateRentRowUI(tenantId,'unpaid',0,'',null);
 }
 function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
   currentRentContext={tenantId,existingId,monthlyRent,month,year};
@@ -915,6 +967,7 @@ async function savePartialRent(){
 function updateRentRowUI(tenantId,status,amountPaid,method,date){
   const pill=document.getElementById(`rent-status-pill-${tenantId}`);
   const paidCell=document.getElementById(`rent-paid-${tenantId}`);
+  const dueCell=document.getElementById(`rent-due-${tenantId}`);
   const methodCell=document.getElementById(`rent-method-${tenantId}`);
   const dateCell=document.getElementById(`rent-date-${tenantId}`);
   if(!pill)return;
@@ -924,6 +977,8 @@ function updateRentRowUI(tenantId,status,amountPaid,method,date){
   if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';
   if(methodCell)methodCell.textContent=method||'—';
   if(dateCell)dateCell.textContent=fmtDate(date);
+  // Update due cell: clear it if paid, otherwise keep showing (full reload will recalc arrears)
+  if(dueCell&&status==='paid')dueCell.innerHTML='—';
   const row=document.getElementById(`rent-row-${tenantId}`);
   if(row){row.querySelectorAll('.qa-btn').forEach(btn=>{btn.classList.remove('active');if((status==='paid'&&btn.classList.contains('qa-paid'))||(status==='partial'&&btn.classList.contains('qa-partial'))||(status==='unpaid'&&btn.classList.contains('qa-unpaid'))){btn.classList.add('active');}});}
   refreshRentSummary();
@@ -931,12 +986,17 @@ function updateRentRowUI(tenantId,status,amountPaid,method,date){
 function refreshRentSummary(){
   let totalDue=0,totalPaid=0,unpaidCount=0;
   document.querySelectorAll('[id^="rent-row-"]').forEach(row=>{
-    const dueTd=row.querySelector('td:nth-child(3) strong');const paidTd=row.querySelector('[id^="rent-paid-"]');const pill=row.querySelector('[id^="rent-status-pill-"]');
+    const dueTd=row.querySelector('td:nth-child(3) strong');
+    const paidTd=row.querySelector('[id^="rent-paid-"]');
+    const pill=row.querySelector('[id^="rent-status-pill-"]');
     if(dueTd){const v=parseFloat(dueTd.textContent.replace(/[^\d.]/g,''))||0;totalDue+=v;}
     if(paidTd&&paidTd.textContent!=='—'){const v=parseFloat(paidTd.textContent.replace(/[^\d.]/g,''))||0;totalPaid+=v;}
     if(pill&&pill.classList.contains('sp-unpaid'))unpaidCount++;
   });
-  document.getElementById('r-total-due').textContent=fmt(totalDue);document.getElementById('r-collected').textContent=fmt(totalPaid);document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);document.getElementById('r-unpaid-count').textContent=unpaidCount;
+  document.getElementById('r-total-due').textContent=fmt(totalDue);
+  document.getElementById('r-collected').textContent=fmt(totalPaid);
+  document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
+  document.getElementById('r-unpaid-count').textContent=unpaidCount;
 }
 
 // ─── SALES ────────────────────────────────────────────────────
