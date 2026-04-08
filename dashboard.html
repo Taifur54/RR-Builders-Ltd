@@ -926,14 +926,12 @@ async function saveFullRent(){
   showToast('Marked as paid ✓');closeModal('modal-rent-paid');loadRent();
 }
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
-  // If there's an existing record, reset it to unpaid
   if(existingId&&existingId!==''){
     const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',existingId);
     if(error){showToast('Error: '+error.message,'error');return;}
   }
-  // If no record exists, tenant is already unpaid — just update UI
   showToast('Marked as unpaid');
-  updateRentRowUI(tenantId,'unpaid',0,'',null);
+  loadRent();
 }
 function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
   currentRentContext={tenantId,existingId,monthlyRent,month,year};
