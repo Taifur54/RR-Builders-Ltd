@@ -995,7 +995,7 @@ async function confirmPartialRent(){
 
 async function tapRentUnpaid(tid,rid,month,year){
   if(rid&&rid!==''){
-    const{error}=await sb.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',rid);
+    const{error}=await sb.from('rent_payments').delete().eq('id',rid);
     if(error){toast('Error: '+error.message,'err');return;}
   }
   toast('Marked as unpaid');
