@@ -923,7 +923,7 @@ async function saveFullRent(){
   if(existingId){({error}=await sbClient.from('rent_payments').update({amount_paid:monthlyRent,payment_status:'paid',payment_method:method,deposited_to:deposited,payment_date:date||null,notes}).eq('id',existingId));}
   else{({error}=await sbClient.from('rent_payments').insert({tenant_id:tenantId,apartment_id:aptId,building_id:bldId,month,year,amount_due:monthlyRent,amount_paid:monthlyRent,payment_status:'paid',payment_method:method,deposited_to:deposited,payment_date:date||null,notes,recorded_by:currentUser.id}));}
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Marked as paid ✓');closeModal('modal-rent-paid');updateRentRowUI(tenantId,'paid',monthlyRent,method,date);
+  showToast('Marked as paid ✓');closeModal('modal-rent-paid');loadRent();
 }
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
   // If there's an existing record, reset it to unpaid
@@ -962,7 +962,7 @@ async function savePartialRent(){
   if(existingId){({error}=await sbClient.from('rent_payments').update({amount_paid:paid,payment_status:status,payment_method:method,deposited_to:deposited,payment_date:date||null,late_fee:lateFee,notes}).eq('id',existingId));}
   else{({error}=await sbClient.from('rent_payments').insert({tenant_id:tenantId,apartment_id:aptId,building_id:bldId,month,year,amount_due:monthlyRent,amount_paid:paid,payment_status:status,payment_method:method,deposited_to:deposited,payment_date:date||null,late_fee:lateFee,notes,recorded_by:currentUser.id}));}
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast(status==='paid'?'Marked as paid ✓':'Partial payment saved');closeModal('modal-rent-partial');updateRentRowUI(tenantId,status,paid,method,date);
+  showToast(status==='paid'?'Marked as paid ✓':'Partial payment saved');closeModal('modal-rent-partial');loadRent();
 }
 function updateRentRowUI(tenantId,status,amountPaid,method,date){
   const pill=document.getElementById(`rent-status-pill-${tenantId}`);
