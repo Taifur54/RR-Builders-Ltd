@@ -1,11 +1,8 @@
 // sw.js — R.R Builders Ltd. Service Worker
 // Handles push notifications and offline caching
 
-const CACHE='rrbuilders-v2';
-const OFFLINE_URLS=[
-  '/RR-Builders-Ltd/tablet.html',
-  '/RR-Builders-Ltd/tablet-login.html',
-];
+const CACHE='rrbuilders-v3';
+const OFFLINE_URLS=[];
 
 // ── INSTALL: cache key pages ──────────────────────────────────
 self.addEventListener('install',e=>{
