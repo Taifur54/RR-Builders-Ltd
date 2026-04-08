@@ -198,6 +198,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 /* ── LOADING ── */
 .loading-cell{text-align:center;padding:48px;color:var(--muted);font-size:24px}
 
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+
 /* ── PROC STEP TRACK ── */
 .step-track{display:flex;align-items:center;gap:0;flex-wrap:nowrap;margin-top:6px}
 .step-node{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:60px}
@@ -700,7 +702,6 @@ async function init(){
   if(isMD()){
     currentUser={id:'md',email:'md'};
     userProfile={full_name:localStorage.getItem('md_name')||'Managing Director',role:'managing_director'};
-    // Show MD name in any future user display area
     fillYears();
     const{data:blds}=await sb.from('buildings').select('*').order('name');
     buildings=blds||[];
@@ -715,7 +716,8 @@ async function init(){
     tenants=tens||[];
     await loadHomeSummary();
     await loadNotifications();
-    setInterval(loadNotifications,30000);
+    setupRealtime();
+    await setupPush();
     return;
   }
 
@@ -726,7 +728,6 @@ async function init(){
   const{data:prof}=await sb.from('user_profiles').select('*').eq('id',currentUser.id).single();
   userProfile=prof;
   fillYears();
-
   const{data:blds}=await sb.from('buildings').select('*').order('name');
   buildings=blds||[];
   ['rent-bld','ten-bld','mat-bld-f','exp-bld-f','rep-bld-f'].forEach(id=>{
@@ -734,16 +735,116 @@ async function init(){
     const first=el.children[0];el.innerHTML='';el.appendChild(first);
     buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;el.appendChild(o);});
   });
-
   const{data:emps}=await sb.from('employees').select('*');
   employees=emps||[];
-
   const{data:tens}=await sb.from('tenants').select('*, apartments(apartment_number, buildings(id,name))');
   tenants=tens||[];
-
   await loadHomeSummary();
   await loadNotifications();
-  setInterval(loadNotifications,30000);
+  setupRealtime();
+  await setupPush();
+}
+
+// ── REALTIME: instant bell update when notifications table changes ──
+function setupRealtime(){
+  sb.channel('notifications-channel')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications'},payload=>{
+      // Refresh bell immediately — no more 30-second wait
+      loadNotifications();
+      loadHomeSummary();
+      // Show in-app banner too for good measure
+      showInAppBanner(payload.new);
+    })
+    .subscribe();
+}
+
+// In-app banner for when the app IS open
+function showInAppBanner(notif){
+  const existing=document.getElementById('push-banner');
+  if(existing)existing.remove();
+  const banner=document.createElement('div');
+  banner.id='push-banner';
+  banner.style.cssText='position:fixed;top:0;left:0;right:0;z-index:500;background:#7a2020;padding:20px 28px;display:flex;align-items:center;gap:16px;box-shadow:0 4px 24px rgba(0,0,0,.3);animation:slideDown .3s ease';
+  banner.innerHTML=`
+    <span style="font-size:28px;flex-shrink:0">🔔</span>
+    <div style="flex:1">
+      <div style="font-size:22px;font-weight:700;color:#fff;margin-bottom:4px">${esc(notif.title||'New Notification')}</div>
+      <div style="font-size:18px;color:rgba(255,255,255,.85)">${esc(notif.message||'')}</div>
+    </div>
+    <button onclick="this.parentElement.remove()" style="background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:10px;padding:10px 18px;color:#fff;font-size:18px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0">✕</button>`;
+  document.body.prepend(banner);
+  // Auto-dismiss after 8 seconds
+  setTimeout(()=>{if(banner.parentElement)banner.remove();},8000);
+}
+
+// ── VAPID PUBLIC KEY ──────────────────────────────────────────
+// Paste your VAPID public key here after generating (see setup guide)
+const VAPID_PUBLIC_KEY='BNuMJJZuk3BnHiwPx2yBBqDEOZSm7-20wAS0uKt86TMxkij7sKxc-2JgU--9rdUByXUGUcPxgQcgch0X3H0l1-4';
+
+function urlBase64ToUint8Array(base64String){
+  const padding='='.repeat((4-base64String.length%4)%4);
+  const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+  const rawData=window.atob(base64);
+  const outputArray=new Uint8Array(rawData.length);
+  for(let i=0;i<rawData.length;++i)outputArray[i]=rawData.charCodeAt(i);
+  return outputArray;
+}
+
+async function setupPush(){
+  // Don't try if VAPID key not set yet
+  if(VAPID_PUBLIC_KEY==='YOUR_VAPID_PUBLIC_KEY_HERE')return;
+  if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+
+  try{
+    const reg=await navigator.serviceWorker.ready;
+
+    // Ask for permission
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted'){
+      console.log('Push permission denied');return;
+    }
+
+    // Subscribe
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){
+      sub=await reg.pushManager.subscribe({
+        userVisibleOnly:true,
+        applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+
+    // Save subscription to Supabase
+    const subJson=sub.toJSON();
+    const deviceId=localStorage.getItem('device_id')||(()=>{const id=crypto.randomUUID();localStorage.setItem('device_id',id);return id;})();
+
+    await sb.from('push_subscriptions').upsert({
+      device_id: deviceId,
+      endpoint: subJson.endpoint,
+      p256dh: subJson.keys.p256dh,
+      auth: subJson.keys.auth,
+      user_label: isMD()?'Managing Director':(userProfile?.full_name||'Staff'),
+      updated_at: new Date().toISOString()
+    },{onConflict:'device_id'});
+
+    console.log('Push subscription saved ✓');
+
+    // Listen for subscription changes from SW
+    navigator.serviceWorker.addEventListener('message',async e=>{
+      if(e.data?.type==='PUSH_SUBSCRIPTION_CHANGED'){
+        const newSub=e.data.subscription.toJSON();
+        await sb.from('push_subscriptions').upsert({
+          device_id:deviceId,
+          endpoint:newSub.endpoint,
+          p256dh:newSub.keys.p256dh,
+          auth:newSub.keys.auth,
+          updated_at:new Date().toISOString()
+        },{onConflict:'device_id'});
+      }
+    });
+
+  }catch(err){
+    console.warn('Push setup failed:',err);
+  }
 }
 
 async function loadHomeSummary(){
@@ -869,7 +970,7 @@ async function confirmRentPaid(){
   else{({error:err}=await sb.from('rent_payments').insert({tenant_id:tid,apartment_id:aptId,building_id:bldId,month,year,amount_due:due,amount_paid:due,payment_status:'paid',payment_method:method,payment_date:date||null,notes,recorded_by:currentUser.id}));}
   if(err){toast('Error: '+err.message,'err');return;}
   toast('Marked as paid ✓','ok');closeM('m-rent-paid');
-  updateRentRow(tid,'paid',due);
+  await loadRent();
 }
 
 async function confirmPartialRent(){
@@ -889,15 +990,20 @@ async function confirmPartialRent(){
   else{({error:err}=await sb.from('rent_payments').insert({tenant_id:tid,apartment_id:aptId,building_id:bldId,month,year,amount_due:due,amount_paid:paid,payment_status:status,payment_method:method,payment_date:date||null,notes,recorded_by:currentUser.id}));}
   if(err){toast('Error: '+err.message,'err');return;}
   toast(status==='paid'?'Marked as paid ✓':'Partial payment saved','ok');closeM('m-rent-partial');
-  updateRentRow(tid,status,paid);
+  await loadRent();
 }
 
 async function tapRentUnpaid(tid,rid,month,year){
   if(rid&&rid!==''){
     const{error}=await sb.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null}).eq('id',rid);
     if(error){toast('Error: '+error.message,'err');return;}
+    toast('Marked as unpaid');
+    updateRentRow(tid,'unpaid',0);
+  } else {
+    // No record exists — already unpaid, just update UI
+    toast('Already unpaid');
+    updateRentRow(tid,'unpaid',0);
   }
-  toast('Marked as unpaid');updateRentRow(tid,'unpaid',0);
 }
 
 function updateRentRow(tid,status,paid){
