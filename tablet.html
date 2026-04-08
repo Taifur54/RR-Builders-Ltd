@@ -66,11 +66,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .row-card-top{display:flex;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:14px}
 .row-name{font-family:'DM Serif Display',serif;font-size:32px;color:var(--text);flex:1;min-width:0;word-break:break-word}
 .row-amount{font-family:'DM Serif Display',serif;font-size:26px;color:var(--text);white-space:nowrap}
-.row-card-mid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px;padding:14px;background:var(--surface2);border-radius:10px;width:100%}
+.row-card-mid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:14px;padding:14px;background:var(--surface2);border-radius:10px;width:100%}
 .row-detail{display:flex;flex-direction:column;gap:3px}
 .row-detail-lbl{font-size:14px;color:var(--muted);font-weight:500}
 .row-detail-val{font-size:20px;font-weight:700;color:var(--text);word-break:break-word}
-.row-card-actions{display:flex;gap:10px;flex-wrap:wrap}
+.row-card-bottom{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;padding-top:14px;border-top:2px solid var(--border)}
+.row-card-bottom.no-actions{grid-template-columns:1fr;border-top:none;padding-top:0}
+.row-card-status{display:flex;flex-direction:column;gap:6px}
+.row-card-status-lbl{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px}
+.row-card-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 
 /* ── ACTION BUTTONS ── */
 .abtn{padding:14px 24px;border-radius:12px;font-size:20px;font-weight:700;cursor:pointer;border:2.5px solid transparent;font-family:'DM Sans',sans-serif;transition:all .12s;white-space:nowrap}
@@ -992,7 +996,6 @@ async function loadRent(){
       <div class="row-card-top">
         <div class="row-name">${esc(r.t.full_name)}</div>
         <div class="row-amount">${fmt(r.due)}/mo</div>
-        <span class="spill spill-${sc}" id="rpill-${r.t.id}">${sl}</span>
       </div>
       <div class="row-card-mid">
         <div class="row-detail"><span class="row-detail-lbl">Apartment</span><span class="row-detail-val">${apt}</span></div>
@@ -1001,11 +1004,17 @@ async function loadRent(){
         <div class="row-detail"><span class="row-detail-lbl">Paid This Month</span><span class="row-detail-val" id="rpaid-${r.t.id}" style="color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</span></div>
         ${dueHtml}
       </div>
-      ${isMD()?'':(`<div class="row-card-actions">
-        <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
-        <button class="abtn abtn-partial" onclick="tapRentPartial('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">~ Partial</button>
-        <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
-      </div>`)}
+      <div class="row-card-bottom${isMD()?' no-actions':''}">
+        <div class="row-card-status">
+          <span class="row-card-status-lbl">Status</span>
+          <span class="spill spill-${sc}" id="rpill-${r.t.id}">${sl}</span>
+        </div>
+        ${isMD()?'':(`<div class="row-card-actions">
+          <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
+          <button class="abtn abtn-partial" onclick="tapRentPartial('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">~ Partial</button>
+          <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
+        </div>`)}
+      </div>
     </div>`;
   }).join('');
 }
@@ -1121,17 +1130,22 @@ async function loadSalary(){
       <div class="row-card-top">
         <div class="row-name">${esc(r.e.full_name)}</div>
         <div class="row-amount">${fmt(r.due)}</div>
-        <span class="spill spill-${sc}" id="spill-${r.e.id}">${sl}</span>
       </div>
       <div class="row-card-mid">
         <div class="row-detail"><span class="row-detail-lbl">Type</span><span class="row-detail-val">${r.e.type}</span></div>
         <div class="row-detail"><span class="row-detail-lbl">Phone</span><span class="row-detail-val">${r.e.phone||'—'}</span></div>
         <div class="row-detail"><span class="row-detail-lbl">Amount Paid</span><span class="row-detail-val" id="spaid-${r.e.id}" style="color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</span></div>
       </div>
-      <div class="row-card-actions">
-        ${r.status!=='paid'
-          ?`<button class="abtn abtn-paid" onclick="tapSalPaid('${r.e.id}','${rid}',${r.due},'${r.e.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Pay Now</button>`
-          :`<button class="abtn abtn-unpaid" onclick="tapSalUnpaid('${r.e.id}','${rid}',${month},${year})">↩ Undo</button>`}
+      <div class="row-card-bottom">
+        <div class="row-card-status">
+          <span class="row-card-status-lbl">Status</span>
+          <span class="spill spill-${sc}" id="spill-${r.e.id}">${sl}</span>
+        </div>
+        <div class="row-card-actions">
+          ${r.status!=='paid'
+            ?`<button class="abtn abtn-paid" onclick="tapSalPaid('${r.e.id}','${rid}',${r.due},'${r.e.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Pay Now</button>`
+            :`<button class="abtn abtn-unpaid" onclick="tapSalUnpaid('${r.e.id}','${rid}',${month},${year})">↩ Undo</button>`}
+        </div>
       </div>
     </div>`;
   }).join('');
