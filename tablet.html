@@ -248,6 +248,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div style="background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:12px 18px;font-size:28px">🔔</div>
       <div id="bell-badge" style="display:none;position:absolute;top:-8px;right:-8px;background:#c0392b;color:#fff;border-radius:50%;width:26px;height:26px;font-size:15px;font-weight:700;align-items:center;justify-content:center">0</div>
     </div>
+    <div style="margin-left:8px;cursor:pointer" onclick="doLogout()" title="Sign out">
+      <div style="background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.2);border-radius:12px;padding:12px 16px;font-size:22px">🚪</div>
+    </div>
   </div>
 
   <!-- Attention banner: shown when purchases need approval -->
@@ -497,6 +500,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
      MODALS
 ══════════════════════════════════════════ -->
 
+
+
 <!-- RENT PAID -->
 <div class="modal-wrap" id="m-rent-paid">
   <div class="modal">
@@ -637,6 +642,9 @@ let rentCtx=null,salCtx=null,matCtx=null;
 const now=new Date();
 const curM=now.getMonth()+1,curY=now.getFullYear();
 
+// Returns true if the logged-in user is the Managing Director (read-only on rent)
+function isMD(){return localStorage.getItem('md_session')==='1';}
+
 // ── UTILS ──────────────────────────────────────────────────────
 function fmt(n){return '৳'+Number(n||0).toLocaleString('en-BD');}
 function fmtD(d){if(!d)return '—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
@@ -688,6 +696,30 @@ function fillYears(){
 }
 
 async function init(){
+  // MD login — no Supabase session needed
+  if(isMD()){
+    currentUser={id:'md',email:'md'};
+    userProfile={full_name:localStorage.getItem('md_name')||'Managing Director',role:'managing_director'};
+    // Show MD name in any future user display area
+    fillYears();
+    const{data:blds}=await sb.from('buildings').select('*').order('name');
+    buildings=blds||[];
+    ['rent-bld','ten-bld','mat-bld-f','exp-bld-f','rep-bld-f'].forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      const first=el.children[0];el.innerHTML='';el.appendChild(first);
+      buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;el.appendChild(o);});
+    });
+    const{data:emps}=await sb.from('employees').select('*');
+    employees=emps||[];
+    const{data:tens}=await sb.from('tenants').select('*, apartments(apartment_number, buildings(id,name))');
+    tenants=tens||[];
+    await loadHomeSummary();
+    await loadNotifications();
+    setInterval(loadNotifications,30000);
+    return;
+  }
+
+  // Regular staff — Supabase auth
   const{data:{session}}=await sb.auth.getSession();
   if(!session){window.location.replace('/RR-Builders-Ltd/tablet-login.html');return;}
   currentUser=session.user;
@@ -796,11 +828,11 @@ async function loadRent(){
         <div class="row-detail"><span class="row-detail-lbl">Paid This Month</span><span class="row-detail-val" id="rpaid-${r.t.id}" style="color:${r.paid>0?'var(--success)':'var(--muted)'}">${r.paid>0?fmt(r.paid):'—'}</span></div>
         ${dueHtml}
       </div>
-      <div class="row-card-actions">
+      ${isMD()?'':(`<div class="row-card-actions">
         <button class="abtn abtn-paid${r.status==='paid'?' done':''}" onclick="tapRentPaid('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">✓ Paid</button>
         <button class="abtn abtn-partial" onclick="tapRentPartial('${r.t.id}','${rid}',${r.due},'${r.t.full_name.replace(/'/g,"\\'")}',${month},${year})">~ Partial</button>
         <button class="abtn abtn-unpaid${r.status==='unpaid'?' done':''}" onclick="tapRentUnpaid('${r.t.id}','${rid}',${month},${year})">✗ Unpaid</button>
-      </div>
+      </div>`)}
     </div>`;
   }).join('');
 }
@@ -1307,6 +1339,16 @@ function toggleNotif(){
 
 async function readNotif(id){await sb.from('notifications').update({is_read:true}).eq('id',id);loadNotifications();}
 async function markAllRead(){await sb.from('notifications').update({is_read:true}).eq('is_read',false);loadNotifications();}
+
+async function doLogout(){
+  if(isMD()){
+    localStorage.removeItem('md_session');
+    localStorage.removeItem('md_name');
+  } else {
+    await sb.auth.signOut();
+  }
+  window.location.replace('/RR-Builders-Ltd/tablet-login.html');
+}
 
 document.addEventListener('DOMContentLoaded',init);
 </script>
