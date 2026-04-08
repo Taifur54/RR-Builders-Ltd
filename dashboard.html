@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>R.R Builders Ltd. — Dashboard</title>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/RR-Builders-Ltd/sw.js'));}</script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -727,6 +728,39 @@ async function init(){
   document.getElementById('sal-custom-date').value=now.toISOString().slice(0,10);
   document.getElementById('rent-partial-date').value=now.toISOString().slice(0,10);
   await loadBuildings();await loadDashboard();await loadNotifications();setLang(lang);
+  setupPush();
+}
+
+// ── PUSH NOTIFICATIONS ────────────────────────────────────────
+const VAPID_PUBLIC_KEY='BNuMJJZuk3BnHiwPx2yBBqDEOZSm7-20wAS0uKt86TMxkij7sKxc-2JgU--9rdUByXUGUcPxgQcgch0X3H0l1-4';
+function urlBase64ToUint8Array(b){const p='='.repeat((4-b.length%4)%4);const s=atob((b+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(s,c=>c.charCodeAt(0));}
+async function setupPush(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+  try{
+    const reg=await navigator.serviceWorker.ready;
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted'){console.log('Push permission denied');return;}
+    let sub=await reg.pushManager.getSubscription();
+    if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});}
+    const subJson=sub.toJSON();
+    const deviceId=localStorage.getItem('device_id')||(()=>{const id=crypto.randomUUID();localStorage.setItem('device_id',id);return id;})();
+    const{error}=await sbClient.from('push_subscriptions').upsert({
+      device_id:deviceId,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,
+      auth:subJson.keys.auth,user_label:userProfile?.full_name||currentUser.email,
+      updated_at:new Date().toISOString()
+    },{onConflict:'device_id'});
+    if(error){console.warn('Push subscription save failed:',error.message);return;}
+    console.log('Push subscription saved ✓');
+    navigator.serviceWorker.addEventListener('message',async e=>{
+      if(e.data?.type==='PUSH_SUBSCRIPTION_CHANGED'){
+        const n=e.data.subscription.toJSON();
+        await sbClient.from('push_subscriptions').upsert({
+          device_id:deviceId,endpoint:n.endpoint,p256dh:n.keys.p256dh,
+          auth:n.keys.auth,updated_at:new Date().toISOString()
+        },{onConflict:'device_id'});
+      }
+    });
+  }catch(err){console.warn('Push setup failed:',err);}
 }
 
 function navigate(page){

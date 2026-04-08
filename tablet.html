@@ -817,7 +817,7 @@ async function setupPush(){
     const subJson=sub.toJSON();
     const deviceId=localStorage.getItem('device_id')||(()=>{const id=crypto.randomUUID();localStorage.setItem('device_id',id);return id;})();
 
-    await sb.from('push_subscriptions').upsert({
+    const{error:upsertErr}=await sb.from('push_subscriptions').upsert({
       device_id: deviceId,
       endpoint: subJson.endpoint,
       p256dh: subJson.keys.p256dh,
@@ -826,6 +826,7 @@ async function setupPush(){
       updated_at: new Date().toISOString()
     },{onConflict:'device_id'});
 
+    if(upsertErr){console.warn('Push subscription save failed:',upsertErr.message);return;}
     console.log('Push subscription saved ✓');
 
     // Listen for subscription changes from SW
