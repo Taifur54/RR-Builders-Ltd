@@ -412,7 +412,7 @@ tr:hover td{background:rgba(28,28,26,.015)}
       </div>
       <div class="tw">
         <div class="th"><h3>Rent Status</h3><div style="font-size:12px;color:var(--muted)">Click buttons on each row to update payment status</div></div>
-        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid Amount</th><th>Total Due (incl. arrears)</th><th>Status & Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
+        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid Amount</th><th>Total Due (incl. arrears)</th><th>Status</th><th>Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
       </div>
     </div>
 
@@ -483,7 +483,7 @@ tr:hover td{background:rgba(28,28,26,.015)}
       </div>
       <div class="tw">
         <div class="th"><h3>Salary Status</h3><div style="font-size:12px;color:var(--muted)">Click <strong>Mark Paid</strong> for quick payment, or ✏️ to enter a custom amount</div></div>
-        <div class="ox"><table><thead><tr><th>Employee</th><th>Type</th><th>Fixed Salary</th><th>Amount Paid</th><th>Status & Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="salary-body"></tbody></table></div>
+        <div class="ox"><table><thead><tr><th>Employee</th><th>Type</th><th>Fixed Salary</th><th>Amount Paid</th><th>Status</th><th>Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="salary-body"></tbody></table></div>
       </div>
     </div>
 
@@ -909,7 +909,7 @@ async function loadRent(){
   document.getElementById('r-collected').textContent=fmt(totalPaid);
   document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
   document.getElementById('r-unpaid-count').textContent=unpaidCount;
-  if(!rows.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
+  if(!rows.length){body.innerHTML='<tr><td colspan="9"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
   body.innerHTML=rows.map(r=>{
     const tid=r.tenant.id;
     const rid=r.record?r.record.id:'';
@@ -930,7 +930,8 @@ async function loadRent(){
       <td><strong>${fmt(r.monthlyRent)}</strong></td>
       <td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
       <td id="rent-due-${tid}">${dueCell}</td>
-      <td><div class="qa-row"><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button></div></td>
+      <td><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span></td>
+      <td><div class="qa-row"><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button></div></td>
       <td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
       <td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
     </tr>`;
@@ -1335,13 +1336,13 @@ async function loadSalary(){
   const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
   const unpaidCount=rows.filter(r=>r.status==='unpaid').length;
   document.getElementById('sal-total-due').textContent=fmt(totalDue);document.getElementById('sal-paid').textContent=fmt(totalPaid);document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);document.getElementById('sal-unpaid-count').textContent=unpaidCount;
-  if(!rows.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No active employees found</p></div></td></tr>';return;}
+  if(!rows.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No active employees found</p></div></td></tr>';return;}
   body.innerHTML=rows.map(r=>{
     const eid=r.employee.id;const rid=r.record?r.record.id:'';
     const statusClass=r.status==='paid'?'sp-paid':r.status==='partial'?'sp-partial':'sp-unpaid';
     const statusLabel=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
     const isPaid=r.status==='paid';
-    return `<tr id="sal-row-${eid}"><td><strong>${r.employee.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.employee.phone||''}</div></td><td><span class="badge badge-info">${r.employee.type}</span></td><td><strong>${fmt(r.fixedSalary)}</strong></td><td id="sal-paid-${eid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td><td><div class="qa-row"><span class="status-pill ${statusClass}" id="sal-status-pill-${eid}">${statusLabel}</span>${!isPaid?`<button class="qa-btn qa-paid" onclick="quickSalaryPaid('${eid}','${rid}',${r.fixedSalary},${month},${year})">✓ Mark Paid</button>`:''}<button class="qa-btn qa-edit" onclick="openCustomSalary('${eid}','${rid}',${r.fixedSalary},${month},${year},'${r.employee.full_name}')">✏️ Custom</button>${isPaid?`<button class="qa-btn qa-unpaid" onclick="quickSalaryUnpaid('${eid}','${rid}',${month},${year})">↩ Undo</button>`:''}</div></td><td id="sal-method-${eid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td><td id="sal-date-${eid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td></tr>`;
+    return `<tr id="sal-row-${eid}"><td><strong>${r.employee.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.employee.phone||''}</div></td><td><span class="badge badge-info">${r.employee.type}</span></td><td><strong>${fmt(r.fixedSalary)}</strong></td><td id="sal-paid-${eid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td><td><span class="status-pill ${statusClass}" id="sal-status-pill-${eid}">${statusLabel}</span></td><td><div class="qa-row">${!isPaid?`<button class="qa-btn qa-paid" onclick="quickSalaryPaid('${eid}','${rid}',${r.fixedSalary},${month},${year})">✓ Mark Paid</button>`:''}<button class="qa-btn qa-edit" onclick="openCustomSalary('${eid}','${rid}',${r.fixedSalary},${month},${year},'${r.employee.full_name}')">✏️ Custom</button>${isPaid?`<button class="qa-btn qa-unpaid" onclick="quickSalaryUnpaid('${eid}','${rid}',${month},${year})">↩ Undo</button>`:''}</div></td><td id="sal-method-${eid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td><td id="sal-date-${eid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td></tr>`;
   }).join('');
 }
 async function quickSalaryPaid(empId,existingId,fixedSalary,month,year){
@@ -1386,7 +1387,7 @@ function updateSalaryRowUI(empId,status,amountPaid,method,date,month,year){
   if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';if(methodCell)methodCell.textContent=method||'—';if(dateCell)dateCell.textContent=fmtDate(date);
   const fixedSalaryCell=row.querySelector('td:nth-child(3) strong');const fixedSalary=fixedSalaryCell?parseFloat(fixedSalaryCell.textContent.replace(/[^\d.]/g,''))||0:0;const isPaid=status==='paid';
   const qaRow=row.querySelector('.qa-row');
-  if(qaRow){const pillEl=qaRow.querySelector('[id^="sal-status-pill-"]');qaRow.innerHTML='';if(pillEl)qaRow.appendChild(pillEl);
+  if(qaRow){qaRow.innerHTML='';
     if(!isPaid){const paidBtn=document.createElement('button');paidBtn.className='qa-btn qa-paid';paidBtn.title='Mark paid at fixed salary';paidBtn.textContent='✓ Mark Paid';paidBtn.onclick=()=>quickSalaryPaid(empId,'',fixedSalary,month,year);qaRow.appendChild(paidBtn);}
     const customBtn=document.createElement('button');customBtn.className='qa-btn qa-edit';customBtn.title='Enter custom amount';customBtn.textContent='✏️ Custom';const emp=employees.find(e=>e.id===empId);customBtn.onclick=()=>openCustomSalary(empId,'',fixedSalary,month,year,emp?emp.full_name:'Employee');qaRow.appendChild(customBtn);
     if(isPaid){const undoBtn=document.createElement('button');undoBtn.className='qa-btn qa-unpaid';undoBtn.title='Undo payment';undoBtn.textContent='↩ Undo';undoBtn.onclick=()=>quickSalaryUnpaid(empId,'',month,year);qaRow.appendChild(undoBtn);}}
