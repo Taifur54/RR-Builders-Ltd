@@ -12,31 +12,13 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f4f0;
-  --surface:#ffffff;
-  --surface2:#f9f8f5;
-  --surface3:#f2f1ed;
-  --border:#e8e5de;
-  --border2:#d8d4ca;
-  --text:#1c1c1a;
-  --muted:#7a7a6a;
-  --muted2:#a8a898;
-  --accent:#1c1c1a;
-  --gold:#8a6c2a;
-  --gold2:#c8a84a;
-  --success:#2a6040;
-  --successbg:#eef6f1;
-  --danger:#8a2828;
-  --dangerbg:#fef2f2;
-  --warn:#7a5010;
-  --warnbg:#fef8ee;
-  --info:#1a4870;
-  --infobg:#eef4fb;
-  --sidebar-w:260px;
+  --bg:#f5f4f0;--surface:#ffffff;--surface2:#f9f8f5;--surface3:#f2f1ed;
+  --border:#e8e5de;--border2:#d8d4ca;--text:#1c1c1a;--muted:#7a7a6a;--muted2:#a8a898;
+  --accent:#1c1c1a;--gold:#8a6c2a;--gold2:#c8a84a;--success:#2a6040;--successbg:#eef6f1;
+  --danger:#8a2828;--dangerbg:#fef2f2;--warn:#7a5010;--warnbg:#fef8ee;
+  --info:#1a4870;--infobg:#eef4fb;--sidebar-w:260px;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden}
-
-/* SIDEBAR */
 .sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--text);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .3s}
 .sb-logo{padding:28px 22px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:12px}
 .sb-logo svg{width:34px;height:34px;flex-shrink:0}
@@ -59,8 +41,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .user-rl{font-size:10.5px;color:rgba(255,255,255,.4);text-transform:capitalize}
 .btn-out{margin-top:10px;width:100%;padding:8px;background:none;border:1px solid rgba(255,255,255,.12);border-radius:6px;color:rgba(255,255,255,.4);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:.5px;text-transform:uppercase}
 .btn-out:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.8)}
-
-/* MAIN */
 .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
 .topbar{height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 28px;gap:14px;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 var(--border)}
 .topbar-title{font-family:'DM Serif Display',serif;font-size:19px;color:var(--text);flex:1}
@@ -71,8 +51,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .notif-btn svg{width:16px;height:16px;color:var(--muted)}
 .notif-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:#c0392b;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
 .hamburger{display:none;width:34px;height:34px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;align-items:center;justify-content:center;cursor:pointer}
-
-/* CONTENT */
 .content{flex:1;padding:28px}
 .page{display:none}.page.active{display:block}
 .ph{margin-bottom:24px}
@@ -80,8 +58,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .ph p{font-size:13px;color:var(--muted);margin-top:5px;font-weight:300}
 .ph-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:24px}
 .ph-row .ph{margin-bottom:0}
-
-/* STAT CARDS */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
 .stat-card .lbl{font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:500;letter-spacing:.3px;text-transform:uppercase}
@@ -91,8 +67,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .stat-card.t-red{border-top:2px solid #c0392b}
 .stat-card.t-green{border-top:2px solid var(--success)}
 .stat-card.t-amber{border-top:2px solid #d4a030}
-
-/* TABLES */
 .tw{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px}
 .th{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--surface2)}
 .th h3{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text)}
@@ -102,16 +76,12 @@ td{padding:12px 16px;border-bottom:1px solid rgba(232,229,222,.5);vertical-align
 tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(28,28,26,.015)}
 .ox{overflow-x:auto}
-
-/* BADGES */
 .badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.3px}
 .badge-success{background:var(--successbg);color:var(--success)}
 .badge-danger{background:var(--dangerbg);color:var(--danger)}
 .badge-warn{background:var(--warnbg);color:var(--warn)}
 .badge-info{background:var(--infobg);color:var(--info)}
 .badge-muted{background:var(--surface3);color:var(--muted)}
-
-/* BUTTONS */
 .btn{padding:8px 18px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s;letter-spacing:.2px}
 .btn-dark{background:var(--text);color:#fff}
 .btn-dark:hover{background:#2d2d2a}
@@ -119,13 +89,10 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .btn-ghost:hover{border-color:var(--text)}
 .btn-sm{padding:5px 12px;font-size:12px}
 .btn-success{background:var(--successbg);border:1px solid #b8dfc8;color:var(--success);font-weight:600}
-.btn-success:hover{background:#daf0e4}
 .btn-danger{background:var(--dangerbg);border:1px solid #f5c0c0;color:var(--danger);font-weight:600}
 .btn-danger:hover{background:#fde0e0}
 .btn-warn{background:var(--warnbg);border:1px solid #f0d8a0;color:var(--warn);font-weight:600}
 .btn-warn:hover{background:#fdf0cc}
-
-/* QUICK ACTION ROW */
 .qa-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .qa-btn{padding:4px 11px;border-radius:6px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid transparent;font-family:'DM Sans',sans-serif;transition:all .15s;letter-spacing:.2px;white-space:nowrap}
 .qa-paid{background:var(--successbg);border-color:#b8dfc8;color:var(--success)}
@@ -136,15 +103,11 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .qa-unpaid:hover,.qa-unpaid.active{background:var(--danger);color:#fff;border-color:var(--danger)}
 .qa-edit{background:var(--surface3);border-color:var(--border2);color:var(--muted);padding:4px 8px}
 .qa-edit:hover{background:var(--border);color:var(--text)}
-
-/* STATUS PILL */
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600}
 .status-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
 .sp-paid{background:var(--successbg);color:var(--success)}
 .sp-partial{background:var(--warnbg);color:var(--warn)}
 .sp-unpaid{background:var(--dangerbg);color:var(--danger)}
-
-/* MODALS */
 .modal-overlay{position:fixed;inset:0;background:rgba(28,28,26,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.15)}
@@ -153,8 +116,6 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .mc-btn{width:28px;height:28px;border-radius:6px;background:var(--surface3);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .mb{padding:24px}
 .mf{padding:14px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;background:var(--surface2);border-radius:0 0 16px 16px}
-
-/* FORM */
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field{margin-bottom:0}
 .field label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
@@ -163,29 +124,19 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .field select option{background:var(--surface)}
 .field textarea{min-height:80px;resize:vertical}
 .ff{grid-column:1/-1}
-
-/* TABS */
 .tabs{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;width:fit-content;margin-bottom:18px}
 .tab{padding:8px 18px;font-size:12.5px;cursor:pointer;color:var(--muted);transition:all .15s;border:none;border-right:1px solid var(--border);background:none;font-family:'DM Sans',sans-serif;font-weight:500}
 .tab:last-child{border-right:none}
 .tab.active{background:var(--text);color:#fff}
-
-/* FILTER ROW */
 .fr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 .fr input,.fr select{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none}
 .fr input:focus,.fr select:focus{border-color:var(--text)}
-
-/* EMPTY */
 .empty{text-align:center;padding:52px 24px;color:var(--muted2)}
 .empty svg{width:36px;height:36px;margin:0 auto 12px;display:block;opacity:.25}
 .empty p{font-size:14px;font-weight:300}
-
-/* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--text);color:#fff;border-radius:10px;padding:13px 18px;font-size:13px;max-width:300px;box-shadow:0 8px 32px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.error{background:#8a2828}
-
-/* NOTIF PANEL */
 .notif-panel{position:fixed;top:58px;right:0;width:340px;max-height:calc(100vh - 58px);background:var(--surface);border-left:1px solid var(--border);z-index:90;overflow-y:auto;transform:translateX(100%);transition:transform .3s;box-shadow:-4px 0 24px rgba(0,0,0,.07)}
 .notif-panel.open{transform:translateX(0)}
 .ni{padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer}
@@ -194,11 +145,8 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .ni .nt{font-size:13px;font-weight:500}
 .ni .nm{font-size:12px;color:var(--muted);margin-top:2px;font-weight:300}
 .ni .nd{font-size:11px;color:var(--muted2);margin-top:4px}
-
-/* LOADING */
 .loading-row td{text-align:center;color:var(--muted2);padding:32px;font-size:13px}
-
-/* ── MATERIALS MODULE CSS ── */
+/* MATERIALS */
 .step-track{display:flex;align-items:center;gap:0}
 .step-node{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:58px}
 .step-circle{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid transparent;flex-shrink:0}
@@ -239,8 +187,43 @@ tr:hover td{background:rgba(28,28,26,.015)}
 .proc-tab:not(.active) .ct{background:var(--surface3);color:var(--muted)}
 .proc-tab.flag-tab{border-color:var(--danger);color:var(--danger)}
 .proc-tab.flag-tab.active{background:var(--danger);color:#fff}
-
-/* RESPONSIVE */
+/* LEASES */
+.tenant-lease-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:24px}
+.lease-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s}
+.lease-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);border-color:var(--border2)}
+.lease-card.expiring{border-left:3px solid var(--warn)}
+.lease-card.expired{border-left:3px solid var(--danger)}
+.lease-card.active-lease{border-left:3px solid var(--success)}
+.lease-card .lc-name{font-family:'DM Serif Display',serif;font-size:15px;color:var(--text);margin-bottom:4px}
+.lease-card .lc-apt{font-size:12px;color:var(--muted);margin-bottom:10px}
+.lease-card .lc-dates{font-size:12px;color:var(--muted2);display:flex;justify-content:space-between}
+/* CONTRACTORS */
+.contractor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:24px}
+.contractor-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:all .2s}
+.contractor-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.cc-name{font-family:'DM Serif Display',serif;font-size:15px;color:var(--text);margin-bottom:3px}
+.cc-type{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:10px}
+.cc-stats{display:flex;gap:16px}
+.cc-stat-lbl{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.cc-stat-val{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text)}
+/* PETTY CASH */
+.petty-day-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.petty-day-header{padding:16px 20px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.petty-day-title{font-family:'DM Serif Display',serif;font-size:16px;color:var(--text)}
+.petty-balance-row{display:flex;gap:20px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface)}
+.petty-bal-item{min-width:80px}
+.petty-bal-lbl{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.petty-bal-val{font-family:'DM Serif Display',serif;font-size:18px;color:var(--text)}
+.petty-bal-val.green{color:var(--success)}
+.petty-bal-val.red{color:var(--danger)}
+.petty-bal-val.gold{color:var(--gold)}
+.petty-exp-list{padding:0}
+.petty-exp-item{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;border-bottom:1px solid rgba(232,229,222,.4);font-size:13px}
+.petty-exp-item:last-child{border-bottom:none}
+.cash-progress{height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:4px}
+.cash-progress-fill{height:100%;border-radius:2px;background:var(--success);transition:width .4s}
+.cash-progress-fill.warn{background:var(--warn)}
+.cash-progress-fill.danger{background:var(--danger)}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
@@ -255,7 +238,6 @@ tr:hover td{background:rgba(28,28,26,.015)}
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
   <div class="sb-logo">
     <svg viewBox="0 0 100 95" xmlns="http://www.w3.org/2000/svg">
@@ -275,64 +257,76 @@ tr:hover td{background:rgba(28,28,26,.015)}
   </div>
   <div class="sb-nav">
     <div class="sb-section">
-      <div class="sb-label" data-t="overview">Overview</div>
+      <div class="sb-label">Overview</div>
       <div class="nav-item active" onclick="navigate('dashboard')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span data-t="nav_dashboard">Dashboard</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        <span>Dashboard</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="rentals">Rentals</div>
+      <div class="sb-label">Rentals</div>
       <div class="nav-item" onclick="navigate('tenants')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        <span data-t="nav_tenants">Tenants</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Tenants</span>
       </div>
       <div class="nav-item" onclick="navigate('rent')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-        <span data-t="nav_rent">Rent Collection</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+        <span>Rent Collection</span>
+      </div>
+      <div class="nav-item" onclick="navigate('leases')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Leases &amp; Agreements</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="sales_label">Sales</div>
+      <div class="sb-label">Sales</div>
       <div class="nav-item" onclick="navigate('sales')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span data-t="nav_sales">Apartment Sales</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Apartment Sales</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="construction">Construction</div>
+      <div class="sb-label">Construction</div>
       <div class="nav-item" onclick="navigate('expenses')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        <span data-t="nav_expenses">Expenses</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Expenses</span>
       </div>
       <div class="nav-item" onclick="navigate('materials')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        <span data-t="nav_materials">Materials</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <span>Materials</span>
+      </div>
+      <div class="nav-item" onclick="navigate('pettycash')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><circle cx="12" cy="14" r="2"/></svg>
+        <span>Joma / Petty Cash</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="people">People</div>
+      <div class="sb-label">People</div>
       <div class="nav-item" onclick="navigate('employees')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        <span data-t="nav_employees">Employees</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>Employees</span>
       </div>
       <div class="nav-item" onclick="navigate('salary')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        <span data-t="nav_salary">Salaries</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>Salaries</span>
+      </div>
+      <div class="nav-item" onclick="navigate('contractors')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Contractors</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="properties">Properties</div>
+      <div class="sb-label">Properties</div>
       <div class="nav-item" onclick="navigate('buildings')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><rect x="9" y="16" width="6" height="6"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="12" y1="7" x2="12" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="11" x2="9" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="15" y1="11" x2="15" y2="11.01"/></svg>
-        <span data-t="nav_buildings">Buildings</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><rect x="9" y="16" width="6" height="6"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="12" y1="7" x2="12" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="11" x2="9" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="15" y1="11" x2="15" y2="11.01"/></svg>
+        <span>Buildings</span>
       </div>
     </div>
     <div class="sb-section">
-      <div class="sb-label" data-t="reports_label">Reports</div>
+      <div class="sb-label">Reports</div>
       <div class="nav-item" onclick="navigate('reports')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
-        <span data-t="nav_reports">Reports</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+        <span>Reports</span>
       </div>
     </div>
   </div>
@@ -341,11 +335,10 @@ tr:hover td{background:rgba(28,28,26,.015)}
       <div class="user-av" id="user-avatar">T</div>
       <div><div class="user-nm" id="user-name">Loading…</div><div class="user-rl" id="user-role">admin</div></div>
     </div>
-    <button class="btn-out" onclick="logout()" data-t="logout">Sign Out</button>
+    <button class="btn-out" onclick="logout()">Sign Out</button>
   </div>
 </nav>
 
-<!-- MAIN -->
 <div class="main">
   <div class="topbar">
     <div class="hamburger" onclick="toggleSidebar()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
@@ -356,7 +349,7 @@ tr:hover td{background:rgba(28,28,26,.015)}
       <button class="lang-btn" onclick="setLang('bn')">বাং</button>
     </div>
     <div class="notif-btn" onclick="toggleNotif(event)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <div class="notif-badge" id="notif-badge" style="display:none">0</div>
     </div>
   </div>
@@ -365,41 +358,37 @@ tr:hover td{background:rgba(28,28,26,.015)}
 
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
-      <div class="ph"><h2 data-t="nav_dashboard">Dashboard</h2><p data-t="dash_sub">Overview of all operations</p></div>
+      <div class="ph"><h2>Dashboard</h2><p>Overview of all operations</p></div>
       <div class="stat-grid">
-        <div class="stat-card t-gold"><div class="lbl" data-t="total_rent">Rent Collected (This Month)</div><div class="val" id="stat-rent">৳0</div><div class="sub" id="stat-rent-sub">—</div></div>
-        <div class="stat-card t-red"><div class="lbl" data-t="pending_rent">Pending Rent</div><div class="val" id="stat-pending">৳0</div><div class="sub" id="stat-pending-sub">—</div></div>
-        <div class="stat-card t-amber"><div class="lbl" data-t="total_expenses">Expenses (This Month)</div><div class="val" id="stat-expenses">৳0</div><div class="sub" id="stat-exp-sub">—</div></div>
-        <div class="stat-card t-green"><div class="lbl" data-t="total_salary">Salary Paid (This Month)</div><div class="val" id="stat-salary">৳0</div><div class="sub" id="stat-sal-sub">—</div></div>
-        <div class="stat-card"><div class="lbl" data-t="active_tenants">Active Tenants</div><div class="val" id="stat-tenants">0</div><div class="sub" id="stat-ten-sub">active leases</div></div>
-        <div class="stat-card"><div class="lbl" data-t="pending_materials">Pending Approvals</div><div class="val" id="stat-materials">0</div><div class="sub" id="stat-mat-sub">purchase requests</div></div>
+        <div class="stat-card t-gold"><div class="lbl">Rent Collected (This Month)</div><div class="val" id="stat-rent">৳0</div><div class="sub" id="stat-rent-sub">—</div></div>
+        <div class="stat-card t-red"><div class="lbl">Pending Rent</div><div class="val" id="stat-pending">৳0</div><div class="sub" id="stat-pending-sub">—</div></div>
+        <div class="stat-card t-amber"><div class="lbl">Expenses (This Month)</div><div class="val" id="stat-expenses">৳0</div><div class="sub" id="stat-exp-sub">—</div></div>
+        <div class="stat-card t-green"><div class="lbl">Salary Paid (This Month)</div><div class="val" id="stat-salary">৳0</div><div class="sub" id="stat-sal-sub">—</div></div>
+        <div class="stat-card"><div class="lbl">Active Tenants</div><div class="val" id="stat-tenants">0</div><div class="sub">active leases</div></div>
+        <div class="stat-card"><div class="lbl">Pending Approvals</div><div class="val" id="stat-materials">0</div><div class="sub">purchase requests</div></div>
       </div>
-      <div class="tw"><div class="th"><h3 data-t="recent_payments">Recent Rent Payments</h3></div><div class="ox"><table><thead><tr><th data-t="tenant">Tenant</th><th data-t="building">Building</th><th data-t="amount">Amount</th><th data-t="method">Method</th><th data-t="status">Status</th><th data-t="date">Date</th></tr></thead><tbody id="dash-payments-body"><tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:24px">Loading…</td></tr></tbody></table></div></div>
+      <div class="tw"><div class="th"><h3>Recent Rent Payments</h3></div><div class="ox"><table><thead><tr><th>Tenant</th><th>Building</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody id="dash-payments-body"><tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:24px">Loading…</td></tr></tbody></table></div></div>
       <div class="tw"><div class="th"><h3>Pending Purchase Requests</h3></div><div class="ox"><table><thead><tr><th>Item</th><th>Building</th><th>Supplier</th><th>Estimated</th><th>Step</th></tr></thead><tbody id="dash-materials-body"><tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:24px">Loading…</td></tr></tbody></table></div></div>
     </div>
 
     <!-- BUILDINGS -->
     <div class="page" id="page-buildings">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_buildings">Buildings</h2><p data-t="buildings_sub">Manage all properties</p></div><button class="btn btn-dark" onclick="openModal('modal-building')" data-t="add_building">+ Add Building</button></div>
+      <div class="ph-row"><div class="ph"><h2>Buildings</h2><p>Manage all properties</p></div><button class="btn btn-dark" onclick="openModal('modal-building')">+ Add Building</button></div>
       <div id="buildings-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px"></div>
     </div>
 
     <!-- TENANTS -->
     <div class="page" id="page-tenants">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_tenants">Tenants</h2><p data-t="tenants_sub">All active and past tenants</p></div><button class="btn btn-dark" onclick="openModal('modal-tenant')" data-t="add_tenant">+ Add Tenant</button></div>
+      <div class="ph-row"><div class="ph"><h2>Tenants</h2><p>All active and past tenants</p></div><button class="btn btn-dark" onclick="openModal('modal-tenant')">+ Add Tenant</button></div>
       <div class="fr"><input type="text" id="tenant-search" placeholder="Search name or phone…" oninput="filterTenants()" style="min-width:200px"/><select id="tenant-building-filter" onchange="filterTenants()"><option value="">All Buildings</option></select><select id="tenant-status-filter" onchange="filterTenants()"><option value="">All Status</option><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="name">Name</th><th data-t="apartment">Apartment</th><th data-t="monthly_rent">Monthly Rent</th><th data-t="advance">Advance</th><th data-t="phone">Phone</th><th data-t="status">Status</th><th>Action</th></tr></thead><tbody id="tenants-body"></tbody></table></div></div>
+      <div class="tw"><div class="ox"><table><thead><tr><th>Name</th><th>Apartment</th><th>Monthly Rent</th><th>Advance</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead><tbody id="tenants-body"></tbody></table></div></div>
     </div>
 
     <!-- RENT COLLECTION -->
     <div class="page" id="page-rent">
-      <div class="ph-row">
-        <div class="ph"><h2 data-t="nav_rent">Rent Collection</h2><p data-t="rent_sub">Track monthly rent payments</p></div>
-      </div>
+      <div class="ph-row"><div class="ph"><h2>Rent Collection</h2><p>Track monthly rent payments</p></div></div>
       <div class="fr">
-        <select id="rent-month-filter" onchange="loadRent()">
-          <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
-        </select>
+        <select id="rent-month-filter" onchange="loadRent()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
         <select id="rent-year-filter" onchange="loadRent()"></select>
         <select id="rent-building-filter" onchange="loadRent()"><option value="">All Buildings</option></select>
         <select id="rent-status-filter" onchange="loadRent()"><option value="">All Status</option><option value="paid">Paid</option><option value="partial">Partial</option><option value="unpaid">Unpaid</option></select>
@@ -411,31 +400,34 @@ tr:hover td{background:rgba(28,28,26,.015)}
         <div class="stat-card"><div class="lbl">Unpaid Units</div><div class="val" id="r-unpaid-count">0</div></div>
       </div>
       <div class="tw">
-        <div class="th"><h3>Rent Status</h3><div style="font-size:12px;color:var(--muted)">Click buttons on each row to update payment status</div></div>
-        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid Amount</th><th>Total Due (incl. arrears)</th><th>Status</th><th>Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
+        <div class="th"><h3>Rent Status</h3><div style="font-size:12px;color:var(--muted)">Click buttons on each row to update</div></div>
+        <div class="ox"><table><thead><tr><th>Tenant</th><th>Apt / Building</th><th>Monthly Rent</th><th>Paid</th><th>Previous Due</th><th>This Month Due</th><th>Total Owed</th><th>Status</th><th>Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="rent-body"></tbody></table></div>
       </div>
+    </div>
+
+    <!-- LEASES -->
+    <div class="page" id="page-leases">
+      <div class="ph-row"><div class="ph"><h2>Leases &amp; Agreements</h2><p>Click a tenant to view or manage their lease</p></div></div>
+      <div id="lease-tenant-grid" class="tenant-lease-grid"></div>
     </div>
 
     <!-- SALES -->
     <div class="page" id="page-sales">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_sales">Apartment Sales</h2><p data-t="sales_sub">Track sold apartments and payments</p></div><button class="btn btn-dark" onclick="openModal('modal-sale')" data-t="add_sale">+ Record Sale</button></div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="buyer">Buyer</th><th data-t="apartment">Apartment</th><th data-t="sale_price">Sale Price</th><th data-t="advance">Advance</th><th data-t="remaining">Remaining</th><th data-t="method">Method</th><th data-t="deposited">Deposited To</th><th data-t="registry">Registry</th></tr></thead><tbody id="sales-body"></tbody></table></div></div>
+      <div class="ph-row"><div class="ph"><h2>Apartment Sales</h2><p>Track sold apartments and payments</p></div><button class="btn btn-dark" onclick="openModal('modal-sale')">+ Record Sale</button></div>
+      <div class="tw"><div class="ox"><table><thead><tr><th>Buyer</th><th>Apartment</th><th>Sale Price</th><th>Advance</th><th>Remaining</th><th>Method</th><th>Deposited To</th><th>Registry</th></tr></thead><tbody id="sales-body"></tbody></table></div></div>
     </div>
 
     <!-- EXPENSES -->
     <div class="page" id="page-expenses">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_expenses">Construction Expenses</h2><p data-t="exp_sub">Track all construction costs</p></div><button class="btn btn-dark" onclick="openModal('modal-expense')" data-t="add_expense">+ Add Expense</button></div>
+      <div class="ph-row"><div class="ph"><h2>Construction Expenses</h2><p>Track all construction costs</p></div><button class="btn btn-dark" onclick="openModal('modal-expense')">+ Add Expense</button></div>
       <div class="fr"><select id="exp-building-filter" onchange="loadExpenses()"><option value="">All Buildings</option></select><select id="exp-category-filter" onchange="loadExpenses()"><option value="">All Categories</option><option value="materials">Materials</option><option value="labor">Labor</option><option value="equipment">Equipment</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="finishing">Finishing</option><option value="design">Design</option><option value="permits">Permits</option><option value="transport">Transport</option><option value="other">Other</option></select><input type="month" id="exp-month-filter" onchange="loadExpenses()"/></div>
-      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"><div class="stat-card t-amber"><div class="lbl" data-t="total_expenses">Total Expenses</div><div class="val" id="exp-total">৳0</div></div></div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="date">Date</th><th data-t="building">Building</th><th data-t="floor_label">Floor</th><th data-t="category">Category</th><th data-t="description">Description</th><th data-t="vendor">Vendor</th><th data-t="amount">Amount</th><th data-t="method">Method</th></tr></thead><tbody id="expenses-body"></tbody></table></div></div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))"><div class="stat-card t-amber"><div class="lbl">Total Expenses</div><div class="val" id="exp-total">৳0</div></div></div>
+      <div class="tw"><div class="ox"><table><thead><tr><th>Date</th><th>Building</th><th>Floor</th><th>Category</th><th>Description</th><th>Contractor / Vendor</th><th>Amount</th><th>Method</th></tr></thead><tbody id="expenses-body"></tbody></table></div></div>
     </div>
 
     <!-- MATERIALS -->
     <div class="page" id="page-materials">
-      <div class="ph-row">
-        <div class="ph"><h2 data-t="nav_materials">Materials & Procurement</h2><p>Track purchase requests, approvals and payments</p></div>
-        <button class="btn btn-dark" onclick="openMatRequest()">+ New Purchase Request</button>
-      </div>
+      <div class="ph-row"><div class="ph"><h2>Materials &amp; Procurement</h2><p>Track purchase requests, approvals and payments</p></div><button class="btn btn-dark" onclick="openMatRequest()">+ New Purchase Request</button></div>
       <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-bottom:20px">
         <div class="stat-card"><div class="lbl">Awaiting Approval</div><div class="val" id="ms-pending">0</div></div>
         <div class="stat-card t-amber"><div class="lbl">Approved / Active</div><div class="val" id="ms-approved">0</div></div>
@@ -456,22 +448,33 @@ tr:hover td{background:rgba(28,28,26,.015)}
       <div id="mat-cards"></div>
     </div>
 
+    <!-- PETTY CASH / JOMA -->
+    <div class="page" id="page-pettycash">
+      <div class="ph-row">
+        <div class="ph"><h2>Joma / Petty Cash</h2><p>Daily cash-in (জমা) and carryover (ইজা) tracker</p></div>
+        <button class="btn btn-dark" onclick="openNewJomaDay()">+ New Day Entry</button>
+      </div>
+      <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr))">
+        <div class="stat-card t-gold"><div class="lbl">Today's Joma</div><div class="val" id="pc-joma-today">৳0</div></div>
+        <div class="stat-card"><div class="lbl">Eeja (Carryover)</div><div class="val" id="pc-eeja">৳0</div></div>
+        <div class="stat-card t-red"><div class="lbl">Spent Today</div><div class="val" id="pc-spent">৳0</div></div>
+        <div class="stat-card t-green"><div class="lbl">Balance</div><div class="val" id="pc-balance">৳0</div></div>
+      </div>
+      <div id="petty-days-list"></div>
+    </div>
+
     <!-- EMPLOYEES -->
     <div class="page" id="page-employees">
-      <div class="ph-row"><div class="ph"><h2 data-t="nav_employees">Employees</h2><p data-t="emp_sub">Staff, guards and workers</p></div><button class="btn btn-dark" onclick="openModal('modal-employee')" data-t="add_employee">+ Add Employee</button></div>
-      <div class="tabs"><button class="tab active" onclick="filterEmployees('all')" data-t="all">All</button><button class="tab" onclick="filterEmployees('staff')" data-t="staff">Staff</button><button class="tab" onclick="filterEmployees('guard')" data-t="guard">Guards</button><button class="tab" onclick="filterEmployees('worker')" data-t="worker">Workers</button></div>
-      <div class="tw"><div class="ox"><table><thead><tr><th data-t="name">Name</th><th data-t="type">Type</th><th data-t="building">Building</th><th data-t="monthly_salary">Monthly Salary</th><th data-t="phone">Phone</th><th data-t="status">Status</th></tr></thead><tbody id="employees-body"></tbody></table></div></div>
+      <div class="ph-row"><div class="ph"><h2>Employees</h2><p>Staff, guards and workers</p></div><button class="btn btn-dark" onclick="openModal('modal-employee')">+ Add Employee</button></div>
+      <div class="tabs"><button class="tab active" onclick="filterEmployees('all')">All</button><button class="tab" onclick="filterEmployees('staff')">Staff</button><button class="tab" onclick="filterEmployees('guard')">Guards</button><button class="tab" onclick="filterEmployees('worker')">Workers</button></div>
+      <div class="tw"><div class="ox"><table><thead><tr><th>Name</th><th>Type</th><th>Building</th><th>Monthly Salary</th><th>Phone</th><th>Status</th></tr></thead><tbody id="employees-body"></tbody></table></div></div>
     </div>
 
     <!-- SALARY -->
     <div class="page" id="page-salary">
-      <div class="ph-row">
-        <div class="ph"><h2 data-t="nav_salary">Salary Payments</h2><p data-t="sal_sub">Monthly salary records</p></div>
-      </div>
+      <div class="ph-row"><div class="ph"><h2>Salary Payments</h2><p>Monthly salary records</p></div></div>
       <div class="fr">
-        <select id="sal-month-filter" onchange="loadSalary()">
-          <option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
-        </select>
+        <select id="sal-month-filter" onchange="loadSalary()"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>
         <select id="sal-year-filter" onchange="loadSalary()"></select>
         <select id="sal-type-filter" onchange="loadSalary()"><option value="">All Types</option><option value="staff">Staff</option><option value="guard">Guards</option><option value="worker">Workers</option><option value="engineer">Engineers</option><option value="manager">Managers</option></select>
       </div>
@@ -482,22 +485,31 @@ tr:hover td{background:rgba(28,28,26,.015)}
         <div class="stat-card"><div class="lbl">Remaining Staff</div><div class="val" id="sal-unpaid-count">0</div></div>
       </div>
       <div class="tw">
-        <div class="th"><h3>Salary Status</h3><div style="font-size:12px;color:var(--muted)">Click <strong>Mark Paid</strong> for quick payment, or ✏️ to enter a custom amount</div></div>
+        <div class="th"><h3>Salary Status</h3><div style="font-size:12px;color:var(--muted)">Click Mark Paid or ✏️ for custom amount</div></div>
         <div class="ox"><table><thead><tr><th>Employee</th><th>Type</th><th>Fixed Salary</th><th>Amount Paid</th><th>Status</th><th>Actions</th><th>Method</th><th>Date</th></tr></thead><tbody id="salary-body"></tbody></table></div>
       </div>
     </div>
 
+    <!-- CONTRACTORS -->
+    <div class="page" id="page-contractors">
+      <div class="ph-row"><div class="ph"><h2>Contractors</h2><p>Plumbers, electricians and other service contractors</p></div><button class="btn btn-dark" onclick="openModal('modal-contractor')">+ Add Contractor</button></div>
+      <div class="fr">
+        <select id="contractor-type-filter" onchange="loadContractors()"><option value="">All Types</option><option value="plumber">Plumber</option><option value="electrician">Electrician</option><option value="carpenter">Carpenter</option><option value="painter">Painter</option><option value="mason">Mason</option><option value="welder">Welder</option><option value="ac_technician">AC Technician</option><option value="other">Other</option></select>
+      </div>
+      <div id="contractor-grid" class="contractor-grid"></div>
+    </div>
+
     <!-- REPORTS -->
     <div class="page" id="page-reports">
-      <div class="ph"><h2 data-t="nav_reports">Reports</h2><p data-t="rep_sub">Financial summaries and analytics</p></div>
+      <div class="ph"><h2>Reports</h2><p>Financial summaries and analytics</p></div>
       <div class="fr"><select id="rep-building-filter" onchange="loadReports()"><option value="">All Buildings</option></select><select id="rep-year-filter" onchange="loadReports()"></select></div>
       <div class="stat-grid">
-        <div class="stat-card t-gold"><div class="lbl" data-t="yearly_rent">Yearly Rent</div><div class="val" id="rep-rent">৳0</div></div>
-        <div class="stat-card t-red"><div class="lbl" data-t="yearly_expenses">Yearly Expenses</div><div class="val" id="rep-expenses">৳0</div></div>
-        <div class="stat-card t-amber"><div class="lbl" data-t="yearly_salary">Yearly Salaries</div><div class="val" id="rep-salary">৳0</div></div>
-        <div class="stat-card t-green"><div class="lbl" data-t="apartment_sales">Sales Revenue</div><div class="val" id="rep-sales">৳0</div></div>
+        <div class="stat-card t-gold"><div class="lbl">Yearly Rent</div><div class="val" id="rep-rent">৳0</div></div>
+        <div class="stat-card t-red"><div class="lbl">Yearly Expenses</div><div class="val" id="rep-expenses">৳0</div></div>
+        <div class="stat-card t-amber"><div class="lbl">Yearly Salaries</div><div class="val" id="rep-salary">৳0</div></div>
+        <div class="stat-card t-green"><div class="lbl">Sales Revenue</div><div class="val" id="rep-sales">৳0</div></div>
       </div>
-      <div class="tw"><div class="th"><h3 data-t="monthly_breakdown">Monthly Breakdown</h3></div><div class="ox"><table><thead><tr><th data-t="month">Month</th><th data-t="rent_collected">Rent Collected</th><th data-t="expenses">Expenses</th><th data-t="salaries">Salaries</th><th data-t="net">Net</th></tr></thead><tbody id="reports-body"></tbody></table></div></div>
+      <div class="tw"><div class="th"><h3>Monthly Breakdown</h3></div><div class="ox"><table><thead><tr><th>Month</th><th>Rent Collected</th><th>Expenses</th><th>Salaries</th><th>Net</th></tr></thead><tbody id="reports-body"></tbody></table></div></div>
     </div>
 
   </div>
@@ -506,51 +518,144 @@ tr:hover td{background:rgba(28,28,26,.015)}
 <!-- NOTIFICATION PANEL -->
 <div class="notif-panel" id="notif-panel">
   <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--surface2)">
-    <span style="font-family:'DM Serif Display',serif;font-size:16px" data-t="notifications">Notifications</span>
-    <button onclick="markAllRead()" class="btn btn-ghost btn-sm" data-t="mark_read">Mark all read</button>
+    <span style="font-family:'DM Serif Display',serif;font-size:16px">Notifications</span>
+    <button onclick="markAllRead()" class="btn btn-ghost btn-sm">Mark all read</button>
   </div>
   <div id="notif-list"></div>
 </div>
-
 <div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(28,28,26,.4);z-index:99" onclick="closeSidebar()"></div>
 
-<!-- ═══════════════════════════════════════════
-     MODALS
-═══════════════════════════════════════════ -->
+<!-- ══════ MODALS ══════ -->
 
 <!-- BUILDING -->
 <div class="modal-overlay" id="modal-building" onclick="if(event.target===this)closeModal('modal-building')">
-  <div class="modal"><div class="mh"><h3 data-t="add_building">Add Building</h3><button class="mc-btn" onclick="closeModal('modal-building')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field ff"><label data-t="building_name">Building Name</label><input id="b-name" placeholder="e.g. Mirpur Tower A"/></div><div class="field ff"><label data-t="address">Address</label><input id="b-address" placeholder="Full address"/></div><div class="field"><label data-t="total_floors">Total Floors</label><input type="number" id="b-floors" placeholder="7"/></div><div class="field"><label data-t="status">Status</label><select id="b-status"><option value="under_construction">Under Construction</option><option value="completed">Completed</option><option value="partial">Partial</option></select></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="b-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-building')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveBuilding()" data-t="save">Save Building</button></div></div>
+  <div class="modal"><div class="mh"><h3>Add Building</h3><button class="mc-btn" onclick="closeModal('modal-building')">×</button></div>
+  <div class="mb"><div class="fg"><div class="field ff"><label>Building Name</label><input id="b-name" placeholder="e.g. Mirpur Tower A"/></div><div class="field ff"><label>Address</label><input id="b-address" placeholder="Full address"/></div><div class="field"><label>Total Floors</label><input type="number" id="b-floors" placeholder="7"/></div><div class="field"><label>Status</label><select id="b-status"><option value="under_construction">Under Construction</option><option value="completed">Completed</option><option value="partial">Partial</option></select></div><div class="field ff"><label>Notes</label><textarea id="b-notes"></textarea></div></div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-building')">Cancel</button><button class="btn btn-dark" onclick="saveBuilding()">Save Building</button></div></div>
 </div>
 
 <!-- TENANT -->
 <div class="modal-overlay" id="modal-tenant" onclick="if(event.target===this)closeModal('modal-tenant')">
-  <div class="modal"><div class="mh"><h3 data-t="add_tenant">Add Tenant</h3><button class="mc-btn" onclick="closeModal('modal-tenant')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field"><label data-t="full_name">Full Name</label><input id="t-name"/></div><div class="field"><label data-t="phone">Phone</label><input id="t-phone"/></div><div class="field"><label data-t="nid">NID Number</label><input id="t-nid"/></div><div class="field"><label data-t="email">Email</label><input type="email" id="t-email"/></div><div class="field"><label data-t="building">Building</label><select id="t-building" onchange="loadApartments('t-apartment',this.value)"><option value="">Select Building</option></select></div><div class="field"><label data-t="apartment">Apartment</label><select id="t-apartment"><option value="">Select Apartment</option></select></div><div class="field"><label data-t="monthly_rent">Monthly Rent (৳)</label><input type="number" id="t-rent"/></div><div class="field"><label data-t="advance">Advance Amount (৳)</label><input type="number" id="t-advance"/></div><div class="field"><label data-t="security_deposit">Security Deposit (৳)</label><input type="number" id="t-deposit"/></div><div class="field"><label data-t="lease_start">Lease Start</label><input type="date" id="t-lease-start"/></div><div class="field"><label data-t="lease_end">Lease End</label><input type="date" id="t-lease-end"/></div><div class="field"><label data-t="emergency">Emergency Contact</label><input id="t-emergency"/></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="t-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-tenant')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveTenant()" data-t="save">Save Tenant</button></div></div>
+  <div class="modal"><div class="mh"><h3>Add Tenant</h3><button class="mc-btn" onclick="closeModal('modal-tenant')">×</button></div>
+  <div class="mb"><div class="fg"><div class="field"><label>Full Name</label><input id="t-name"/></div><div class="field"><label>Phone</label><input id="t-phone"/></div><div class="field"><label>NID Number</label><input id="t-nid"/></div><div class="field"><label>Email</label><input type="email" id="t-email"/></div><div class="field"><label>Building</label><select id="t-building" onchange="loadApartments('t-apartment',this.value)"><option value="">Select Building</option></select></div><div class="field"><label>Apartment</label><select id="t-apartment"><option value="">Select Apartment</option></select></div><div class="field"><label>Monthly Rent (৳)</label><input type="number" id="t-rent"/></div><div class="field"><label>Advance Amount (৳)</label><input type="number" id="t-advance"/></div><div class="field"><label>Security Deposit (৳)</label><input type="number" id="t-deposit"/></div><div class="field"><label>Lease Start</label><input type="date" id="t-lease-start"/></div><div class="field"><label>Lease End</label><input type="date" id="t-lease-end"/></div><div class="field"><label>Emergency Contact</label><input id="t-emergency"/></div><div class="field ff"><label>Notes</label><textarea id="t-notes"></textarea></div></div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-tenant')">Cancel</button><button class="btn btn-dark" onclick="saveTenant()">Save Tenant</button></div></div>
+</div>
+
+<!-- CHANGE RENT -->
+<div class="modal-overlay" id="modal-change-rent" onclick="if(event.target===this)closeModal('modal-change-rent')">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 id="change-rent-title">Change Rent</h3><button class="mc-btn" onclick="closeModal('modal-change-rent')">×</button></div>
+    <div class="mb">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Current Rent</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--text)" id="change-rent-current">৳0</div>
+      </div>
+      <div class="fg">
+        <div class="field ff"><label>New Monthly Rent (৳)</label><input type="number" id="change-rent-new" placeholder="Enter new amount"/></div>
+        <div class="field"><label>Effective Date</label><input type="date" id="change-rent-date"/></div>
+        <div class="field ff"><label>Reason / Notes</label><textarea id="change-rent-notes" style="min-height:60px" placeholder="e.g. Annual revision, agreement renewal…"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-change-rent')">Cancel</button><button class="btn btn-dark" onclick="saveRentChange()">Update Rent</button></div>
+  </div>
+</div>
+
+<!-- LEASE DETAIL PANEL -->
+<div class="modal-overlay" id="modal-lease-detail" onclick="if(event.target===this)closeModal('modal-lease-detail')">
+  <div class="modal" style="max-width:600px">
+    <div class="mh"><h3 id="lease-detail-title">Lease Details</h3><button class="mc-btn" onclick="closeModal('modal-lease-detail')">×</button></div>
+    <div class="mb" id="lease-detail-body"></div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-lease-detail')">Close</button>
+      <button class="btn btn-warn btn-sm" id="lease-terminate-btn" onclick="terminateLease()" style="margin-right:auto">Terminate</button>
+      <button class="btn btn-dark" onclick="openAddLease()">+ New Agreement</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD LEASE -->
+<div class="modal-overlay" id="modal-add-lease" onclick="if(event.target===this)closeModal('modal-add-lease')">
+  <div class="modal">
+    <div class="mh"><h3 id="add-lease-title">New Lease Agreement</h3><button class="mc-btn" onclick="closeModal('modal-add-lease')">×</button></div>
+    <div class="mb">
+      <div class="fg">
+        <div class="field"><label>Lease Start</label><input type="date" id="la-start"/></div>
+        <div class="field"><label>Lease End</label><input type="date" id="la-end"/></div>
+        <div class="field"><label>Monthly Rent (৳)</label><input type="number" id="la-rent"/></div>
+        <div class="field"><label>Advance (৳)</label><input type="number" id="la-advance"/></div>
+        <div class="field"><label>Security Deposit (৳)</label><input type="number" id="la-deposit"/></div>
+        <div class="field"><label>Status</label><select id="la-status"><option value="active">Active</option><option value="expired">Expired</option><option value="terminated">Terminated</option></select></div>
+        <div class="field ff"><label>Terms &amp; Conditions</label><textarea id="la-terms" style="min-height:100px" placeholder="Enter lease terms, conditions, special clauses…"></textarea></div>
+        <div class="field ff"><label>Notes</label><textarea id="la-notes" style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-add-lease')">Cancel</button><button class="btn btn-dark" onclick="saveLease()">Save Agreement</button></div>
+  </div>
+</div>
+
+<!-- CONTRACTOR -->
+<div class="modal-overlay" id="modal-contractor" onclick="if(event.target===this)closeModal('modal-contractor')">
+  <div class="modal" style="max-width:460px">
+    <div class="mh"><h3>Add Contractor</h3><button class="mc-btn" onclick="closeModal('modal-contractor')">×</button></div>
+    <div class="mb"><div class="fg">
+      <div class="field"><label>Name</label><input id="con-name" placeholder="Contractor name"/></div>
+      <div class="field"><label>Type</label><select id="con-type"><option value="plumber">Plumber</option><option value="electrician">Electrician</option><option value="carpenter">Carpenter</option><option value="painter">Painter</option><option value="mason">Mason</option><option value="welder">Welder</option><option value="ac_technician">AC Technician</option><option value="other">Other</option></select></div>
+      <div class="field"><label>Phone</label><input id="con-phone" placeholder="01XXXXXXXXX"/></div>
+      <div class="field"><label>NID</label><input id="con-nid"/></div>
+      <div class="field ff"><label>Address</label><input id="con-address"/></div>
+      <div class="field ff"><label>Notes</label><textarea id="con-notes" style="min-height:60px"></textarea></div>
+    </div></div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-contractor')">Cancel</button><button class="btn btn-dark" onclick="saveContractor()">Save Contractor</button></div>
+  </div>
+</div>
+
+<!-- CONTRACTOR PROFILE -->
+<div class="modal-overlay" id="modal-contractor-profile" onclick="if(event.target===this)closeModal('modal-contractor-profile')">
+  <div class="modal" style="max-width:620px">
+    <div class="mh"><h3 id="con-profile-title">Contractor Profile</h3><button class="mc-btn" onclick="closeModal('modal-contractor-profile')">×</button></div>
+    <div class="mb" id="con-profile-body"></div>
+    <div class="mf">
+      <div class="fr" style="margin:0;flex:1">
+        <input type="date" id="con-profile-from" style="font-size:12px;padding:5px 8px"/>
+        <input type="date" id="con-profile-to" style="font-size:12px;padding:5px 8px"/>
+        <button class="btn btn-ghost btn-sm" onclick="loadContractorTransactions()">Filter</button>
+      </div>
+      <button class="btn btn-ghost" onclick="closeModal('modal-contractor-profile')">Close</button>
+    </div>
+  </div>
 </div>
 
 <!-- SALE -->
 <div class="modal-overlay" id="modal-sale" onclick="if(event.target===this)closeModal('modal-sale')">
-  <div class="modal"><div class="mh"><h3 data-t="add_sale">Record Apartment Sale</h3><button class="mc-btn" onclick="closeModal('modal-sale')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field"><label data-t="building">Building</label><select id="s-building" onchange="loadApartments('s-apartment',this.value)"><option value="">Select</option></select></div><div class="field"><label data-t="apartment">Apartment</label><select id="s-apartment"><option value="">Select</option></select></div><div class="field"><label data-t="buyer_name">Buyer Name</label><input id="s-buyer"/></div><div class="field"><label data-t="buyer_phone">Buyer Phone</label><input id="s-phone"/></div><div class="field"><label data-t="buyer_nid">Buyer NID</label><input id="s-nid"/></div><div class="field"><label data-t="sale_price">Sale Price (৳)</label><input type="number" id="s-price"/></div><div class="field"><label data-t="advance">Advance Paid (৳)</label><input type="number" id="s-advance"/></div><div class="field"><label data-t="payment_method">Payment Method</label><select id="s-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option><option value="installment">Installment</option></select></div><div class="field"><label data-t="cheque_no">Cheque Number</label><input id="s-cheque"/></div><div class="field"><label data-t="deposited_to">Deposited To</label><select id="s-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div><div class="field"><label data-t="sale_date">Sale Date</label><input type="date" id="s-date"/></div><div class="field"><label data-t="registry">Registry Done?</label><select id="s-registry"><option value="false">No</option><option value="true">Yes</option></select></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="s-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-sale')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveSale()" data-t="save">Save Sale</button></div></div>
+  <div class="modal"><div class="mh"><h3>Record Apartment Sale</h3><button class="mc-btn" onclick="closeModal('modal-sale')">×</button></div>
+  <div class="mb"><div class="fg"><div class="field"><label>Building</label><select id="s-building" onchange="loadApartments('s-apartment',this.value)"><option value="">Select</option></select></div><div class="field"><label>Apartment</label><select id="s-apartment"><option value="">Select</option></select></div><div class="field"><label>Buyer Name</label><input id="s-buyer"/></div><div class="field"><label>Buyer Phone</label><input id="s-phone"/></div><div class="field"><label>Buyer NID</label><input id="s-nid"/></div><div class="field"><label>Sale Price (৳)</label><input type="number" id="s-price"/></div><div class="field"><label>Advance Paid (৳)</label><input type="number" id="s-advance"/></div><div class="field"><label>Payment Method</label><select id="s-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option><option value="installment">Installment</option></select></div><div class="field"><label>Cheque Number</label><input id="s-cheque"/></div><div class="field"><label>Deposited To</label><select id="s-deposited"><option value="bank">Bank</option><option value="managing_director">Managing Director</option><option value="director">Director</option><option value="other">Other</option></select></div><div class="field"><label>Sale Date</label><input type="date" id="s-date"/></div><div class="field"><label>Registry Done?</label><select id="s-registry"><option value="false">No</option><option value="true">Yes</option></select></div><div class="field ff"><label>Notes</label><textarea id="s-notes"></textarea></div></div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-sale')">Cancel</button><button class="btn btn-dark" onclick="saveSale()">Save Sale</button></div></div>
 </div>
 
 <!-- EXPENSE -->
 <div class="modal-overlay" id="modal-expense" onclick="if(event.target===this)closeModal('modal-expense')">
-  <div class="modal"><div class="mh"><h3 data-t="add_expense">Add Expense</h3><button class="mc-btn" onclick="closeModal('modal-expense')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field"><label data-t="building">Building</label><select id="e-building" onchange="loadFloors('e-floor',this.value)"><option value="">Select</option></select></div><div class="field"><label data-t="floor_label">Floor (optional)</label><select id="e-floor"><option value="">Whole Building</option></select></div><div class="field"><label data-t="category">Category</label><select id="e-category"><option value="materials">Materials</option><option value="labor">Labor</option><option value="equipment">Equipment</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="finishing">Finishing</option><option value="design">Design</option><option value="permits">Permits</option><option value="transport">Transport</option><option value="other">Other</option></select></div><div class="field"><label data-t="expense_date">Date</label><input type="date" id="e-date"/></div><div class="field ff"><label data-t="description">Description</label><input id="e-desc" placeholder="What was this for?"/></div><div class="field"><label data-t="amount">Amount (৳)</label><input type="number" id="e-amount"/></div><div class="field"><label data-t="payment_method">Payment Method</label><select id="e-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div><div class="field"><label data-t="vendor">Vendor Name</label><input id="e-vendor"/></div><div class="field"><label data-t="receipt_no">Receipt Number</label><input id="e-receipt"/></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="e-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-expense')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveExpense()" data-t="save">Save Expense</button></div></div>
+  <div class="modal"><div class="mh"><h3>Add Expense</h3><button class="mc-btn" onclick="closeModal('modal-expense')">×</button></div>
+  <div class="mb"><div class="fg">
+    <div class="field"><label>Building</label><select id="e-building" onchange="loadFloors('e-floor',this.value)"><option value="">Select</option></select></div>
+    <div class="field"><label>Floor (optional)</label><select id="e-floor"><option value="">Whole Building</option></select></div>
+    <div class="field"><label>Category</label><select id="e-category"><option value="materials">Materials</option><option value="labor">Labor</option><option value="equipment">Equipment</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="finishing">Finishing</option><option value="design">Design</option><option value="permits">Permits</option><option value="transport">Transport</option><option value="other">Other</option></select></div>
+    <div class="field"><label>Date</label><input type="date" id="e-date"/></div>
+    <div class="field ff"><label>Description</label><input id="e-desc" placeholder="What was this for?"/></div>
+    <div class="field"><label>Amount (৳)</label><input type="number" id="e-amount"/></div>
+    <div class="field"><label>Payment Method</label><select id="e-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+    <div class="field"><label>Contractor (optional)</label><select id="e-contractor"><option value="">None / In-house</option></select></div>
+    <div class="field"><label>Vendor Name (optional)</label><input id="e-vendor" placeholder="If no contractor selected"/></div>
+    <div class="field"><label>Receipt Number</label><input id="e-receipt"/></div>
+    <div class="field ff"><label>Notes</label><textarea id="e-notes"></textarea></div>
+  </div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-expense')">Cancel</button><button class="btn btn-dark" onclick="saveExpense()">Save Expense</button></div></div>
 </div>
 
 <!-- EMPLOYEE -->
 <div class="modal-overlay" id="modal-employee" onclick="if(event.target===this)closeModal('modal-employee')">
-  <div class="modal"><div class="mh"><h3 data-t="add_employee">Add Employee</h3><button class="mc-btn" onclick="closeModal('modal-employee')">×</button></div>
-  <div class="mb"><div class="fg"><div class="field"><label data-t="full_name">Full Name</label><input id="em-name"/></div><div class="field"><label data-t="type">Type</label><select id="em-type"><option value="staff">Staff</option><option value="guard">Guard</option><option value="worker">Worker</option><option value="engineer">Engineer</option><option value="manager">Manager</option></select></div><div class="field"><label data-t="phone">Phone</label><input id="em-phone"/></div><div class="field"><label data-t="nid">NID</label><input id="em-nid"/></div><div class="field"><label data-t="monthly_salary">Monthly Salary (৳)</label><input type="number" id="em-salary"/></div><div class="field"><label data-t="building">Assigned Building</label><select id="em-building"><option value="">All / General</option></select></div><div class="field"><label data-t="join_date">Join Date</label><input type="date" id="em-join"/></div><div class="field ff"><label data-t="notes">Notes</label><textarea id="em-notes"></textarea></div></div></div>
-  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-employee')" data-t="cancel">Cancel</button><button class="btn btn-dark" onclick="saveEmployee()" data-t="save">Save Employee</button></div></div>
+  <div class="modal"><div class="mh"><h3>Add Employee</h3><button class="mc-btn" onclick="closeModal('modal-employee')">×</button></div>
+  <div class="mb"><div class="fg"><div class="field"><label>Full Name</label><input id="em-name"/></div><div class="field"><label>Type</label><select id="em-type"><option value="staff">Staff</option><option value="guard">Guard</option><option value="worker">Worker</option><option value="engineer">Engineer</option><option value="manager">Manager</option></select></div><div class="field"><label>Phone</label><input id="em-phone"/></div><div class="field"><label>NID</label><input id="em-nid"/></div><div class="field"><label>Monthly Salary (৳)</label><input type="number" id="em-salary"/></div><div class="field"><label>Assigned Building</label><select id="em-building"><option value="">All / General</option></select></div><div class="field"><label>Join Date</label><input type="date" id="em-join"/></div><div class="field ff"><label>Notes</label><textarea id="em-notes"></textarea></div></div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-employee')">Cancel</button><button class="btn btn-dark" onclick="saveEmployee()">Save Employee</button></div></div>
 </div>
 
 <!-- RENT FULL PAYMENT -->
@@ -573,22 +678,6 @@ tr:hover td{background:rgba(28,28,26,.015)}
   </div>
 </div>
 
-<!-- SALARY CUSTOM -->
-<div class="modal-overlay" id="modal-sal-custom" onclick="if(event.target===this)closeModal('modal-sal-custom')">
-  <div class="modal" style="max-width:420px">
-    <div class="mh"><h3 id="sal-custom-title">Custom Salary Payment</h3><button class="mc-btn" onclick="closeModal('modal-sal-custom')">×</button></div>
-    <div class="mb">
-      <div class="fg">
-        <div class="field"><label>Amount Paid (৳)</label><input type="number" id="sal-custom-amount" placeholder="Enter amount"/></div>
-        <div class="field"><label>Payment Method</label><select id="sal-custom-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
-        <div class="field"><label>Payment Date</label><input type="date" id="sal-custom-date"/></div>
-        <div class="field ff"><label>Notes</label><textarea id="sal-custom-notes" style="min-height:60px"></textarea></div>
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-sal-custom')">Cancel</button><button class="btn btn-dark" onclick="saveCustomSalary()">Save Payment</button></div>
-  </div>
-</div>
-
 <!-- RENT PARTIAL -->
 <div class="modal-overlay" id="modal-rent-partial" onclick="if(event.target===this)closeModal('modal-rent-partial')">
   <div class="modal" style="max-width:420px">
@@ -607,31 +696,82 @@ tr:hover td{background:rgba(28,28,26,.015)}
   </div>
 </div>
 
+<!-- EDIT DUE -->
+<div class="modal-overlay" id="modal-edit-due" onclick="if(event.target===this)closeModal('modal-edit-due')">
+  <div class="modal" style="max-width:380px">
+    <div class="mh"><h3 id="edit-due-title">Edit Outstanding Due</h3><button class="mc-btn" onclick="closeModal('modal-edit-due')">×</button></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Set the total historical due. This will appear as "Previous Due" separate from this month's rent.</p>
+      <div class="field"><label>Outstanding Due (৳)</label><input type="number" id="edit-due-amount" placeholder="0"/></div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-edit-due')">Cancel</button><button class="btn btn-dark" onclick="saveEditDue()">Save</button></div>
+  </div>
+</div>
+
+<!-- SALARY CUSTOM -->
+<div class="modal-overlay" id="modal-sal-custom" onclick="if(event.target===this)closeModal('modal-sal-custom')">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h3 id="sal-custom-title">Custom Salary Payment</h3><button class="mc-btn" onclick="closeModal('modal-sal-custom')">×</button></div>
+    <div class="mb">
+      <div class="fg">
+        <div class="field"><label>Amount Paid (৳)</label><input type="number" id="sal-custom-amount" placeholder="Enter amount"/></div>
+        <div class="field"><label>Payment Method</label><select id="sal-custom-method"><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank_transfer">Bank Transfer</option></select></div>
+        <div class="field"><label>Payment Date</label><input type="date" id="sal-custom-date"/></div>
+        <div class="field ff"><label>Notes</label><textarea id="sal-custom-notes" style="min-height:60px"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-sal-custom')">Cancel</button><button class="btn btn-dark" onclick="saveCustomSalary()">Save Payment</button></div>
+  </div>
+</div>
+
+<!-- JOMA NEW DAY -->
+<div class="modal-overlay" id="modal-joma-day" onclick="if(event.target===this)closeModal('modal-joma-day')">
+  <div class="modal" style="max-width:460px">
+    <div class="mh"><h3 id="joma-day-title">New Day — Cash Entry</h3><button class="mc-btn" onclick="closeModal('modal-joma-day')">×</button></div>
+    <div class="mb">
+      <div style="background:var(--infobg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--info)">
+        <strong>জমা (Joma)</strong> = fresh cash received today.<br>
+        <strong>ইজা (Eeja)</strong> = leftover from yesterday, auto-carried over.
+      </div>
+      <div id="joma-eeja-info" style="margin-bottom:14px"></div>
+      <div class="fg">
+        <div class="field"><label>Date</label><input type="date" id="joma-date"/></div>
+        <div class="field"><label>Joma — Cash Received Today (৳)</label><input type="number" id="joma-amount" placeholder="0"/></div>
+        <div class="field ff"><label>Notes</label><textarea id="joma-notes" style="min-height:50px" placeholder="Where cash came from…"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-joma-day')">Cancel</button><button class="btn btn-dark" onclick="saveJomaDay()">Open Day</button></div>
+  </div>
+</div>
+
+<!-- JOMA ADD EXPENSE -->
+<div class="modal-overlay" id="modal-joma-expense" onclick="if(event.target===this)closeModal('modal-joma-expense')">
+  <div class="modal" style="max-width:460px">
+    <div class="mh"><h3 id="joma-exp-title">Add Daily Expense</h3><button class="mc-btn" onclick="closeModal('modal-joma-expense')">×</button></div>
+    <div class="mb">
+      <div id="joma-balance-info" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:13px"></div>
+      <div class="fg">
+        <div class="field ff"><label>Description *</label><input id="je-desc" placeholder="What was this for?"/></div>
+        <div class="field"><label>Amount (৳) *</label><input type="number" id="je-amount"/></div>
+        <div class="field"><label>Category</label><select id="je-category"><option value="labor">Labor</option><option value="materials">Materials</option><option value="transport">Transport</option><option value="food">Food / Tea</option><option value="tools">Tools</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="other">Other</option></select></div>
+        <div class="field"><label>Contractor (optional)</label><select id="je-contractor"><option value="">None</option></select></div>
+        <div class="field"><label>Building (optional)</label><select id="je-building"><option value="">General</option></select></div>
+        <div class="field ff"><label>Notes</label><textarea id="je-notes" style="min-height:50px"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-joma-expense')">Cancel</button><button class="btn btn-dark" onclick="saveJomaExpense()">Add Expense</button></div>
+  </div>
+</div>
+
 <!-- MATERIALS: REQUEST -->
 <div class="modal-overlay" id="modal-mat-req" onclick="if(event.target===this)closeModal('modal-mat-req')">
   <div class="modal">
     <div class="mh"><h3>New Purchase Request</h3><button class="mc-btn" onclick="closeModal('modal-mat-req')">×</button></div>
     <div class="mb">
-      <div class="dup-warn" id="req-dup" style="display:none">
-        <span style="font-size:16px;flex-shrink:0">⚠</span>
-        <div id="req-dup-text"></div>
-      </div>
+      <div class="dup-warn" id="req-dup" style="display:none"><span style="font-size:16px;flex-shrink:0">⚠</span><div id="req-dup-text"></div></div>
       <div class="fg">
         <div class="field"><label>Building</label><select id="req-bld" onchange="matDupCheck()"><option value="">Select Building</option></select></div>
-        <div class="field"><label>Category</label>
-          <select id="req-cat">
-            <option value="bathroom_fittings">Bathroom Fittings</option>
-            <option value="sanitary">Sanitary Ware</option>
-            <option value="tiles">Tiles & Flooring</option>
-            <option value="electrical">Electrical</option>
-            <option value="plumbing">Plumbing</option>
-            <option value="doors_windows">Doors & Windows</option>
-            <option value="paint">Paint & Finishing</option>
-            <option value="hardware">Hardware</option>
-            <option value="cement_steel">Cement / Steel / Rebar</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
+        <div class="field"><label>Category</label><select id="req-cat"><option value="bathroom_fittings">Bathroom Fittings</option><option value="sanitary">Sanitary Ware</option><option value="tiles">Tiles & Flooring</option><option value="electrical">Electrical</option><option value="plumbing">Plumbing</option><option value="doors_windows">Doors & Windows</option><option value="paint">Paint & Finishing</option><option value="hardware">Hardware</option><option value="cement_steel">Cement / Steel / Rebar</option><option value="other">Other</option></select></div>
         <div class="field ff"><label>Item Description *</label><input id="req-item" placeholder="e.g. Faucet — Grohe Chrome, single handle" oninput="matDupCheck()"/></div>
         <div class="field"><label>Supplier Name *</label><input id="req-sup" placeholder="Shop or company name" oninput="matDupCheck()"/></div>
         <div class="field"><label>Supplier Phone</label><input id="req-sup-ph" placeholder="01XXXXXXXXX"/></div>
@@ -657,9 +797,7 @@ tr:hover td{background:rgba(28,28,26,.015)}
         <div class="field"><label>Given To (Name) *</label><input id="approve-to" placeholder="Employee who received the cash"/></div>
         <div class="field ff"><label>Approval Notes</label><textarea id="approve-notes" style="min-height:55px" placeholder="Instructions, conditions…"></textarea></div>
       </div>
-      <div style="background:var(--infobg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--info)">
-        Cash given is logged. Any difference from actual purchase will be highlighted for accountability.
-      </div>
+      <div style="background:var(--infobg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--info)">Cash given is logged. Differences from actual purchase will be flagged.</div>
     </div>
     <div class="mf">
       <button class="btn btn-danger btn-sm" onclick="rejectMatRequest()" style="margin-right:auto">✕ Reject</button>
@@ -690,46 +828,26 @@ tr:hover td{background:rgba(28,28,26,.015)}
     <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-mat-purchase')">Cancel</button><button class="btn btn-dark" onclick="saveMatPurchase()">Save Purchase Record</button></div>
   </div>
 </div>
-<!-- EDIT DUE MODAL -->
-<div class="modal-overlay" id="modal-edit-due" onclick="if(event.target===this)closeModal('modal-edit-due')">
-  <div class="modal" style="max-width:380px">
-    <div class="mh"><h3 id="edit-due-title">Edit Outstanding Due</h3><button class="mc-btn" onclick="closeModal('modal-edit-due')">×</button></div>
-    <div class="mb">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Set the total historical due for this tenant. This will be added on top of any unpaid months tracked by the system.</p>
-      <div class="field">
-        <label>Outstanding Due (৳)</label>
-        <input type="number" id="edit-due-amount" placeholder="0"/>
-      </div>
-    </div>
-    <div class="mf">
-      <button class="btn btn-ghost" onclick="closeModal('modal-edit-due')">Cancel</button>
-      <button class="btn btn-dark" onclick="saveEditDue()">Save</button>
-    </div>
-  </div>
-</div>
+
 <div class="toast" id="toast"></div>
 
-<!-- ═══════════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════════ -->
+<!-- ══════ JAVASCRIPT ══════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL='https://atxhshirummpenfqtwku.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGhzaGlydW1tcGVuZnF0d2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NTAwMTksImV4cCI6MjA5MDUyNjAxOX0.2Q54dc59CvfT34tEWxPTB8n25mHWCTHpvQyKsAOVE5E';
 const sbClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-let currentUser=null,userProfile=null,buildings=[],employees=[],tenants=[];
-let currentSalaryContext=null,currentRentContext=null;
+let currentUser=null,userProfile=null,buildings=[],employees=[],tenants=[],contractors=[];
+let currentSalaryContext=null,currentRentContext=null,currentChangeRentContext=null;
 let procurements=[],matFilter='all',currentMatId=null;
+let currentLeaseTenantId=null,currentLeaseId=null,currentContractorId=null;
+let currentJomaDayId=null,currentJomaDate=null;
 let lang=localStorage.getItem('bt_lang')||'en';
+let currentDueTenantId=null;
 
-const T={
-  en:{overview:'Overview',rentals:'Rentals',sales_label:'Sales',construction:'Construction',people:'People',properties:'Properties',reports_label:'Reports',nav_dashboard:'Dashboard',nav_tenants:'Tenants',nav_rent:'Rent Collection',nav_sales:'Apartment Sales',nav_expenses:'Expenses',nav_materials:'Materials',nav_employees:'Employees',nav_salary:'Salaries',nav_buildings:'Buildings',nav_reports:'Reports',logout:'Sign Out',notifications:'Notifications',mark_read:'Mark all read',add_building:'+ Add Building',add_tenant:'+ Add Tenant',add_sale:'+ Record Sale',add_expense:'+ Add Expense',add_employee:'+ Add Employee',dash_sub:'Overview of all operations',total_rent:'Rent Collected (This Month)',pending_rent:'Pending Rent',total_expenses:'Expenses (This Month)',total_salary:'Salary Paid (This Month)',active_tenants:'Active Tenants',pending_materials:'Pending Approvals',recent_payments:'Recent Rent Payments',name:'Name',tenant:'Tenant',building:'Building',amount:'Amount',method:'Method',status:'Status',date:'Date',apartment:'Apt',monthly_rent:'Monthly Rent',advance:'Advance',phone:'Phone',employee:'Employee',type:'Type',month:'Month',full_name:'Full Name',nid:'NID Number',email:'Email',lease_start:'Lease Start',lease_end:'Lease End',security_deposit:'Security Deposit',emergency:'Emergency Contact',building_name:'Building Name',address:'Address',total_floors:'Total Floors',floor_label:'Floor',category:'Category',description:'Description',vendor:'Vendor',receipt_no:'Receipt Number',expense_date:'Date',join_date:'Join Date',monthly_salary:'Monthly Salary',buyer_name:'Buyer Name',buyer_phone:'Buyer Phone',buyer_nid:'Buyer NID',sale_price:'Sale Price',sale_date:'Sale Date',registry:'Registry Done?',deposited:'Deposited To',buyer:'Buyer',all:'All',staff:'Staff',guard:'Guards',worker:'Workers',save:'Save',cancel:'Cancel',monthly_breakdown:'Monthly Breakdown',yearly_rent:'Yearly Rent',yearly_expenses:'Yearly Expenses',yearly_salary:'Yearly Salaries',apartment_sales:'Sales Revenue',rent_collected:'Rent Collected',expenses:'Expenses',salaries:'Salaries',net:'Net',buildings_sub:'Manage all properties',tenants_sub:'All active and past tenants',rent_sub:'Track monthly rent payments',sales_sub:'Track sold apartments',exp_sub:'Track all construction costs',emp_sub:'Staff, guards and workers',sal_sub:'Monthly salary records',rep_sub:'Financial summaries'},
-  bn:{overview:'সংক্ষিপ্ত',rentals:'ভাড়া',sales_label:'বিক্রয়',construction:'নির্মাণ',people:'জনবল',properties:'সম্পত্তি',reports_label:'রিপোর্ট',nav_dashboard:'ড্যাশবোর্ড',nav_tenants:'ভাড়াটে',nav_rent:'ভাড়া সংগ্রহ',nav_sales:'ফ্ল্যাট বিক্রয়',nav_expenses:'খরচ',nav_materials:'মালামাল',nav_employees:'কর্মচারী',nav_salary:'বেতন',nav_buildings:'ভবন',nav_reports:'রিপোর্ট',logout:'বের হন',notifications:'বিজ্ঞপ্তি',mark_read:'সব পড়েছি',add_building:'+ ভবন যোগ',add_tenant:'+ ভাড়াটে যোগ',add_sale:'+ বিক্রয় রেকর্ড',add_expense:'+ খরচ যোগ',add_employee:'+ কর্মচারী যোগ',dash_sub:'সকল কার্যক্রমের সংক্ষিপ্ত বিবরণ',total_rent:'ভাড়া সংগ্রহ (এই মাস)',pending_rent:'বকেয়া ভাড়া',total_expenses:'নির্মাণ খরচ (এই মাস)',total_salary:'বেতন প্রদান (এই মাস)',active_tenants:'সক্রিয় ভাড়াটে',pending_materials:'অনুমোদনের অপেক্ষায়',recent_payments:'সাম্প্রতিক ভাড়া পেমেন্ট',name:'নাম',tenant:'ভাড়াটে',building:'ভবন',amount:'পরিমাণ',method:'পদ্ধতি',status:'অবস্থা',date:'তারিখ',apartment:'ফ্ল্যাট',monthly_rent:'মাসিক ভাড়া',advance:'অগ্রিম',phone:'ফোন',employee:'কর্মচারী',type:'ধরন',month:'মাস',full_name:'পূর্ণ নাম',nid:'জাতীয় পরিচয়পত্র',email:'ইমেইল',lease_start:'চুক্তি শুরু',lease_end:'চুক্তি শেষ',security_deposit:'নিরাপত্তা জমা',emergency:'জরুরি যোগাযোগ',building_name:'ভবনের নাম',address:'ঠিকানা',total_floors:'মোট তলা',floor_label:'তলা',category:'বিভাগ',description:'বিবরণ',vendor:'বিক্রেতা',receipt_no:'রসিদ নং',expense_date:'তারিখ',join_date:'যোগদানের তারিখ',monthly_salary:'মাসিক বেতন',buyer_name:'ক্রেতার নাম',buyer_phone:'ক্রেতার ফোন',buyer_nid:'ক্রেতার NID',sale_price:'বিক্রয় মূল্য',sale_date:'বিক্রয়ের তারিখ',registry:'রেজিস্ট্রি হয়েছে?',deposited:'জমার স্থান',buyer:'ক্রেতা',all:'সব',staff:'স্টাফ',guard:'গার্ড',worker:'শ্রমিক',save:'সংরক্ষণ',cancel:'বাতিল',monthly_breakdown:'মাসিক বিবরণ',yearly_rent:'বার্ষিক ভাড়া',yearly_expenses:'বার্ষিক খরচ',yearly_salary:'বার্ষিক বেতন',apartment_sales:'বিক্রয় আয়',rent_collected:'ভাড়া সংগৃহীত',expenses:'খরচ',salaries:'বেতন',net:'নীট',buildings_sub:'সকল সম্পত্তি ব্যবস্থাপনা',tenants_sub:'সকল ভাড়াটের তালিকা',rent_sub:'মাসিক ভাড়া পেমেন্ট ট্র্যাক করুন',sales_sub:'বিক্রীত ফ্ল্যাট ট্র্যাক করুন',exp_sub:'নির্মাণ খরচের রেকর্ড',emp_sub:'স্টাফ, গার্ড ও শ্রমিক',sal_sub:'মাসিক বেতনের রেকর্ড',rep_sub:'আর্থিক সারসংক্ষেপ'}
-};
-
-function t(key){return T[lang][key]||T['en'][key]||key;}
-function setLang(l){lang=l;localStorage.setItem('bt_lang',l);document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&l==='en')||(i===1&&l==='bn')));document.querySelectorAll('[data-t]').forEach(el=>{const k=el.getAttribute('data-t');if(el.tagName==='INPUT'||el.tagName==='TEXTAREA')el.placeholder=t(k);else el.textContent=t(k);});}
+function t(key){return key;}
+function setLang(l){lang=l;localStorage.setItem('bt_lang',l);document.querySelectorAll('.lang-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&l==='en')||(i===1&&l==='bn')));}
 
 async function init(){
   const{data:{session}}=await sbClient.auth.getSession();
@@ -746,11 +864,12 @@ async function init(){
   const repYr=document.getElementById('rep-year-filter');if(repYr&&repYr.options.length>0)repYr.value=yr;
   document.getElementById('sal-custom-date').value=now.toISOString().slice(0,10);
   document.getElementById('rent-partial-date').value=now.toISOString().slice(0,10);
-  await loadBuildings();await loadDashboard();await loadNotifications();setLang(lang);
+  document.getElementById('change-rent-date').value=now.toISOString().slice(0,10);
+  document.getElementById('joma-date').value=now.toISOString().slice(0,10);
+  await loadBuildings();await loadContractorsData();await loadDashboard();await loadNotifications();
   setupPush();
 }
 
-// ── PUSH NOTIFICATIONS ────────────────────────────────────────
 const VAPID_PUBLIC_KEY='BNuMJJZuk3BnHiwPx2yBBqDEOZSm7-20wAS0uKt86TMxkij7sKxc-2JgU--9rdUByXUGUcPxgQcgch0X3H0l1-4';
 function urlBase64ToUint8Array(b){const p='='.repeat((4-b.length%4)%4);const s=atob((b+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(s,c=>c.charCodeAt(0));}
 async function setupPush(){
@@ -758,27 +877,12 @@ async function setupPush(){
   try{
     const reg=await navigator.serviceWorker.ready;
     const permission=await Notification.requestPermission();
-    if(permission!=='granted'){console.log('Push permission denied');return;}
+    if(permission!=='granted')return;
     let sub=await reg.pushManager.getSubscription();
     if(!sub){sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});}
     const subJson=sub.toJSON();
     const deviceId=localStorage.getItem('device_id')||(()=>{const id=crypto.randomUUID();localStorage.setItem('device_id',id);return id;})();
-    const{error}=await sbClient.from('push_subscriptions').upsert({
-      device_id:deviceId,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,
-      auth:subJson.keys.auth,user_label:userProfile?.full_name||currentUser.email,
-      updated_at:new Date().toISOString()
-    },{onConflict:'device_id'});
-    if(error){console.warn('Push subscription save failed:',error.message);return;}
-    console.log('Push subscription saved ✓');
-    navigator.serviceWorker.addEventListener('message',async e=>{
-      if(e.data?.type==='PUSH_SUBSCRIPTION_CHANGED'){
-        const n=e.data.subscription.toJSON();
-        await sbClient.from('push_subscriptions').upsert({
-          device_id:deviceId,endpoint:n.endpoint,p256dh:n.keys.p256dh,
-          auth:n.keys.auth,updated_at:new Date().toISOString()
-        },{onConflict:'device_id'});
-      }
-    });
+    await sbClient.from('push_subscriptions').upsert({device_id:deviceId,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,auth:subJson.keys.auth,user_label:userProfile?.full_name||currentUser.email,updated_at:new Date().toISOString()},{onConflict:'device_id'});
   }catch(err){console.warn('Push setup failed:',err);}
 }
 
@@ -787,9 +891,10 @@ function navigate(page){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')===`navigate('${page}')`)n.classList.add('active');});
-  document.getElementById('page-title').textContent=t('nav_'+page);
+  const titles={dashboard:'Dashboard',tenants:'Tenants',rent:'Rent Collection',leases:'Leases & Agreements',sales:'Apartment Sales',expenses:'Expenses',materials:'Materials',pettycash:'Joma / Petty Cash',employees:'Employees',salary:'Salaries',contractors:'Contractors',buildings:'Buildings',reports:'Reports'};
+  document.getElementById('page-title').textContent=titles[page]||page;
   closeSidebar();
-  const loaders={buildings:loadBuildingsPage,tenants:loadTenants,rent:loadRent,sales:loadSales,expenses:loadExpenses,materials:loadMaterials,employees:loadEmployees,salary:loadSalary,reports:loadReports};
+  const loaders={buildings:loadBuildingsPage,tenants:loadTenants,rent:loadRent,leases:loadLeases,sales:loadSales,expenses:loadExpenses,materials:loadMaterials,pettycash:loadPettyCash,employees:loadEmployees,salary:loadSalary,contractors:loadContractors,reports:loadReports};
   if(loaders[page])loaders[page]();
 }
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').style.display=document.getElementById('sidebar').classList.contains('open')?'block':'none';}
@@ -800,14 +905,14 @@ function showToast(msg,type='success'){const el=document.getElementById('toast')
 function fmt(n){return '৳'+Number(n||0).toLocaleString('en-BD');}
 function fmtDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
 function monthName(m){return['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m];}
-function statusBadge(s){const map={paid:'badge-success',partial:'badge-warn',unpaid:'badge-danger',delivered:'badge-success',ordered:'badge-info',in_transit:'badge-warn',partially_delivered:'badge-warn',cancelled:'badge-danger',confirmed:'badge-info',active:'badge-success',inactive:'badge-muted',under_construction:'badge-warn',completed:'badge-success'};return `<span class="badge ${map[s]||'badge-muted'}">${s.replace(/_/g,' ')}</span>`;}
+function statusBadge(s){const map={paid:'badge-success',partial:'badge-warn',unpaid:'badge-danger',delivered:'badge-success',ordered:'badge-info',in_transit:'badge-warn',partially_delivered:'badge-warn',cancelled:'badge-danger',confirmed:'badge-info',active:'badge-success',inactive:'badge-muted',under_construction:'badge-warn',completed:'badge-success',expired:'badge-danger',terminated:'badge-muted'};return `<span class="badge ${map[s]||'badge-muted'}">${s.replace(/_/g,' ')}</span>`;}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ─── BUILDINGS ────────────────────────────────────────────────
 async function loadBuildings(){
   const{data}=await sbClient.from('buildings').select('*').order('created_at');
   buildings=data||[];
-  ['t-building','s-building','e-building','em-building','rent-building-filter','exp-building-filter','mat-building-filter','rep-building-filter','tenant-building-filter','req-bld'].forEach(id=>{
+  ['t-building','s-building','e-building','em-building','rent-building-filter','exp-building-filter','mat-building-filter','rep-building-filter','tenant-building-filter','req-bld','je-building'].forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     const keepFirst=el.children[0];el.innerHTML='';if(keepFirst)el.appendChild(keepFirst);
     buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;el.appendChild(o);});
@@ -815,8 +920,8 @@ async function loadBuildings(){
 }
 async function loadBuildingsPage(){
   const grid=document.getElementById('buildings-grid');
-  if(!buildings.length){grid.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="1"/></svg><p>No buildings yet</p></div>';return;}
-  grid.innerHTML=buildings.map(b=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:'DM Serif Display',serif;font-size:17px;color:var(--text)">${b.name}</div><div style="font-size:12px;color:var(--muted);margin-top:3px;font-weight:300">${b.address||'No address'}</div></div>${statusBadge(b.status)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px;color:var(--muted)"><span>Floors</span><span style="color:var(--text);font-weight:500">${b.total_floors||'—'}</span></div>${b.notes?`<div style="font-size:12px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-weight:300">${b.notes}</div>`:''}</div>`).join('');
+  if(!buildings.length){grid.innerHTML='<div class="empty"><p>No buildings yet</p></div>';return;}
+  grid.innerHTML=buildings.map(b=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px"><div><div style="font-family:'DM Serif Display',serif;font-size:17px">${b.name}</div><div style="font-size:12px;color:var(--muted);margin-top:3px;font-weight:300">${b.address||'No address'}</div></div>${statusBadge(b.status)}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px;color:var(--muted)"><span>Floors</span><span style="color:var(--text);font-weight:500">${b.total_floors||'—'}</span></div>${b.notes?`<div style="font-size:12px;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-weight:300">${b.notes}</div>`:''}</div>`).join('');
 }
 async function saveBuilding(){
   const payload={name:document.getElementById('b-name').value,address:document.getElementById('b-address').value,total_floors:parseInt(document.getElementById('b-floors').value)||0,status:document.getElementById('b-status').value,notes:document.getElementById('b-notes').value};
@@ -849,7 +954,18 @@ async function loadTenants(){
 function renderTenants(list){
   const body=document.getElementById('tenants-body');
   if(!list.length){body.innerHTML='<tr><td colspan="7"><div class="empty"><p>No tenants yet</p></div></td></tr>';return;}
-  body.innerHTML=list.map(t2=>`<tr><td><strong>${t2.full_name}</strong></td><td>${t2.apartments?.apartment_number||'—'}</td><td>${fmt(t2.monthly_rent)}</td><td>${fmt(t2.advance_amount)}</td><td>${t2.phone||'—'}</td><td>${statusBadge(t2.is_active?'active':'inactive')}</td><td><button class="btn btn-ghost btn-sm" onclick="toggleTenant('${t2.id}',${t2.is_active})">${t2.is_active?'Deactivate':'Activate'}</button></td></tr>`).join('');
+  body.innerHTML=list.map(t2=>`<tr>
+    <td><strong>${t2.full_name}</strong></td>
+    <td>${t2.apartments?.apartment_number||'—'}</td>
+    <td>${fmt(t2.monthly_rent)}</td>
+    <td>${fmt(t2.advance_amount)}</td>
+    <td>${t2.phone||'—'}</td>
+    <td>${statusBadge(t2.is_active?'active':'inactive')}</td>
+    <td><div class="qa-row">
+      <button class="qa-btn qa-edit" onclick="openChangeRent('${t2.id}','${esc(t2.full_name)}',${t2.monthly_rent})">৳ Rent</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleTenant('${t2.id}',${t2.is_active})">${t2.is_active?'Deactivate':'Activate'}</button>
+    </div></td>
+  </tr>`).join('');
 }
 function filterTenants(){
   const search=document.getElementById('tenant-search').value.toLowerCase();
@@ -875,6 +991,213 @@ async function saveTenant(){
 }
 async function toggleTenant(id,current){await sbClient.from('tenants').update({is_active:!current}).eq('id',id);loadTenants();}
 
+// ─── CHANGE RENT ──────────────────────────────────────────────
+function openChangeRent(tenantId,name,currentRent){
+  currentChangeRentContext={tenantId,currentRent};
+  document.getElementById('change-rent-title').textContent=`Change Rent — ${name}`;
+  document.getElementById('change-rent-current').textContent=fmt(currentRent);
+  document.getElementById('change-rent-new').value=currentRent;
+  document.getElementById('change-rent-notes').value='';
+  document.getElementById('change-rent-date').value=new Date().toISOString().slice(0,10);
+  openModal('modal-change-rent');
+}
+async function saveRentChange(){
+  if(!currentChangeRentContext)return;
+  const{tenantId,currentRent}=currentChangeRentContext;
+  const newRent=parseFloat(document.getElementById('change-rent-new').value)||0;
+  if(!newRent){showToast('Enter new rent amount','error');return;}
+  const date=document.getElementById('change-rent-date').value;
+  const notes=document.getElementById('change-rent-notes').value;
+  // Log the history
+  await sbClient.from('tenant_rent_history').insert({tenant_id:tenantId,old_rent:currentRent,new_rent:newRent,effective_date:date||null,changed_by:currentUser.id,notes});
+  // Update tenant
+  const{error}=await sbClient.from('tenants').update({monthly_rent:newRent}).eq('id',tenantId);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast(`Rent updated to ${fmt(newRent)} ✓`);
+  closeModal('modal-change-rent');
+  const t2=tenants.find(x=>x.id===tenantId);
+  if(t2)t2.monthly_rent=newRent;
+  loadTenants();
+}
+
+// ─── LEASES ───────────────────────────────────────────────────
+async function loadLeases(){
+  if(tenants.length===0)await loadTenants();
+  const{data:leases}=await sbClient.from('tenant_leases').select('*');
+  const leaseMap={};
+  (leases||[]).forEach(l=>{if(l.status==='active'||(l.status&&!leaseMap[l.tenant_id]))leaseMap[l.tenant_id]=l;});
+  const grid=document.getElementById('lease-tenant-grid');
+  const active=tenants.filter(t2=>t2.is_active);
+  if(!active.length){grid.innerHTML='<div class="empty"><p>No active tenants</p></div>';return;}
+  const today=new Date();
+  grid.innerHTML=active.map(t2=>{
+    const lease=leaseMap[t2.id];
+    let cls='';let expLabel='No active lease';
+    if(lease&&lease.lease_end){
+      const end=new Date(lease.lease_end);
+      const daysLeft=Math.ceil((end-today)/(1000*60*60*24));
+      if(daysLeft<0){cls='expired';expLabel='Expired '+fmtDate(lease.lease_end);}
+      else if(daysLeft<=60){cls='expiring';expLabel=`Expires in ${daysLeft} days`;}
+      else{cls='active-lease';expLabel=`Until ${fmtDate(lease.lease_end)}`;}
+    } else if(lease){cls='active-lease';expLabel='Active — no end date';}
+    return `<div class="lease-card ${cls}" onclick="openLeaseDetail('${t2.id}','${esc(t2.full_name)}')">
+      <div class="lc-name">${t2.full_name}</div>
+      <div class="lc-apt">${t2.apartments?.apartment_number||'—'} · ${t2.apartments?.buildings?.name||'—'}</div>
+      ${lease?`<div style="margin-bottom:8px">${statusBadge(lease.status)}</div>`:'<div style="margin-bottom:8px"><span class="badge badge-muted">No Lease</span></div>'}
+      <div class="lc-dates"><span>${lease?fmtDate(lease.lease_start):'—'}</span><span style="color:${cls==='expired'?'var(--danger)':cls==='expiring'?'var(--warn)':'var(--muted2)'}">${expLabel}</span></div>
+      ${lease?`<div style="font-size:12px;color:var(--muted);margin-top:6px">${fmt(lease.monthly_rent)}/month</div>`:''}
+    </div>`;
+  }).join('');
+}
+async function openLeaseDetail(tenantId,name){
+  currentLeaseTenantId=tenantId;
+  document.getElementById('lease-detail-title').textContent=name+' — Agreements';
+  const{data:leases}=await sbClient.from('tenant_leases').select('*').eq('tenant_id',tenantId).order('created_at',{ascending:false});
+  const body=document.getElementById('lease-detail-body');
+  if(!leases||!leases.length){
+    body.innerHTML='<div class="empty"><p>No lease agreements found.<br>Click "+ New Agreement" to add one.</p></div>';
+  } else {
+    body.innerHTML=leases.map(l=>`
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div><div style="font-family:'DM Serif Display',serif;font-size:15px">${fmtDate(l.lease_start)} → ${l.lease_end?fmtDate(l.lease_end):'Open-ended'}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">${fmt(l.monthly_rent)}/month · Advance ${fmt(l.advance_amount)} · Deposit ${fmt(l.security_deposit)}</div></div>
+          ${statusBadge(l.status)}
+        </div>
+        ${l.terms?`<div style="font-size:12.5px;color:var(--text);background:var(--surface);border-radius:6px;padding:10px 12px;margin-bottom:8px;border-left:2px solid var(--gold2)">${esc(l.terms)}</div>`:''}
+        ${l.notes?`<div style="font-size:12px;color:var(--muted)">${esc(l.notes)}</div>`:''}
+        <div style="margin-top:10px;display:flex;gap:8px">
+          ${l.status==='active'?`<button class="qa-btn qa-unpaid" onclick="terminateLeaseById('${l.id}')">Terminate</button>`:''}
+          <button class="qa-btn qa-edit" onclick="editLeaseOpen('${l.id}','${tenantId}')">Edit</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  currentLeaseId=leases&&leases.length?leases[0].id:null;
+  openModal('modal-lease-detail');
+}
+function openAddLease(){
+  document.getElementById('add-lease-title').textContent='New Agreement — '+currentLeaseTenantId;
+  ['la-start','la-end','la-rent','la-advance','la-deposit','la-terms','la-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('la-status').value='active';
+  closeModal('modal-lease-detail');
+  openModal('modal-add-lease');
+}
+function editLeaseOpen(leaseId,tenantId){
+  currentLeaseId=leaseId;currentLeaseTenantId=tenantId;
+  sbClient.from('tenant_leases').select('*').eq('id',leaseId).single().then(({data:l})=>{
+    if(!l)return;
+    document.getElementById('la-start').value=l.lease_start||'';
+    document.getElementById('la-end').value=l.lease_end||'';
+    document.getElementById('la-rent').value=l.monthly_rent||'';
+    document.getElementById('la-advance').value=l.advance_amount||'';
+    document.getElementById('la-deposit').value=l.security_deposit||'';
+    document.getElementById('la-terms').value=l.terms||'';
+    document.getElementById('la-notes').value=l.notes||'';
+    document.getElementById('la-status').value=l.status||'active';
+    closeModal('modal-lease-detail');
+    openModal('modal-add-lease');
+  });
+}
+async function saveLease(){
+  const payload={tenant_id:currentLeaseTenantId,lease_start:document.getElementById('la-start').value||null,lease_end:document.getElementById('la-end').value||null,monthly_rent:parseFloat(document.getElementById('la-rent').value)||0,advance_amount:parseFloat(document.getElementById('la-advance').value)||0,security_deposit:parseFloat(document.getElementById('la-deposit').value)||0,terms:document.getElementById('la-terms').value,notes:document.getElementById('la-notes').value,status:document.getElementById('la-status').value,created_by:currentUser.id};
+  let error;
+  if(currentLeaseId&&document.getElementById('la-start').getAttribute('data-edit')==='true'){({error}=await sbClient.from('tenant_leases').update(payload).eq('id',currentLeaseId));}
+  else{({error}=await sbClient.from('tenant_leases').insert(payload));}
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Agreement saved ✓');closeModal('modal-add-lease');loadLeases();
+}
+async function terminateLeaseById(leaseId){
+  if(!confirm('Terminate this lease?'))return;
+  await sbClient.from('tenant_leases').update({status:'terminated'}).eq('id',leaseId);
+  showToast('Lease terminated');closeModal('modal-lease-detail');loadLeases();
+}
+async function terminateLease(){if(currentLeaseId)terminateLeaseById(currentLeaseId);}
+
+// ─── CONTRACTORS ──────────────────────────────────────────────
+async function loadContractorsData(){
+  const{data}=await sbClient.from('contractors').select('*').eq('is_active',true).order('name');
+  contractors=data||[];
+  ['e-contractor','je-contractor'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const first=el.children[0];el.innerHTML='';el.appendChild(first);
+    contractors.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=`${c.name} (${c.type})`;el.appendChild(o);});
+  });
+}
+async function loadContractors(){
+  const typeFilter=document.getElementById('contractor-type-filter').value;
+  let q=sbClient.from('contractors').select('*');
+  if(typeFilter)q=q.eq('type',typeFilter);
+  const{data}=await q.order('name');
+  contractors=data||[];
+  // Get total spent per contractor
+  const{data:expData}=await sbClient.from('construction_expenses').select('contractor_id, amount').not('contractor_id','is',null);
+  const spentMap={};
+  (expData||[]).forEach(e=>{spentMap[e.contractor_id]=(spentMap[e.contractor_id]||0)+Number(e.amount);});
+  const{data:pcData}=await sbClient.from('petty_cash_expenses').select('contractor_id, amount').not('contractor_id','is',null);
+  (pcData||[]).forEach(e=>{spentMap[e.contractor_id]=(spentMap[e.contractor_id]||0)+Number(e.amount);});
+  const grid=document.getElementById('contractor-grid');
+  if(!contractors.length){grid.innerHTML='<div class="empty"><p>No contractors yet</p></div>';return;}
+  grid.innerHTML=contractors.map(c=>`
+    <div class="contractor-card" onclick="openContractorProfile('${c.id}')">
+      <div class="cc-name">${esc(c.name)}</div>
+      <div class="cc-type">${c.type.replace(/_/g,' ')}</div>
+      <div class="cc-stats">
+        <div><div class="cc-stat-lbl">Total Paid</div><div class="cc-stat-val">${fmt(spentMap[c.id]||0)}</div></div>
+        <div><div class="cc-stat-lbl">Phone</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${c.phone||'—'}</div></div>
+      </div>
+      ${!c.is_active?'<div style="margin-top:8px"><span class="badge badge-muted">Inactive</span></div>':''}
+    </div>
+  `).join('');
+}
+async function saveContractor(){
+  const payload={name:document.getElementById('con-name').value,type:document.getElementById('con-type').value,phone:document.getElementById('con-phone').value,nid:document.getElementById('con-nid').value,address:document.getElementById('con-address').value,notes:document.getElementById('con-notes').value};
+  if(!payload.name){showToast('Name required','error');return;}
+  const{error}=await sbClient.from('contractors').insert(payload);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Contractor saved ✓');closeModal('modal-contractor');
+  ['con-name','con-phone','con-nid','con-address','con-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  await loadContractorsData();loadContractors();
+}
+async function openContractorProfile(contractorId){
+  currentContractorId=contractorId;
+  const con=contractors.find(c=>c.id===contractorId);if(!con)return;
+  document.getElementById('con-profile-title').textContent=con.name+' — '+con.type.replace(/_/g,' ');
+  // Set default date range: last 6 months
+  const now=new Date();
+  const sixMonthsAgo=new Date(now.getFullYear(),now.getMonth()-6,1);
+  document.getElementById('con-profile-from').value=sixMonthsAgo.toISOString().slice(0,10);
+  document.getElementById('con-profile-to').value=now.toISOString().slice(0,10);
+  await loadContractorTransactions();
+  openModal('modal-contractor-profile');
+}
+async function loadContractorTransactions(){
+  const con=contractors.find(c=>c.id===currentContractorId);if(!con)return;
+  const from=document.getElementById('con-profile-from').value;
+  const to=document.getElementById('con-profile-to').value;
+  let expQ=sbClient.from('construction_expenses').select('*, buildings(name)').eq('contractor_id',currentContractorId);
+  if(from)expQ=expQ.gte('expense_date',from);
+  if(to)expQ=expQ.lte('expense_date',to);
+  const{data:expenses}=await expQ.order('expense_date',{ascending:false});
+  let pcQ=sbClient.from('petty_cash_expenses').select('*, buildings(name)').eq('contractor_id',currentContractorId);
+  if(from)pcQ=pcQ.gte('cash_date',from);
+  if(to)pcQ=pcQ.lte('cash_date',to);
+  const{data:pcExpenses}=await pcQ.order('cash_date',{ascending:false});
+  const allTx=[...(expenses||[]).map(e=>({date:e.expense_date,desc:e.description,amount:e.amount,building:e.buildings?.name,source:'expense',category:e.category})),...(pcExpenses||[]).map(e=>({date:e.cash_date,desc:e.description,amount:e.amount,building:e.buildings?.name,source:'petty_cash',category:e.category}))].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const total=allTx.reduce((s,t2)=>s+Number(t2.amount),0);
+  const body=document.getElementById('con-profile-body');
+  body.innerHTML=`
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Phone</div><div style="font-size:14px">${con.phone||'—'}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Total Paid (filtered)</div><div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold)">${fmt(total)}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Transactions</div><div style="font-size:20px;font-family:'DM Serif Display',serif">${allTx.length}</div></div>
+    </div>
+    ${!allTx.length?'<div class="empty"><p>No transactions in this date range</p></div>':
+    `<div class="ox"><table><thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Building</th><th>Source</th><th>Amount</th></tr></thead><tbody>
+    ${allTx.map(tx=>`<tr><td>${fmtDate(tx.date)}</td><td>${esc(tx.desc)}</td><td><span class="badge badge-info">${tx.category||'—'}</span></td><td>${tx.building||'—'}</td><td><span class="badge badge-muted">${tx.source==='petty_cash'?'Petty Cash':'Expense'}</span></td><td><strong>${fmt(tx.amount)}</strong></td></tr>`).join('')}
+    </tbody></table></div>`}
+  `;
+}
+
 // ─── RENT ─────────────────────────────────────────────────────
 async function loadRent(){
   const month=parseInt(document.getElementById('rent-month-filter').value);
@@ -882,46 +1205,26 @@ async function loadRent(){
   const buildingFilter=document.getElementById('rent-building-filter').value;
   const statusFilter=document.getElementById('rent-status-filter').value;
   const body=document.getElementById('rent-body');
-  body.innerHTML='<tr class="loading-row"><td colspan="8">Loading…</td></tr>';
+  body.innerHTML='<tr class="loading-row"><td colspan="11">Loading…</td></tr>';
   if(tenants.length===0)await loadTenants();
   let activeTenants=tenants.filter(t2=>t2.is_active);
   if(buildingFilter)activeTenants=activeTenants.filter(t2=>t2.apartments?.buildings?.id===buildingFilter);
-
-  // Fetch this month's payments
   const{data:existing}=await sbClient.from('rent_payments').select('*').eq('month',month).eq('year',year);
   const paymentMap={};(existing||[]).forEach(p=>{paymentMap[p.tenant_id]=p;});
-
-  // Fetch all unpaid/partial records BEFORE this month to calculate arrears
-  // Build a date boundary: anything before year-month
-  const{data:pastUnpaid}=await sbClient.from('rent_payments')
-    .select('tenant_id,amount_due,amount_paid,month,year')
-    .in('payment_status',['unpaid','partial'])
-    .or(`year.lt.${year},and(year.eq.${year},month.lt.${month})`);
-
-  // Sum arrears per tenant
- const arrearsMap={};
-(pastUnpaid||[]).forEach(p=>{
-  const owed=Number(p.amount_due||0)-Number(p.amount_paid||0);
-  arrearsMap[p.tenant_id]=(arrearsMap[p.tenant_id]||0)+owed;
-});
-// Add manually entered historical dues
-activeTenants.forEach(t2=>{
-  const manualDue=Number(t2.outstanding_due||0);
-  if(manualDue>0) arrearsMap[t2.id]=(arrearsMap[t2.id]||0)+manualDue;
-});
-
+  const{data:pastUnpaid}=await sbClient.from('rent_payments').select('tenant_id,amount_due,amount_paid,month,year').in('payment_status',['unpaid','partial']).or(`year.lt.${year},and(year.eq.${year},month.lt.${month})`);
+  const prevDueMap={};
+  (pastUnpaid||[]).forEach(p=>{const owed=Number(p.amount_due||0)-Number(p.amount_paid||0);prevDueMap[p.tenant_id]=(prevDueMap[p.tenant_id]||0)+owed;});
+  activeTenants.forEach(t2=>{const manualDue=Number(t2.outstanding_due||0);if(manualDue>0)prevDueMap[t2.id]=(prevDueMap[t2.id]||0)+manualDue;});
   let rows=activeTenants.map(t2=>{
     const rec=paymentMap[t2.id]||null;
     const monthlyRent=Number(t2.monthly_rent||0);
     const amountPaid=rec?Number(rec.amount_paid):0;
     const status=rec?rec.payment_status:'unpaid';
-    const arrears=arrearsMap[t2.id]||0;
-    // Total due = this month's unpaid portion + arrears from past months
+    const prevDue=prevDueMap[t2.id]||0;
     const thisMonthOwed=status==='paid'?0:monthlyRent-amountPaid;
-    const totalDueAmount=thisMonthOwed+arrears;
-    return{tenant:t2,record:rec,status,amountPaid,monthlyRent,arrears,totalDueAmount,method:rec?rec.payment_method:'',paymentDate:rec?rec.payment_date:null};
+    const totalOwed=thisMonthOwed+prevDue;
+    return{tenant:t2,record:rec,status,amountPaid,monthlyRent,prevDue,thisMonthOwed,totalOwed,method:rec?rec.payment_method:'',paymentDate:rec?rec.payment_date:null};
   });
-
   if(statusFilter)rows=rows.filter(r=>r.status===statusFilter);
   const totalDue=rows.reduce((s,r)=>s+r.monthlyRent,0);
   const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
@@ -930,7 +1233,7 @@ activeTenants.forEach(t2=>{
   document.getElementById('r-collected').textContent=fmt(totalPaid);
   document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
   document.getElementById('r-unpaid-count').textContent=unpaidCount;
-  if(!rows.length){body.innerHTML='<tr><td colspan="9"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
+  if(!rows.length){body.innerHTML='<tr><td colspan="11"><div class="empty"><p>No active tenants found</p></div></td></tr>';return;}
   body.innerHTML=rows.map(r=>{
     const tid=r.tenant.id;
     const rid=r.record?r.record.id:'';
@@ -938,21 +1241,24 @@ activeTenants.forEach(t2=>{
     const bldLabel=r.tenant.apartments?.buildings?.name||'—';
     const statusClass=r.status==='paid'?'sp-paid':r.status==='partial'?'sp-partial':'sp-unpaid';
     const statusLabel=r.status==='paid'?'✓ Paid':r.status==='partial'?'~ Partial':'✗ Unpaid';
-    // Due cell: show total due, with arrears breakdown if any
-    let dueCell='—';
-    if(r.status!=='paid'||r.arrears>0){
-      const hasArrears=r.arrears>0;
-      dueCell=`<strong style="color:${r.totalDueAmount>0?'var(--danger)':'var(--muted)'}">${fmt(r.totalDueAmount)}</strong>`;
-      if(hasArrears)dueCell+=`<div style="font-size:11px;color:var(--danger);margin-top:2px">incl. ${fmt(r.arrears)} arrears</div>`;
-    }
+    const prevDueCell=r.prevDue>0?`<strong style="color:var(--danger)">${fmt(r.prevDue)}</strong>`:'<span style="color:var(--muted2)">—</span>';
+    const thisMonthCell=r.status==='paid'?'<span style="color:var(--success)">✓</span>':`<strong>${fmt(r.monthlyRent)}</strong>`;
+    const totalCell=r.totalOwed>0?`<strong style="color:var(--danger)">${fmt(r.totalOwed)}</strong>`:'<span style="color:var(--muted2)">—</span>';
     return `<tr id="rent-row-${tid}">
       <td><strong>${r.tenant.full_name}</strong><div style="font-size:11px;color:var(--muted)">${r.tenant.phone||''}</div></td>
       <td>${aptLabel}<div style="font-size:11px;color:var(--muted)">${bldLabel}</div></td>
       <td><strong>${fmt(r.monthlyRent)}</strong></td>
       <td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
-      <td id="rent-due-${tid}">${dueCell}</td>
+      <td>${prevDueCell}</td>
+      <td>${thisMonthCell}</td>
+      <td id="rent-due-${tid}">${totalCell}</td>
       <td style="text-align:center"><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span></td>
-      <td><div class="qa-row"><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button><button class="qa-btn qa-edit" onclick="openEditDue('${tid}',${r.tenant.outstanding_due||0},'${r.tenant.full_name}')">৳ Due</button></div></td>
+      <td><div class="qa-row">
+        <button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button>
+        <button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button>
+        <button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button>
+        <button class="qa-btn qa-edit" onclick="openEditDue('${tid}',${r.tenant.outstanding_due||0},'${r.tenant.full_name}')">৳ Due</button>
+      </div></td>
       <td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
       <td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
     </tr>`;
@@ -985,13 +1291,11 @@ async function saveFullRent(){
   showToast('Marked as paid ✓');closeModal('modal-rent-paid');loadRent();
 }
 async function quickRentUnpaid(tenantId,existingId,monthlyRent,month,year){
-  // If there's an existing record, reset it to unpaid (full audit log)
   if(existingId&&existingId!==''){
     const{error}=await sbClient.from('rent_payments').update({amount_paid:0,payment_status:'unpaid',payment_date:null,payment_method:null,marked_unpaid_at:new Date().toISOString(),marked_unpaid_by:currentUser.id}).eq('id',existingId);
     if(error){showToast('Error: '+error.message,'error');return;}
   }
-  showToast('Marked as unpaid');
-  loadRent();
+  showToast('Marked as unpaid');loadRent();
 }
 function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
   currentRentContext={tenantId,existingId,monthlyRent,month,year};
@@ -1001,23 +1305,6 @@ function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
   document.getElementById('rent-partial-notes').value='';
   document.getElementById('rent-partial-date').value=new Date().toISOString().slice(0,10);
   openModal('modal-rent-partial');
-}let currentDueTenantId=null;
-function openEditDue(tenantId, currentDue, name){
-  currentDueTenantId=tenantId;
-  document.getElementById('edit-due-title').textContent=`Outstanding Due — ${name}`;
-  document.getElementById('edit-due-amount').value=currentDue||0;
-  openModal('modal-edit-due');
-}
-async function saveEditDue(){
-  const amount=parseFloat(document.getElementById('edit-due-amount').value)||0;
-  const{error}=await sbClient.from('tenants').update({outstanding_due:amount}).eq('id',currentDueTenantId);
-  if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Due updated ✓');
-  closeModal('modal-edit-due');
-  // Update local cache
-  const t2=tenants.find(x=>x.id===currentDueTenantId);
-  if(t2)t2.outstanding_due=amount;
-  loadRent();
 }
 async function savePartialRent(){
   if(!currentRentContext)return;
@@ -1039,40 +1326,21 @@ async function savePartialRent(){
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast(status==='paid'?'Marked as paid ✓':'Partial payment saved');closeModal('modal-rent-partial');loadRent();
 }
-function updateRentRowUI(tenantId,status,amountPaid,method,date){
-  const pill=document.getElementById(`rent-status-pill-${tenantId}`);
-  const paidCell=document.getElementById(`rent-paid-${tenantId}`);
-  const dueCell=document.getElementById(`rent-due-${tenantId}`);
-  const methodCell=document.getElementById(`rent-method-${tenantId}`);
-  const dateCell=document.getElementById(`rent-date-${tenantId}`);
-  if(!pill)return;
-  const classMap={paid:'sp-paid',partial:'sp-partial',unpaid:'sp-unpaid'};
-  const labelMap={paid:'✓ Paid',partial:'~ Partial',unpaid:'✗ Unpaid'};
-  pill.className=`status-pill ${classMap[status]}`;pill.textContent=labelMap[status];
-  if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';
-  if(methodCell)methodCell.textContent=method||'—';
-  if(dateCell)dateCell.textContent=fmtDate(date);
-  // Update due cell: clear it if paid, otherwise keep showing (full reload will recalc arrears)
-  if(dueCell&&status==='paid')dueCell.innerHTML='—';
-  const row=document.getElementById(`rent-row-${tenantId}`);
-  if(row){row.querySelectorAll('.qa-btn').forEach(btn=>{btn.classList.remove('active');if((status==='paid'&&btn.classList.contains('qa-paid'))||(status==='partial'&&btn.classList.contains('qa-partial'))||(status==='unpaid'&&btn.classList.contains('qa-unpaid'))){btn.classList.add('active');}});}
-  refreshRentSummary();
+function openEditDue(tenantId,currentDue,name){
+  currentDueTenantId=tenantId;
+  document.getElementById('edit-due-title').textContent=`Previous Due — ${name}`;
+  document.getElementById('edit-due-amount').value=currentDue||0;
+  openModal('modal-edit-due');
 }
-function refreshRentSummary(){
-  let totalDue=0,totalPaid=0,unpaidCount=0;
-  document.querySelectorAll('[id^="rent-row-"]').forEach(row=>{
-    const dueTd=row.querySelector('td:nth-child(3) strong');
-    const paidTd=row.querySelector('[id^="rent-paid-"]');
-    const pill=row.querySelector('[id^="rent-status-pill-"]');
-    if(dueTd){const v=parseFloat(dueTd.textContent.replace(/[^\d.]/g,''))||0;totalDue+=v;}
-    if(paidTd&&paidTd.textContent!=='—'){const v=parseFloat(paidTd.textContent.replace(/[^\d.]/g,''))||0;totalPaid+=v;}
-    if(pill&&pill.classList.contains('sp-unpaid'))unpaidCount++;
-  });
-  document.getElementById('r-total-due').textContent=fmt(totalDue);
-  document.getElementById('r-collected').textContent=fmt(totalPaid);
-  document.getElementById('r-outstanding').textContent=fmt(totalDue-totalPaid);
-  document.getElementById('r-unpaid-count').textContent=unpaidCount;
+async function saveEditDue(){
+  const amount=parseFloat(document.getElementById('edit-due-amount').value)||0;
+  const{error}=await sbClient.from('tenants').update({outstanding_due:amount}).eq('id',currentDueTenantId);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Due updated ✓');closeModal('modal-edit-due');
+  const t2=tenants.find(x=>x.id===currentDueTenantId);if(t2)t2.outstanding_due=amount;
+  loadRent();
 }
+function refreshRentSummary(){}
 
 // ─── SALES ────────────────────────────────────────────────────
 async function loadSales(){
@@ -1097,7 +1365,7 @@ async function saveSale(){
 // ─── EXPENSES ─────────────────────────────────────────────────
 async function loadExpenses(){
   const building=document.getElementById('exp-building-filter').value;const category=document.getElementById('exp-category-filter').value;const month=document.getElementById('exp-month-filter').value;
-  let q=sbClient.from('construction_expenses').select('*, buildings(name), floors(floor_number)');
+  let q=sbClient.from('construction_expenses').select('*, buildings(name), floors(floor_number), contractors(name)');
   if(building)q=q.eq('building_id',building);if(category)q=q.eq('category',category);
   if(month){const[y,m]=month.split('-');q=q.gte('expense_date',`${y}-${m}-01`).lte('expense_date',`${y}-${m}-31`);}
   const{data}=await q.order('expense_date',{ascending:false});
@@ -1105,10 +1373,11 @@ async function loadExpenses(){
   document.getElementById('exp-total').textContent=fmt(expenses.reduce((s,e)=>s+Number(e.amount),0));
   const body=document.getElementById('expenses-body');
   if(!expenses.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No expenses yet</p></div></td></tr>';return;}
-  body.innerHTML=expenses.map(e=>`<tr><td>${fmtDate(e.expense_date)}</td><td>${e.buildings?.name||'—'}</td><td>${e.floors?'Floor '+e.floors.floor_number:'All'}</td><td><span class="badge badge-info">${e.category}</span></td><td>${e.description}</td><td>${e.vendor_name||'—'}</td><td><strong>${fmt(e.amount)}</strong></td><td>${e.payment_method||'—'}</td></tr>`).join('');
+  body.innerHTML=expenses.map(e=>`<tr><td>${fmtDate(e.expense_date)}</td><td>${e.buildings?.name||'—'}</td><td>${e.floors?'Floor '+e.floors.floor_number:'All'}</td><td><span class="badge badge-info">${e.category}</span></td><td>${esc(e.description)}</td><td>${e.contractors?.name||e.vendor_name||'—'}</td><td><strong>${fmt(e.amount)}</strong></td><td>${e.payment_method||'—'}</td></tr>`).join('');
 }
 async function saveExpense(){
-  const payload={building_id:document.getElementById('e-building').value,floor_id:document.getElementById('e-floor').value||null,category:document.getElementById('e-category').value,description:document.getElementById('e-desc').value,amount:parseFloat(document.getElementById('e-amount').value)||0,payment_method:document.getElementById('e-method').value,expense_date:document.getElementById('e-date').value,vendor_name:document.getElementById('e-vendor').value,receipt_number:document.getElementById('e-receipt').value,notes:document.getElementById('e-notes').value,recorded_by:currentUser.id};
+  const conId=document.getElementById('e-contractor').value||null;
+  const payload={building_id:document.getElementById('e-building').value,floor_id:document.getElementById('e-floor').value||null,category:document.getElementById('e-category').value,description:document.getElementById('e-desc').value,amount:parseFloat(document.getElementById('e-amount').value)||0,payment_method:document.getElementById('e-method').value,expense_date:document.getElementById('e-date').value,contractor_id:conId,vendor_name:conId?null:document.getElementById('e-vendor').value,receipt_number:document.getElementById('e-receipt').value,notes:document.getElementById('e-notes').value,recorded_by:currentUser.id};
   if(!payload.building_id||!payload.description||!payload.amount){showToast('Fill required fields','error');return;}
   const{error}=await sbClient.from('construction_expenses').insert(payload);
   if(error){showToast('Error: '+error.message,'error');return;}
@@ -1117,7 +1386,108 @@ async function saveExpense(){
   loadExpenses();
 }
 
-// ─── MATERIALS (new procurement workflow) ─────────────────────
+// ─── PETTY CASH / JOMA ────────────────────────────────────────
+async function loadPettyCash(){
+  const{data:days}=await sbClient.from('petty_cash').select('*').order('cash_date',{ascending:false}).limit(30);
+  const today=new Date().toISOString().slice(0,10);
+  const todayEntry=(days||[]).find(d=>d.cash_date===today);
+  document.getElementById('pc-joma-today').textContent=fmt(todayEntry?todayEntry.joma:0);
+  document.getElementById('pc-eeja').textContent=fmt(todayEntry?todayEntry.eeja_from_prev:0);
+  document.getElementById('pc-spent').textContent=fmt(todayEntry?todayEntry.total_spent:0);
+  document.getElementById('pc-balance').textContent=fmt(todayEntry?todayEntry.balance:0);
+  const list=document.getElementById('petty-days-list');
+  if(!(days||[]).length){list.innerHTML='<div class="empty"><p>No cash entries yet. Click "+ New Day Entry" to start.</p></div>';return;}
+  // Load expenses for each day
+  const dateList=(days||[]).map(d=>d.cash_date);
+  const{data:allExps}=await sbClient.from('petty_cash_expenses').select('*, contractors(name), buildings(name)').in('cash_date',dateList).order('created_at',{ascending:false});
+  const expByDate={};
+  (allExps||[]).forEach(e=>{if(!expByDate[e.cash_date])expByDate[e.cash_date]=[];expByDate[e.cash_date].push(e);});
+  list.innerHTML=(days||[]).map(d=>{
+    const exps=expByDate[d.cash_date]||[];
+    const pct=d.total_available>0?Math.min((d.total_spent/d.total_available)*100,100):0;
+    const isToday=d.cash_date===today;
+    return `<div class="petty-day-card">
+      <div class="petty-day-header">
+        <div>
+          <div class="petty-day-title">${fmtDate(d.cash_date)}${isToday?' <span style="font-size:11px;background:var(--gold2);color:#fff;padding:2px 8px;border-radius:10px;vertical-align:middle">Today</span>':''}</div>
+          ${d.notes?`<div style="font-size:12px;color:var(--muted);margin-top:3px">${esc(d.notes)}</div>`:''}
+        </div>
+        ${isToday?`<button class="btn btn-dark btn-sm" onclick="openAddJomaExpense('${d.id}','${d.cash_date}',${d.balance})">+ Expense</button>`:''}
+      </div>
+      <div class="petty-balance-row">
+        <div class="petty-bal-item"><div class="petty-bal-lbl">জমা Joma</div><div class="petty-bal-val gold">${fmt(d.joma)}</div></div>
+        <div class="petty-bal-item"><div class="petty-bal-lbl">ইজা Eeja</div><div class="petty-bal-val">${fmt(d.eeja_from_prev)}</div></div>
+        <div class="petty-bal-item"><div class="petty-bal-lbl">Total</div><div class="petty-bal-val">${fmt(d.total_available)}</div></div>
+        <div class="petty-bal-item"><div class="petty-bal-lbl">Spent</div><div class="petty-bal-val red">${fmt(d.total_spent)}</div></div>
+        <div class="petty-bal-item"><div class="petty-bal-lbl">Balance</div><div class="petty-bal-val ${d.balance>=0?'green':'red'}">${fmt(d.balance)}</div></div>
+      </div>
+      <div style="padding:0 20px 10px">
+        <div class="cash-progress"><div class="cash-progress-fill ${pct>90?'danger':pct>70?'warn':''}" style="width:${pct}%"></div></div>
+        <div style="font-size:11px;color:var(--muted2);margin-top:4px">${Math.round(pct)}% of cash spent</div>
+      </div>
+      ${exps.length?`<div class="petty-exp-list">${exps.map(e=>`
+        <div class="petty-exp-item">
+          <div>
+            <div style="font-weight:500">${esc(e.description)}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">${e.category||''}${e.contractors?.name?' · '+e.contractors.name:''}${e.buildings?.name?' · '+e.buildings.name:''}</div>
+          </div>
+          <strong style="color:var(--danger)">${fmt(e.amount)}</strong>
+        </div>`).join('')}</div>`:'<div style="padding:12px 20px;font-size:13px;color:var(--muted2)">No expenses recorded</div>'}
+    </div>`;
+  }).join('');
+}
+async function openNewJomaDay(){
+  // Get last day's balance for eeja
+  const{data:lastDay}=await sbClient.from('petty_cash').select('cash_date,balance').order('cash_date',{ascending:false}).limit(1).single().catch(()=>({data:null}));
+  const eeja=lastDay?.balance||0;
+  document.getElementById('joma-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('joma-amount').value='';
+  document.getElementById('joma-notes').value='';
+  document.getElementById('joma-eeja-info').innerHTML=eeja>0?
+    `<div style="background:var(--successbg);border:1px solid #b8dfc8;border-radius:8px;padding:10px 14px;font-size:13px;color:var(--success)">ইজা from yesterday: <strong>${fmt(eeja)}</strong> will be added automatically.</div>`
+    :'<div style="font-size:13px;color:var(--muted2)">No carryover from previous day.</div>';
+  openModal('modal-joma-day');
+}
+async function saveJomaDay(){
+  const date=document.getElementById('joma-date').value;
+  const joma=parseFloat(document.getElementById('joma-amount').value)||0;
+  if(!date){showToast('Select date','error');return;}
+  // Get eeja from previous day
+  const{data:prevDay}=await sbClient.from('petty_cash').select('cash_date,balance').lt('cash_date',date).order('cash_date',{ascending:false}).limit(1).single().catch(()=>({data:null}));
+  const eeja=prevDay?.balance||0;
+  const{error}=await sbClient.from('petty_cash').upsert({cash_date:date,joma,eeja_from_prev:eeja,total_spent:0,balance:joma+eeja,notes:document.getElementById('joma-notes').value,created_by:currentUser.id},{onConflict:'cash_date'});
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Day opened ✓ Total: '+fmt(joma+eeja));closeModal('modal-joma-day');loadPettyCash();
+}
+function openAddJomaExpense(dayId,date,balance){
+  currentJomaDayId=dayId;currentJomaDate=date;
+  document.getElementById('joma-exp-title').textContent=`Add Expense — ${fmtDate(date)}`;
+  document.getElementById('je-desc').value='';
+  document.getElementById('je-amount').value='';
+  document.getElementById('je-notes').value='';
+  document.getElementById('je-contractor').value='';
+  document.getElementById('je-building').value='';
+  document.getElementById('joma-balance-info').innerHTML=`Available balance: <strong style="color:var(--success)">${fmt(balance)}</strong>`;
+  openModal('modal-joma-expense');
+}
+async function saveJomaExpense(){
+  const desc=document.getElementById('je-desc').value.trim();
+  const amount=parseFloat(document.getElementById('je-amount').value)||0;
+  if(!desc){showToast('Enter description','error');return;}
+  if(!amount){showToast('Enter amount','error');return;}
+  // Insert expense
+  const{error}=await sbClient.from('petty_cash_expenses').insert({cash_date:currentJomaDate,petty_cash_id:currentJomaDayId,description:desc,amount,category:document.getElementById('je-category').value,contractor_id:document.getElementById('je-contractor').value||null,building_id:document.getElementById('je-building').value||null,notes:document.getElementById('je-notes').value,recorded_by:currentUser.id});
+  if(error){showToast('Error: '+error.message,'error');return;}
+  // Recalculate day totals
+  const{data:dayExps}=await sbClient.from('petty_cash_expenses').select('amount').eq('cash_date',currentJomaDate);
+  const totalSpent=(dayExps||[]).reduce((s,e)=>s+Number(e.amount),0);
+  const{data:day}=await sbClient.from('petty_cash').select('total_available').eq('id',currentJomaDayId).single();
+  const balance=(day?.total_available||0)-totalSpent;
+  await sbClient.from('petty_cash').update({total_spent:totalSpent,balance}).eq('id',currentJomaDayId);
+  showToast('Expense added ✓');closeModal('modal-joma-expense');loadPettyCash();
+}
+
+// ─── MATERIALS ────────────────────────────────────────────────
 const MAT_STEPS=[{key:'requested',label:'Requested',n:'1'},{key:'approved',label:'Approved',n:'2'},{key:'purchased',label:'Purchased',n:'3'}];
 function matStepIdx(s){return{requested:0,approved:1,purchased:2,rejected:-1}[s]??0;}
 function renderMatSteps(status){
@@ -1131,212 +1501,106 @@ function renderMatSteps(status){
   });
   return h+`</div>`;
 }
-
 async function loadMaterials(){
   const bld=document.getElementById('mat-building-filter')?.value||'';
   let q=sbClient.from('procurement_requests').select('*, buildings(name)').order('created_at',{ascending:false});
   if(bld)q=q.eq('building_id',bld);
   const{data,error}=await q;
-  if(error){
-    document.getElementById('mat-cards').innerHTML=`<div style="background:var(--warnbg);border:1px solid #f0d8a0;border-radius:12px;padding:24px;text-align:center"><div style="font-size:15px;margin-bottom:8px">⚠ Run the database migration first</div><div style="font-size:13px;color:var(--muted);margin-bottom:14px">The procurement_requests table doesn't exist yet.</div><button class="btn btn-dark btn-sm" onclick="showMatSQL()">Show Migration SQL</button></div>`;
-    return;
-  }
+  if(error){document.getElementById('mat-cards').innerHTML=`<div style="background:var(--warnbg);border:1px solid #f0d8a0;border-radius:12px;padding:24px;text-align:center"><div style="font-size:15px;margin-bottom:8px">⚠ Run database migration first</div></div>`;return;}
   procurements=data||[];renderMat();
 }
-
-function setMatFilter(f){
-  matFilter=f;
-  document.querySelectorAll('.proc-tab').forEach(t2=>t2.classList.toggle('active',t2.dataset.f===f));
-  renderMat();
-}
-
+function setMatFilter(f){matFilter=f;document.querySelectorAll('.proc-tab').forEach(t2=>t2.classList.toggle('active',t2.dataset.f===f));renderMat();}
 function renderMat(){
   const counts={all:procurements.length,requested:0,approved:0,purchased:0,flagged:0};
   procurements.forEach(p=>{if(counts[p.status]!==undefined)counts[p.status]++;if(p.is_flagged)counts.flagged++;});
   ['all','requested','approved','purchased','flagged'].forEach(k=>{const el=document.getElementById('fc-'+k);if(el)el.textContent=counts[k];});
   const cashOut=procurements.reduce((s,p)=>s+Number(p.cash_given||0),0);
-  document.getElementById('ms-pending').textContent=counts.requested;
-  document.getElementById('ms-approved').textContent=counts.approved;
-  document.getElementById('ms-cash').textContent=fmt(cashOut);
-  document.getElementById('ms-done').textContent=counts.purchased;
-  document.getElementById('ms-flags').textContent=counts.flagged;
+  document.getElementById('ms-pending').textContent=counts.requested;document.getElementById('ms-approved').textContent=counts.approved;document.getElementById('ms-cash').textContent=fmt(cashOut);document.getElementById('ms-done').textContent=counts.purchased;document.getElementById('ms-flags').textContent=counts.flagged;
   let list=procurements;
   if(matFilter==='flagged')list=list.filter(p=>p.is_flagged);
   else if(matFilter!=='all')list=list.filter(p=>p.status===matFilter);
   const c=document.getElementById('mat-cards');
-  if(!list.length){c.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg><p>No purchase requests</p></div>`;return;}
+  if(!list.length){c.innerHTML=`<div class="empty"><p>No purchase requests</p></div>`;return;}
   c.innerHTML=list.map(renderMatCard).join('');
 }
-
 function renderMatCard(p){
   const cash=Number(p.cash_given||0),actual=Number(p.actual_cost||0),est=Number(p.estimated_price||0);
-  const isOver=actual>cash&&cash>0;
-  const pct=cash>0?Math.min((actual/cash)*100,100):0;
+  const isOver=actual>cash&&cash>0;const pct=cash>0?Math.min((actual/cash)*100,100):0;
   let actionBtn='';
   if(p.status==='requested')actionBtn=`<button class="btn btn-dark btn-sm" onclick="openMatApprove('${p.id}')">✓ Approve</button>`;
   else if(p.status==='approved')actionBtn=`<button class="btn btn-warn btn-sm" onclick="openMatPurchase('${p.id}')">🛒 Record Purchase</button>`;
   else if(p.status==='purchased')actionBtn=`<span class="badge badge-success">✓ Complete</span>`;
   const dupHtml=p.is_flagged?`<div class="dup-warn" style="margin:0 0 10px"><span style="font-size:14px;flex-shrink:0">⚠</span><div><strong>Flag:</strong> ${esc(p.flag_reason||'Marked as flagged')}</div></div>`:'';
-  const cashBarHtml=cash>0?`<div class="cash-bar-wrap"><div class="cash-bar-labels"><span>Cash given: ${fmt(cash)}</span><span>${actual>0?'Actual: '+fmt(actual):'Purchase pending'}</span></div><div class="cash-bar"><div class="cash-bar-fill ${isOver?'over':''}" style="width:${pct}%"></div></div>${isOver?`<div style="font-size:11px;color:var(--danger);margin-top:3px">⚠ Over by ${fmt(actual-cash)} — needs explanation</div>`:''}${!isOver&&actual>0&&cash>actual?`<div style="font-size:11px;color:var(--success);margin-top:3px">Change to return: ${fmt(cash-actual)}</div>`:''}</div>`:' ';
+  const cashBarHtml=cash>0?`<div class="cash-bar-wrap"><div class="cash-bar-labels"><span>Cash given: ${fmt(cash)}</span><span>${actual>0?'Actual: '+fmt(actual):'Purchase pending'}</span></div><div class="cash-bar"><div class="cash-bar-fill ${isOver?'over':''}" style="width:${pct}%"></div></div>${isOver?`<div style="font-size:11px;color:var(--danger);margin-top:3px">⚠ Over by ${fmt(actual-cash)}</div>`:''}${!isOver&&actual>0&&cash>actual?`<div style="font-size:11px;color:var(--success);margin-top:3px">Change to return: ${fmt(cash-actual)}</div>`:''}</div>`:' ';
   const auditItems=[];
   if(p.created_at)auditItems.push({cls:'step1',text:`Requested by <strong>${esc(p.requested_by_name||'Staff')}</strong>`,time:fmtDate(p.created_at)});
-  if(p.approved_at)auditItems.push({cls:'step2',text:`Approved by <strong>${esc(p.approved_by_name||'—')}</strong> — ${fmt(p.cash_given)} given to <strong>${esc(p.given_to||'—')}</strong>`,time:fmtDate(p.approved_at)});
-  if(p.purchase_date)auditItems.push({cls:'step3',text:`Purchased by <strong>${esc(p.purchased_by_name||'—')}</strong> — actual ${fmt(p.actual_cost)}${p.change_returned>0?', change ৳'+Number(p.change_returned).toLocaleString():''}`,time:fmtDate(p.purchase_date)});
-  if(p.is_flagged&&p.flag_reason)auditItems.push({cls:'flag',text:`<strong>Flag:</strong> ${esc(p.flag_reason)}`,time:''});
+  if(p.approved_at)auditItems.push({cls:'step2',text:`Approved — ${fmt(p.cash_given)} given to <strong>${esc(p.given_to||'—')}</strong>`,time:fmtDate(p.approved_at)});
+  if(p.purchase_date)auditItems.push({cls:'step3',text:`Purchased — actual ${fmt(p.actual_cost)}`,time:fmtDate(p.purchase_date)});
   const auditHtml=auditItems.length?`<div class="audit-log">${auditItems.map(a=>`<div class="audit-item"><div class="audit-dot ${a.cls}"></div><div><div class="audit-text">${a.text}</div><div class="audit-time">${a.time}</div></div></div>`).join('')}</div>`:'';
-  return `<div class="proc-card"><div class="proc-ch"><div style="flex:1;min-width:0"><div class="proc-name">${esc(p.item_description||'—')}</div><div class="proc-meta">${esc(p.supplier_name||'—')} · ${p.buildings?.name||'—'}${p.location_note?' · '+esc(p.location_note):''}</div></div><div>${renderMatSteps(p.status)}</div></div><div class="proc-cb">${dupHtml}<div class="proc-amounts"><div class="proc-ab"><div class="proc-al">Estimated</div><div class="proc-av">${fmt(est)}</div></div>${cash>0?`<div class="proc-ab"><div class="proc-al">Cash Given</div><div class="proc-av green">${fmt(cash)}</div></div>`:' '}${actual>0?`<div class="proc-ab"><div class="proc-al">Actual Cost</div><div class="proc-av ${isOver?'red':''}">${fmt(actual)}</div></div>`:' '}${p.qty_requested?`<div class="proc-ab"><div class="proc-al">Qty</div><div class="proc-av" style="font-size:14px">${p.qty_requested} ${p.unit||''}</div></div>`:' '}</div>${cashBarHtml}${p.receipt_note?`<div style="font-size:12px;color:var(--muted);margin-top:6px;padding:8px 10px;background:var(--surface2);border-radius:6px;border-left:2px solid var(--gold2)">🧾 ${esc(p.receipt_note)}</div>`:''}${auditHtml}</div><div class="proc-cf"><div style="font-size:12px;color:var(--muted)">${fmtDate(p.created_at)}</div><div style="display:flex;gap:8px;align-items:center">${actionBtn}</div></div></div>`;
+  return `<div class="proc-card"><div class="proc-ch"><div style="flex:1;min-width:0"><div class="proc-name">${esc(p.item_description||'—')}</div><div class="proc-meta">${esc(p.supplier_name||'—')} · ${p.buildings?.name||'—'}${p.location_note?' · '+esc(p.location_note):''}</div></div><div>${renderMatSteps(p.status)}</div></div><div class="proc-cb">${dupHtml}<div class="proc-amounts"><div class="proc-ab"><div class="proc-al">Estimated</div><div class="proc-av">${fmt(est)}</div></div>${cash>0?`<div class="proc-ab"><div class="proc-al">Cash Given</div><div class="proc-av green">${fmt(cash)}</div></div>`:' '}${actual>0?`<div class="proc-ab"><div class="proc-al">Actual</div><div class="proc-av ${isOver?'red':''}">${fmt(actual)}</div></div>`:' '}${p.qty_requested?`<div class="proc-ab"><div class="proc-al">Qty</div><div class="proc-av" style="font-size:14px">${p.qty_requested} ${p.unit||''}</div></div>`:' '}</div>${cashBarHtml}${auditHtml}</div><div class="proc-cf"><div style="font-size:12px;color:var(--muted)">${fmtDate(p.created_at)}</div><div style="display:flex;gap:8px;align-items:center">${actionBtn}</div></div></div>`;
 }
-
 async function matDupCheck(){
-  const bld=document.getElementById('req-bld').value;
-  const item=(document.getElementById('req-item').value||'').toLowerCase().trim();
-  const sup=(document.getElementById('req-sup').value||'').toLowerCase().trim();
+  const bld=document.getElementById('req-bld').value;const item=(document.getElementById('req-item').value||'').toLowerCase().trim();const sup=(document.getElementById('req-sup').value||'').toLowerCase().trim();
   const el=document.getElementById('req-dup');
   if(!bld||item.length<4||sup.length<2){el.style.display='none';return;}
   const match=procurements.find(p=>p.building_id===bld&&!['purchased','rejected'].includes(p.status)&&(p.item_description||'').toLowerCase().includes(item.slice(0,6))&&(p.supplier_name||'').toLowerCase().includes(sup.slice(0,4)));
-  if(match){document.getElementById('req-dup-text').innerHTML=`<strong>Possible duplicate:</strong> "${esc(match.item_description)}" from <em>${esc(match.supplier_name)}</em> is currently <strong>${match.status}</strong>. Is this the same item?`;el.style.display='flex';}
+  if(match){document.getElementById('req-dup-text').innerHTML=`<strong>Possible duplicate:</strong> "${esc(match.item_description)}" is currently <strong>${match.status}</strong>`;el.style.display='flex';}
   else{el.style.display='none';}
 }
-
 function openMatRequest(){
-  const sel=document.getElementById('req-bld');
-  const first=sel.children[0];sel.innerHTML='';sel.appendChild(first);
+  const sel=document.getElementById('req-bld');const first=sel.children[0];sel.innerHTML='';sel.appendChild(first);
   buildings.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=b.name;sel.appendChild(o);});
   document.getElementById('req-dup').style.display='none';
   ['req-item','req-sup','req-sup-ph','req-qty','req-unit','req-price','req-loc','req-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   openModal('modal-mat-req');
 }
-
 async function submitMatRequest(){
-  const bld=document.getElementById('req-bld').value;
-  const item=document.getElementById('req-item').value.trim();
-  const sup=document.getElementById('req-sup').value.trim();
-  const price=parseFloat(document.getElementById('req-price').value)||0;
-  if(!bld){showToast('Select a building','error');return;}
-  if(!item){showToast('Item description required','error');return;}
-  if(!sup){showToast('Supplier name required','error');return;}
-  if(!price){showToast('Enter estimated price','error');return;}
+  const bld=document.getElementById('req-bld').value;const item=document.getElementById('req-item').value.trim();const sup=document.getElementById('req-sup').value.trim();const price=parseFloat(document.getElementById('req-price').value)||0;
+  if(!bld){showToast('Select a building','error');return;}if(!item){showToast('Item description required','error');return;}if(!sup){showToast('Supplier name required','error');return;}if(!price){showToast('Enter estimated price','error');return;}
   const isDup=procurements.some(p=>p.building_id===bld&&!['purchased','rejected'].includes(p.status)&&(p.item_description||'').toLowerCase().includes(item.toLowerCase().slice(0,6))&&(p.supplier_name||'').toLowerCase()===sup.toLowerCase());
-  const{error}=await sbClient.from('procurement_requests').insert({building_id:bld,item_category:document.getElementById('req-cat').value,item_description:item,supplier_name:sup,supplier_phone:document.getElementById('req-sup-ph').value,qty_requested:parseFloat(document.getElementById('req-qty').value)||null,unit:document.getElementById('req-unit').value,estimated_price:price,location_note:document.getElementById('req-loc').value,notes:document.getElementById('req-notes').value,status:'requested',is_flagged:isDup,flag_reason:isDup?'Similar item from same supplier already active for this building.':null,requested_by:currentUser.id,requested_by_name:userProfile?.full_name||currentUser.email});
+  const{error}=await sbClient.from('procurement_requests').insert({building_id:bld,item_category:document.getElementById('req-cat').value,item_description:item,supplier_name:sup,supplier_phone:document.getElementById('req-sup-ph').value,qty_requested:parseFloat(document.getElementById('req-qty').value)||null,unit:document.getElementById('req-unit').value,estimated_price:price,location_note:document.getElementById('req-loc').value,notes:document.getElementById('req-notes').value,status:'requested',is_flagged:isDup,flag_reason:isDup?'Similar item from same supplier already active.':null,requested_by:currentUser.id,requested_by_name:userProfile?.full_name||currentUser.email});
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast(isDup?'⚠ Submitted — duplicate flag raised':'Request submitted ✓');
-  closeModal('modal-mat-req');loadMaterials();
+  showToast(isDup?'⚠ Submitted — duplicate flag raised':'Request submitted ✓');closeModal('modal-mat-req');loadMaterials();
 }
-
 function openMatApprove(id){
-  currentMatId=id;
-  const p=procurements.find(x=>x.id===id);if(!p)return;
+  currentMatId=id;const p=procurements.find(x=>x.id===id);if(!p)return;
   document.getElementById('approve-title').textContent='Approve — '+p.item_description;
-  document.getElementById('approve-summary').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Item</div><strong>${esc(p.item_description)}</strong></div><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Supplier</div><strong>${esc(p.supplier_name)}</strong></div><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Estimated</div><strong style="color:var(--gold)">${fmt(p.estimated_price)}</strong></div><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Requested By</div><strong>${esc(p.requested_by_name||'—')}</strong></div>${p.notes?`<div style="grid-column:1/-1"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Notes</div>${esc(p.notes)}</div>`:''}</div>`;
-  document.getElementById('approve-cash').value=p.estimated_price||'';
-  document.getElementById('approve-to').value='';
-  document.getElementById('approve-notes').value='';
+  document.getElementById('approve-summary').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Item</div><strong>${esc(p.item_description)}</strong></div><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Supplier</div><strong>${esc(p.supplier_name)}</strong></div><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Estimated</div><strong style="color:var(--gold)">${fmt(p.estimated_price)}</strong></div></div>`;
+  document.getElementById('approve-cash').value=p.estimated_price||'';document.getElementById('approve-to').value='';document.getElementById('approve-notes').value='';
   openModal('modal-mat-approve');
 }
-
 async function saveMatApproval(){
-  const cash=parseFloat(document.getElementById('approve-cash').value)||0;
-  const to=document.getElementById('approve-to').value.trim();
-  if(!cash){showToast('Enter cash amount','error');return;}
-  if(!to){showToast('Enter name of person receiving cash','error');return;}
+  const cash=parseFloat(document.getElementById('approve-cash').value)||0;const to=document.getElementById('approve-to').value.trim();
+  if(!cash){showToast('Enter cash amount','error');return;}if(!to){showToast('Enter receiver name','error');return;}
   const{error}=await sbClient.from('procurement_requests').update({status:'approved',cash_given:cash,given_to:to,approved_by:currentUser.id,approved_by_name:userProfile?.full_name||currentUser.email,approved_at:new Date().toISOString(),approval_notes:document.getElementById('approve-notes').value}).eq('id',currentMatId);
   if(error){showToast('Error: '+error.message,'error');return;}
   showToast(`Approved. ${fmt(cash)} given to ${to} ✓`);closeModal('modal-mat-approve');loadMaterials();
 }
-
 async function rejectMatRequest(){
   if(!currentMatId||!confirm('Reject this request?'))return;
   await sbClient.from('procurement_requests').update({status:'rejected',rejected_by:currentUser.id,rejected_by_name:userProfile?.full_name||currentUser.email,rejected_at:new Date().toISOString()}).eq('id',currentMatId);
   showToast('Request rejected');closeModal('modal-mat-approve');loadMaterials();
 }
-
 function openMatPurchase(id){
-  currentMatId=id;
-  const p=procurements.find(x=>x.id===id);if(!p)return;
+  currentMatId=id;const p=procurements.find(x=>x.id===id);if(!p)return;
   document.getElementById('purchase-title').textContent='Record Purchase — '+p.item_description;
-  document.getElementById('purchase-cash-info').innerHTML=`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">Cash in hand</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--success)">${fmt(p.cash_given)}</div></div><div style="font-size:12px;color:var(--muted);text-align:right">Given to<br><strong style="color:var(--text)">${esc(p.given_to||'—')}</strong></div></div>`;
-  document.getElementById('purchase-amt').value=p.estimated_price||'';
-  document.getElementById('purchase-date').value=new Date().toISOString().slice(0,10);
-  document.getElementById('purchase-qty').value=p.qty_requested||'';
-  document.getElementById('purchase-change').value='0';
-  document.getElementById('purchase-receipt').value='';
-  document.getElementById('purchase-notes').value='';
+  document.getElementById('purchase-cash-info').innerHTML=`<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:2px">Cash in hand</div><div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--success)">${fmt(p.cash_given)}</div></div><div style="font-size:12px;color:var(--muted);text-align:right">Given to<br><strong style="color:var(--text)">${esc(p.given_to||'—')}</strong></div></div>`;
+  document.getElementById('purchase-amt').value=p.estimated_price||'';document.getElementById('purchase-date').value=new Date().toISOString().slice(0,10);document.getElementById('purchase-qty').value=p.qty_requested||'';document.getElementById('purchase-change').value='0';document.getElementById('purchase-receipt').value='';document.getElementById('purchase-notes').value='';
   openModal('modal-mat-purchase');
 }
-
 async function saveMatPurchase(){
-  const amt=parseFloat(document.getElementById('purchase-amt').value)||0;
-  const date=document.getElementById('purchase-date').value;
-  if(!amt){showToast('Enter amount paid','error');return;}
-  if(!date){showToast('Enter purchase date','error');return;}
-  const p=procurements.find(x=>x.id===currentMatId);
-  const cash=Number(p?.cash_given||0);
-  const isOver=amt>cash&&cash>0;
-  const{error}=await sbClient.from('procurement_requests').update({status:'purchased',actual_cost:amt,purchase_date:date,qty_purchased:parseFloat(document.getElementById('purchase-qty').value)||null,change_returned:parseFloat(document.getElementById('purchase-change').value)||0,receipt_note:document.getElementById('purchase-receipt').value||null,purchase_notes:document.getElementById('purchase-notes').value,purchased_by:currentUser.id,purchased_by_name:userProfile?.full_name||currentUser.email,is_flagged:isOver?true:(p?.is_flagged||false),flag_reason:isOver?`Actual cost ${fmt(amt)} exceeds cash given ${fmt(cash)} — difference: ${fmt(amt-cash)}${p?.flag_reason?' | '+p.flag_reason:''}`:p?.flag_reason}).eq('id',currentMatId);
+  const amt=parseFloat(document.getElementById('purchase-amt').value)||0;const date=document.getElementById('purchase-date').value;
+  if(!amt){showToast('Enter amount paid','error');return;}if(!date){showToast('Enter purchase date','error');return;}
+  const p=procurements.find(x=>x.id===currentMatId);const cash=Number(p?.cash_given||0);const isOver=amt>cash&&cash>0;
+  const{error}=await sbClient.from('procurement_requests').update({status:'purchased',actual_cost:amt,purchase_date:date,qty_purchased:parseFloat(document.getElementById('purchase-qty').value)||null,change_returned:parseFloat(document.getElementById('purchase-change').value)||0,receipt_note:document.getElementById('purchase-receipt').value||null,purchase_notes:document.getElementById('purchase-notes').value,purchased_by:currentUser.id,purchased_by_name:userProfile?.full_name||currentUser.email,is_flagged:isOver?true:(p?.is_flagged||false),flag_reason:isOver?`Actual ${fmt(amt)} exceeds cash ${fmt(cash)}`:p?.flag_reason}).eq('id',currentMatId);
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast(isOver?`⚠ Recorded — over by ${fmt(amt-cash)}`:'Purchase recorded ✓');closeModal('modal-mat-purchase');loadMaterials();
-}
-
-function showMatSQL(){
-  const sql=`CREATE TABLE IF NOT EXISTS procurement_requests (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  building_id UUID REFERENCES buildings(id),
-  item_category TEXT,
-  item_description TEXT NOT NULL,
-  supplier_name TEXT NOT NULL,
-  supplier_phone TEXT,
-  qty_requested NUMERIC,
-  qty_purchased NUMERIC,
-  unit TEXT,
-  estimated_price NUMERIC DEFAULT 0,
-  cash_given NUMERIC DEFAULT 0,
-  actual_cost NUMERIC DEFAULT 0,
-  change_returned NUMERIC DEFAULT 0,
-  status TEXT DEFAULT 'requested'
-    CHECK (status IN ('requested','approved','purchased','rejected')),
-  is_flagged BOOLEAN DEFAULT FALSE,
-  flag_reason TEXT,
-  location_note TEXT,
-  receipt_note TEXT,
-  notes TEXT,
-  approval_notes TEXT,
-  purchase_notes TEXT,
-  given_to TEXT,
-  requested_by UUID,
-  requested_by_name TEXT,
-  approved_by UUID,
-  approved_by_name TEXT,
-  purchased_by UUID,
-  purchased_by_name TEXT,
-  rejected_by UUID,
-  rejected_by_name TEXT,
-  approved_at TIMESTAMPTZ,
-  purchase_date DATE,
-  rejected_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-ALTER TABLE procurement_requests ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "auth_users_all" ON procurement_requests
-  FOR ALL USING (auth.uid() IS NOT NULL);
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER LANGUAGE plpgsql AS
-$$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$;
-CREATE TRIGGER trg_proc_updated
-  BEFORE UPDATE ON procurement_requests
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();`;
-  const div=document.createElement('div');
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px';
-  div.innerHTML=`<div style="background:var(--surface);border-radius:12px;padding:24px;max-width:680px;width:100%;max-height:90vh;overflow-y:auto"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 style="font-family:'DM Serif Display',serif;font-size:18px">Migration SQL</h3><button onclick="this.closest('div[style*=fixed]').remove()" style="background:var(--surface3);border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px">✕</button></div><p style="font-size:13px;color:var(--muted);margin-bottom:12px">Supabase → SQL Editor → New Query → paste → Run</p><pre style="background:var(--text);color:#c8e6c9;padding:16px;border-radius:8px;font-size:12px;overflow-x:auto;white-space:pre;font-family:monospace;line-height:1.5;max-height:360px;overflow-y:auto">${sql}</pre><button onclick="navigator.clipboard.writeText(this.dataset.sql);showToast('Copied!')" data-sql="${sql.replace(/"/g,'&quot;')}" class="btn btn-dark" style="margin-top:14px;width:100%">Copy SQL</button></div>`;
-  document.body.appendChild(div);
+  showToast(isOver?`⚠ Over by ${fmt(amt-cash)}`:'Purchase recorded ✓');closeModal('modal-mat-purchase');loadMaterials();
 }
 
 // ─── EMPLOYEES ────────────────────────────────────────────────
 async function loadEmployees(typeFilter='all'){
-  let q=sbClient.from('employees').select('*, buildings(name)');
-  if(typeFilter!=='all')q=q.eq('type',typeFilter);
-  const{data}=await q.order('created_at',{ascending:false});
-  employees=data||[];renderEmployees(employees);
+  let q=sbClient.from('employees').select('*, buildings(name)');if(typeFilter!=='all')q=q.eq('type',typeFilter);
+  const{data}=await q.order('created_at',{ascending:false});employees=data||[];renderEmployees(employees);
 }
 function renderEmployees(list){
   const body=document.getElementById('employees-body');
@@ -1344,35 +1608,25 @@ function renderEmployees(list){
   body.innerHTML=list.map(e=>`<tr><td><strong>${e.full_name}</strong></td><td><span class="badge badge-info">${e.type}</span></td><td>${e.buildings?.name||'All'}</td><td>${fmt(e.monthly_salary)}</td><td>${e.phone||'—'}</td><td>${statusBadge(e.is_active?'active':'inactive')}</td></tr>`).join('');
 }
 function filterEmployees(type){
-  document.querySelectorAll('.tab').forEach((t2,i)=>{const types=['all','staff','guard','worker'];t2.classList.toggle('active',types[i]===type);});
-  loadEmployees(type);
+  document.querySelectorAll('.tab').forEach((t2,i)=>{const types=['all','staff','guard','worker'];t2.classList.toggle('active',types[i]===type);});loadEmployees(type);
 }
 async function saveEmployee(){
   const payload={full_name:document.getElementById('em-name').value,type:document.getElementById('em-type').value,phone:document.getElementById('em-phone').value,nid:document.getElementById('em-nid').value,monthly_salary:parseFloat(document.getElementById('em-salary').value)||0,building_id:document.getElementById('em-building').value||null,join_date:document.getElementById('em-join').value||null,notes:document.getElementById('em-notes').value};
   if(!payload.full_name){showToast('Name required','error');return;}
-  const{error}=await sbClient.from('employees').insert(payload);
-  if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Employee saved!');closeModal('modal-employee');
-  ['em-name','em-phone','em-nid','em-salary','em-join','em-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  loadEmployees();
+  const{error}=await sbClient.from('employees').insert(payload);if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Employee saved!');closeModal('modal-employee');['em-name','em-phone','em-nid','em-salary','em-join','em-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});loadEmployees();
 }
 
 // ─── SALARY ───────────────────────────────────────────────────
 async function loadSalary(){
   if(employees.length===0)await loadEmployees();
-  const month=parseInt(document.getElementById('sal-month-filter').value);
-  const year=parseInt(document.getElementById('sal-year-filter').value);
-  const typeFilter=document.getElementById('sal-type-filter').value;
-  const body=document.getElementById('salary-body');
-  body.innerHTML='<tr class="loading-row"><td colspan="7">Loading…</td></tr>';
-  let activeEmployees=employees.filter(e=>e.is_active!==false);
-  if(typeFilter)activeEmployees=activeEmployees.filter(e=>e.type===typeFilter);
+  const month=parseInt(document.getElementById('sal-month-filter').value);const year=parseInt(document.getElementById('sal-year-filter').value);const typeFilter=document.getElementById('sal-type-filter').value;
+  const body=document.getElementById('salary-body');body.innerHTML='<tr class="loading-row"><td colspan="8">Loading…</td></tr>';
+  let activeEmployees=employees.filter(e=>e.is_active!==false);if(typeFilter)activeEmployees=activeEmployees.filter(e=>e.type===typeFilter);
   const{data:existing}=await sbClient.from('salary_payments').select('*').eq('month',month).eq('year',year);
   const salMap={};(existing||[]).forEach(p=>{salMap[p.employee_id]=p;});
   const rows=activeEmployees.map(e=>{const rec=salMap[e.id]||null;return{employee:e,record:rec,status:rec?(rec.amount_paid>=rec.amount_due?'paid':rec.amount_paid>0?'partial':'unpaid'):'unpaid',amountPaid:rec?Number(rec.amount_paid):0,fixedSalary:Number(e.monthly_salary||0),method:rec?rec.payment_method:'',paymentDate:rec?rec.payment_date:null};});
-  const totalDue=rows.reduce((s,r)=>s+r.fixedSalary,0);
-  const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);
-  const unpaidCount=rows.filter(r=>r.status==='unpaid').length;
+  const totalDue=rows.reduce((s,r)=>s+r.fixedSalary,0);const totalPaid=rows.reduce((s,r)=>s+r.amountPaid,0);const unpaidCount=rows.filter(r=>r.status==='unpaid').length;
   document.getElementById('sal-total-due').textContent=fmt(totalDue);document.getElementById('sal-paid').textContent=fmt(totalPaid);document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);document.getElementById('sal-unpaid-count').textContent=unpaidCount;
   if(!rows.length){body.innerHTML='<tr><td colspan="8"><div class="empty"><p>No active employees found</p></div></td></tr>';return;}
   body.innerHTML=rows.map(r=>{
@@ -1388,81 +1642,47 @@ async function quickSalaryPaid(empId,existingId,fixedSalary,month,year){
   if(existingId){({error}=await sbClient.from('salary_payments').update({amount_paid:fixedSalary,amount_due:fixedSalary,payment_date:today,payment_method:'cash'}).eq('id',existingId));}
   else{({error}=await sbClient.from('salary_payments').insert({employee_id:empId,month,year,amount_due:fixedSalary,amount_paid:fixedSalary,payment_method:'cash',payment_date:today,paid_by:currentUser.id}));}
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Salary marked as paid ✓');updateSalaryRowUI(empId,'paid',fixedSalary,'cash',today,month,year);
+  showToast('Salary marked as paid ✓');loadSalary();
 }
 async function quickSalaryUnpaid(empId,existingId,month,year){
   if(existingId){const{error}=await sbClient.from('salary_payments').update({amount_paid:0,payment_date:null}).eq('id',existingId);if(error){showToast('Error: '+error.message,'error');return;}}
-  showToast('Salary marked as unpaid');updateSalaryRowUI(empId,'unpaid',0,'',null,month,year);
+  showToast('Salary marked as unpaid');loadSalary();
 }
 function openCustomSalary(empId,existingId,fixedSalary,month,year,name){
   currentSalaryContext={empId,existingId,fixedSalary,month,year};
   document.getElementById('sal-custom-title').textContent=`Custom Payment — ${name}`;
-  document.getElementById('sal-custom-amount').value=fixedSalary||'';
-  document.getElementById('sal-custom-notes').value='';
-  document.getElementById('sal-custom-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('sal-custom-amount').value=fixedSalary||'';document.getElementById('sal-custom-notes').value='';document.getElementById('sal-custom-date').value=new Date().toISOString().slice(0,10);
   openModal('modal-sal-custom');
 }
 async function saveCustomSalary(){
   if(!currentSalaryContext)return;
   const{empId,existingId,fixedSalary,month,year}=currentSalaryContext;
-  const paid=parseFloat(document.getElementById('sal-custom-amount').value)||0;
-  if(!paid){showToast('Enter amount','error');return;}
-  const method=document.getElementById('sal-custom-method').value;
-  const date=document.getElementById('sal-custom-date').value;
-  const notes=document.getElementById('sal-custom-notes').value;
-  const status=paid>=fixedSalary?'paid':'partial';
+  const paid=parseFloat(document.getElementById('sal-custom-amount').value)||0;if(!paid){showToast('Enter amount','error');return;}
+  const method=document.getElementById('sal-custom-method').value;const date=document.getElementById('sal-custom-date').value;const notes=document.getElementById('sal-custom-notes').value;const status=paid>=fixedSalary?'paid':'partial';
   let error;
   if(existingId){({error}=await sbClient.from('salary_payments').update({amount_paid:paid,amount_due:fixedSalary,payment_method:method,payment_date:date||null,notes}).eq('id',existingId));}
   else{({error}=await sbClient.from('salary_payments').insert({employee_id:empId,month,year,amount_due:fixedSalary,amount_paid:paid,payment_method:method,payment_date:date||null,notes,paid_by:currentUser.id}));}
   if(error){showToast('Error: '+error.message,'error');return;}
-  showToast('Payment saved ✓');closeModal('modal-sal-custom');updateSalaryRowUI(empId,status,paid,method,date,month,year);
-}
-function updateSalaryRowUI(empId,status,amountPaid,method,date,month,year){
-  const pill=document.getElementById(`sal-status-pill-${empId}`);const paidCell=document.getElementById(`sal-paid-${empId}`);const methodCell=document.getElementById(`sal-method-${empId}`);const dateCell=document.getElementById(`sal-date-${empId}`);const row=document.getElementById(`sal-row-${empId}`);
-  if(!pill||!row)return;
-  const classMap={paid:'sp-paid',partial:'sp-partial',unpaid:'sp-unpaid'};const labelMap={paid:'✓ Paid',partial:'~ Partial',unpaid:'✗ Unpaid'};
-  pill.className=`status-pill ${classMap[status]}`;pill.textContent=labelMap[status];
-  if(paidCell)paidCell.textContent=amountPaid>0?fmt(amountPaid):'—';if(methodCell)methodCell.textContent=method||'—';if(dateCell)dateCell.textContent=fmtDate(date);
-  const fixedSalaryCell=row.querySelector('td:nth-child(3) strong');const fixedSalary=fixedSalaryCell?parseFloat(fixedSalaryCell.textContent.replace(/[^\d.]/g,''))||0:0;const isPaid=status==='paid';
-  const qaRow=row.querySelector('.qa-row');
-  if(qaRow){qaRow.innerHTML='';
-    if(!isPaid){const paidBtn=document.createElement('button');paidBtn.className='qa-btn qa-paid';paidBtn.title='Mark paid at fixed salary';paidBtn.textContent='✓ Mark Paid';paidBtn.onclick=()=>quickSalaryPaid(empId,'',fixedSalary,month,year);qaRow.appendChild(paidBtn);}
-    const customBtn=document.createElement('button');customBtn.className='qa-btn qa-edit';customBtn.title='Enter custom amount';customBtn.textContent='✏️ Custom';const emp=employees.find(e=>e.id===empId);customBtn.onclick=()=>openCustomSalary(empId,'',fixedSalary,month,year,emp?emp.full_name:'Employee');qaRow.appendChild(customBtn);
-    if(isPaid){const undoBtn=document.createElement('button');undoBtn.className='qa-btn qa-unpaid';undoBtn.title='Undo payment';undoBtn.textContent='↩ Undo';undoBtn.onclick=()=>quickSalaryUnpaid(empId,'',month,year);qaRow.appendChild(undoBtn);}}
-  refreshSalarySummary();
-}
-function refreshSalarySummary(){
-  let totalDue=0,totalPaid=0,unpaidCount=0;
-  document.querySelectorAll('[id^="sal-row-"]').forEach(row=>{const dueTd=row.querySelector('td:nth-child(3) strong');const paidTd=row.querySelector('[id^="sal-paid-"]');const pill=row.querySelector('[id^="sal-status-pill-"]');if(dueTd){const v=parseFloat(dueTd.textContent.replace(/[^\d.]/g,''))||0;totalDue+=v;}if(paidTd&&paidTd.textContent!=='—'){const v=parseFloat(paidTd.textContent.replace(/[^\d.]/g,''))||0;totalPaid+=v;}if(pill&&pill.classList.contains('sp-unpaid'))unpaidCount++;});
-  document.getElementById('sal-total-due').textContent=fmt(totalDue);document.getElementById('sal-paid').textContent=fmt(totalPaid);document.getElementById('sal-unpaid').textContent=fmt(totalDue-totalPaid);document.getElementById('sal-unpaid-count').textContent=unpaidCount;
+  showToast('Payment saved ✓');closeModal('modal-sal-custom');loadSalary();
 }
 
 // ─── DASHBOARD ────────────────────────────────────────────────
 async function loadDashboard(){
   const now=new Date();const month=now.getMonth()+1;const year=now.getFullYear();
   const{data:rent}=await sbClient.from('rent_payments').select('amount_paid,amount_due,payment_status').eq('month',month).eq('year',year);
-  const rentCollected=(rent||[]).reduce((s,r)=>s+Number(r.amount_paid),0);
-  const rentDue=(rent||[]).reduce((s,r)=>s+Number(r.amount_due),0);
-  document.getElementById('stat-rent').textContent=fmt(rentCollected);
-  document.getElementById('stat-rent-sub').textContent=`of ${fmt(rentDue)} due`;
-  document.getElementById('stat-pending').textContent=fmt(rentDue-rentCollected);
-  document.getElementById('stat-pending-sub').textContent=`${(rent||[]).filter(r=>r.payment_status==='unpaid').length} unpaid units`;
+  const rentCollected=(rent||[]).reduce((s,r)=>s+Number(r.amount_paid),0);const rentDue=(rent||[]).reduce((s,r)=>s+Number(r.amount_due),0);
+  document.getElementById('stat-rent').textContent=fmt(rentCollected);document.getElementById('stat-rent-sub').textContent=`of ${fmt(rentDue)} due`;
+  document.getElementById('stat-pending').textContent=fmt(rentDue-rentCollected);document.getElementById('stat-pending-sub').textContent=`${(rent||[]).filter(r=>r.payment_status==='unpaid').length} unpaid units`;
   const startM=`${year}-${String(month).padStart(2,'0')}-01`;const endM=`${year}-${String(month).padStart(2,'0')}-31`;
   const{data:exp}=await sbClient.from('construction_expenses').select('amount').gte('expense_date',startM).lte('expense_date',endM);
-  document.getElementById('stat-expenses').textContent=fmt((exp||[]).reduce((s,e)=>s+Number(e.amount),0));
-  document.getElementById('stat-exp-sub').textContent=`${(exp||[]).length} transactions`;
+  document.getElementById('stat-expenses').textContent=fmt((exp||[]).reduce((s,e)=>s+Number(e.amount),0));document.getElementById('stat-exp-sub').textContent=`${(exp||[]).length} transactions`;
   const{data:sal}=await sbClient.from('salary_payments').select('amount_paid').eq('month',month).eq('year',year);
-  document.getElementById('stat-salary').textContent=fmt((sal||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
-  document.getElementById('stat-sal-sub').textContent=`${(sal||[]).length} payments`;
-  const{count:tenantCount}=await sbClient.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);
-  document.getElementById('stat-tenants').textContent=tenantCount||0;
-  // Pending procurement requests count
-  const{count:matCount}=await sbClient.from('procurement_requests').select('*',{count:'exact',head:true}).eq('status','requested').catch(()=>({count:0}));
-  document.getElementById('stat-materials').textContent=matCount||0;
+  document.getElementById('stat-salary').textContent=fmt((sal||[]).reduce((s,p)=>s+Number(p.amount_paid),0));document.getElementById('stat-sal-sub').textContent=`${(sal||[]).length} payments`;
+  const{count:tenantCount}=await sbClient.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);document.getElementById('stat-tenants').textContent=tenantCount||0;
+  const{count:matCount}=await sbClient.from('procurement_requests').select('*',{count:'exact',head:true}).eq('status','requested').catch(()=>({count:0}));document.getElementById('stat-materials').textContent=matCount||0;
   const{data:recentP}=await sbClient.from('rent_payments').select('*, tenants(full_name), buildings(name)').order('created_at',{ascending:false}).limit(6);
   const pBody=document.getElementById('dash-payments-body');
   pBody.innerHTML=(recentP||[]).map(p=>`<tr><td>${p.tenants?.full_name||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${statusBadge(p.payment_status)}</td><td>${fmtDate(p.payment_date)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:20px">No payments yet</td></tr>';
-  // Pending procurement on dashboard
   const{data:pendMat}=await sbClient.from('procurement_requests').select('*, buildings(name)').in('status',['requested','approved']).order('created_at',{ascending:false}).limit(6).catch(()=>({data:[]}));
   const mBody=document.getElementById('dash-materials-body');
   mBody.innerHTML=(pendMat||[]).map(m=>`<tr><td><strong>${esc(m.item_description||'—')}</strong></td><td>${m.buildings?.name||'—'}</td><td>${esc(m.supplier_name||'—')}</td><td>${fmt(m.estimated_price)}</td><td>${renderMatSteps(m.status)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:20px">No pending requests</td></tr>';
@@ -1470,19 +1690,14 @@ async function loadDashboard(){
 
 // ─── REPORTS ──────────────────────────────────────────────────
 async function loadReports(){
-  const year=document.getElementById('rep-year-filter').value||new Date().getFullYear();
-  const building=document.getElementById('rep-building-filter').value;
+  const year=document.getElementById('rep-year-filter').value||new Date().getFullYear();const building=document.getElementById('rep-building-filter').value;
   let rq=sbClient.from('rent_payments').select('amount_paid,month').eq('year',year);if(building)rq=rq.eq('building_id',building);
-  const{data:rentData}=await rq;
-  document.getElementById('rep-rent').textContent=fmt((rentData||[]).reduce((s,r)=>s+Number(r.amount_paid),0));
+  const{data:rentData}=await rq;document.getElementById('rep-rent').textContent=fmt((rentData||[]).reduce((s,r)=>s+Number(r.amount_paid),0));
   let eq2=sbClient.from('construction_expenses').select('amount,expense_date').gte('expense_date',`${year}-01-01`).lte('expense_date',`${year}-12-31`);if(building)eq2=eq2.eq('building_id',building);
-  const{data:expData}=await eq2;
-  document.getElementById('rep-expenses').textContent=fmt((expData||[]).reduce((s,e)=>s+Number(e.amount),0));
-  const{data:salData}=await sbClient.from('salary_payments').select('amount_paid,month').eq('year',year);
-  document.getElementById('rep-salary').textContent=fmt((salData||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
+  const{data:expData}=await eq2;document.getElementById('rep-expenses').textContent=fmt((expData||[]).reduce((s,e)=>s+Number(e.amount),0));
+  const{data:salData}=await sbClient.from('salary_payments').select('amount_paid,month').eq('year',year);document.getElementById('rep-salary').textContent=fmt((salData||[]).reduce((s,p)=>s+Number(p.amount_paid),0));
   let sq=sbClient.from('apartment_sales').select('advance_paid');if(building)sq=sq.eq('building_id',building);
-  const{data:salesData}=await sq;
-  document.getElementById('rep-sales').textContent=fmt((salesData||[]).reduce((s,s2)=>s+Number(s2.advance_paid),0));
+  const{data:salesData}=await sq;document.getElementById('rep-sales').textContent=fmt((salesData||[]).reduce((s,s2)=>s+Number(s2.advance_paid),0));
   const months=Array.from({length:12},(_,i)=>i+1);
   document.getElementById('reports-body').innerHTML=months.map(m=>{
     const mRent=(rentData||[]).filter(r=>r.month===m).reduce((s,r)=>s+Number(r.amount_paid),0);
