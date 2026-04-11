@@ -690,7 +690,23 @@ tr:hover td{background:rgba(28,28,26,.015)}
     <div class="mf"><button class="btn btn-ghost" onclick="closeModal('modal-mat-purchase')">Cancel</button><button class="btn btn-dark" onclick="saveMatPurchase()">Save Purchase Record</button></div>
   </div>
 </div>
-
+<!-- EDIT DUE MODAL -->
+<div class="modal-overlay" id="modal-edit-due" onclick="if(event.target===this)closeModal('modal-edit-due')">
+  <div class="modal" style="max-width:380px">
+    <div class="mh"><h3 id="edit-due-title">Edit Outstanding Due</h3><button class="mc-btn" onclick="closeModal('modal-edit-due')">×</button></div>
+    <div class="mb">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Set the total historical due for this tenant. This will be added on top of any unpaid months tracked by the system.</p>
+      <div class="field">
+        <label>Outstanding Due (৳)</label>
+        <input type="number" id="edit-due-amount" placeholder="0"/>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal('modal-edit-due')">Cancel</button>
+      <button class="btn btn-dark" onclick="saveEditDue()">Save</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <!-- ═══════════════════════════════════════════
@@ -883,11 +899,16 @@ async function loadRent(){
     .or(`year.lt.${year},and(year.eq.${year},month.lt.${month})`);
 
   // Sum arrears per tenant
-  const arrearsMap={};
-  (pastUnpaid||[]).forEach(p=>{
-    const owed=Number(p.amount_due||0)-Number(p.amount_paid||0);
-    arrearsMap[p.tenant_id]=(arrearsMap[p.tenant_id]||0)+owed;
-  });
+ const arrearsMap={};
+(pastUnpaid||[]).forEach(p=>{
+  const owed=Number(p.amount_due||0)-Number(p.amount_paid||0);
+  arrearsMap[p.tenant_id]=(arrearsMap[p.tenant_id]||0)+owed;
+});
+// Add manually entered historical dues
+activeTenants.forEach(t2=>{
+  const manualDue=Number(t2.outstanding_due||0);
+  if(manualDue>0) arrearsMap[t2.id]=(arrearsMap[t2.id]||0)+manualDue;
+});
 
   let rows=activeTenants.map(t2=>{
     const rec=paymentMap[t2.id]||null;
@@ -931,7 +952,7 @@ async function loadRent(){
       <td id="rent-paid-${tid}">${r.amountPaid>0?fmt(r.amountPaid):'—'}</td>
       <td id="rent-due-${tid}">${dueCell}</td>
       <td style="text-align:center"><span class="status-pill ${statusClass}" id="rent-status-pill-${tid}">${statusLabel}</span></td>
-      <td><div class="qa-row"><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button></div></td>
+      <td><div class="qa-row"><button class="qa-btn qa-paid${r.status==='paid'?' active':''}" onclick="quickRentPaid('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name.replace(/'/g,"\\'")}')">✓ Paid</button><button class="qa-btn qa-partial${r.status==='partial'?' active':''}" onclick="openRentPartial('${tid}','${rid}',${r.monthlyRent},${month},${year},'${r.tenant.full_name}')">~ Partial</button><button class="qa-btn qa-unpaid${r.status==='unpaid'?' active':''}" onclick="quickRentUnpaid('${tid}','${rid}',${r.monthlyRent},${month},${year})">✗ Unpaid</button><button class="qa-btn qa-edit" onclick="openEditDue('${tid}',${r.tenant.outstanding_due||0},'${r.tenant.full_name.replace(/'/g,&quot;\\'&quot;)}')">৳ Due</button></div></td>
       <td id="rent-method-${tid}" style="font-size:12px;color:var(--muted)">${r.method||'—'}</td>
       <td id="rent-date-${tid}" style="font-size:12px;color:var(--muted)">${fmtDate(r.paymentDate)}</td>
     </tr>`;
@@ -980,6 +1001,23 @@ function openRentPartial(tenantId,existingId,monthlyRent,month,year,name){
   document.getElementById('rent-partial-notes').value='';
   document.getElementById('rent-partial-date').value=new Date().toISOString().slice(0,10);
   openModal('modal-rent-partial');
+}let currentDueTenantId=null;
+function openEditDue(tenantId, currentDue, name){
+  currentDueTenantId=tenantId;
+  document.getElementById('edit-due-title').textContent=`Outstanding Due — ${name}`;
+  document.getElementById('edit-due-amount').value=currentDue||0;
+  openModal('modal-edit-due');
+}
+async function saveEditDue(){
+  const amount=parseFloat(document.getElementById('edit-due-amount').value)||0;
+  const{error}=await sbClient.from('tenants').update({outstanding_due:amount}).eq('id',currentDueTenantId);
+  if(error){showToast('Error: '+error.message,'error');return;}
+  showToast('Due updated ✓');
+  closeModal('modal-edit-due');
+  // Update local cache
+  const t2=tenants.find(x=>x.id===currentDueTenantId);
+  if(t2)t2.outstanding_due=amount;
+  loadRent();
 }
 async function savePartialRent(){
   if(!currentRentContext)return;
