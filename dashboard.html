@@ -1437,8 +1437,8 @@ async function loadPettyCash(){
   }).join('');
 }
 async function openNewJomaDay(){
-  // Get last day's balance for eeja
-  const{data:lastDay}=await sbClient.from('petty_cash').select('cash_date,balance').order('cash_date',{ascending:false}).limit(1).single().catch(()=>({data:null}));
+  let lastDay=null;
+  try{const{data}=await sbClient.from('petty_cash').select('cash_date,balance').order('cash_date',{ascending:false}).limit(1).single();lastDay=data;}catch(e){}
   const eeja=lastDay?.balance||0;
   document.getElementById('joma-date').value=new Date().toISOString().slice(0,10);
   document.getElementById('joma-amount').value='';
@@ -1453,7 +1453,8 @@ async function saveJomaDay(){
   const joma=parseFloat(document.getElementById('joma-amount').value)||0;
   if(!date){showToast('Select date','error');return;}
   // Get eeja from previous day
-  const{data:prevDay}=await sbClient.from('petty_cash').select('cash_date,balance').lt('cash_date',date).order('cash_date',{ascending:false}).limit(1).single().catch(()=>({data:null}));
+  let prevDay=null;
+  try{const{data}=await sbClient.from('petty_cash').select('cash_date,balance').lt('cash_date',date).order('cash_date',{ascending:false}).limit(1).single();prevDay=data;}catch(e){}
   const eeja=prevDay?.balance||0;
   const{error}=await sbClient.from('petty_cash').upsert({cash_date:date,joma,eeja_from_prev:eeja,total_spent:0,balance:joma+eeja,notes:document.getElementById('joma-notes').value,created_by:currentUser.id},{onConflict:'cash_date'});
   if(error){showToast('Error: '+error.message,'error');return;}
@@ -1679,13 +1680,16 @@ async function loadDashboard(){
   const{data:sal}=await sbClient.from('salary_payments').select('amount_paid').eq('month',month).eq('year',year);
   document.getElementById('stat-salary').textContent=fmt((sal||[]).reduce((s,p)=>s+Number(p.amount_paid),0));document.getElementById('stat-sal-sub').textContent=`${(sal||[]).length} payments`;
   const{count:tenantCount}=await sbClient.from('tenants').select('*',{count:'exact',head:true}).eq('is_active',true);document.getElementById('stat-tenants').textContent=tenantCount||0;
-  const{count:matCount}=await sbClient.from('procurement_requests').select('*',{count:'exact',head:true}).eq('status','requested').catch(()=>({count:0}));document.getElementById('stat-materials').textContent=matCount||0;
+  let matCount=0;
+  try{const{count}=await sbClient.from('procurement_requests').select('*',{count:'exact',head:true}).eq('status','requested');matCount=count||0;}catch(e){}
+  document.getElementById('stat-materials').textContent=matCount;
   const{data:recentP}=await sbClient.from('rent_payments').select('*, tenants(full_name), buildings(name)').order('created_at',{ascending:false}).limit(6);
   const pBody=document.getElementById('dash-payments-body');
   pBody.innerHTML=(recentP||[]).map(p=>`<tr><td>${p.tenants?.full_name||'—'}</td><td>${p.buildings?.name||'—'}</td><td>${fmt(p.amount_paid)}</td><td>${p.payment_method||'—'}</td><td>${statusBadge(p.payment_status)}</td><td>${fmtDate(p.payment_date)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:20px">No payments yet</td></tr>';
-  const{data:pendMat}=await sbClient.from('procurement_requests').select('*, buildings(name)').in('status',['requested','approved']).order('created_at',{ascending:false}).limit(6).catch(()=>({data:[]}));
+  let pendMat=[];
+  try{const{data}=await sbClient.from('procurement_requests').select('*, buildings(name)').in('status',['requested','approved']).order('created_at',{ascending:false}).limit(6);pendMat=data||[];}catch(e){}
   const mBody=document.getElementById('dash-materials-body');
-  mBody.innerHTML=(pendMat||[]).map(m=>`<tr><td><strong>${esc(m.item_description||'—')}</strong></td><td>${m.buildings?.name||'—'}</td><td>${esc(m.supplier_name||'—')}</td><td>${fmt(m.estimated_price)}</td><td>${renderMatSteps(m.status)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:20px">No pending requests</td></tr>';
+  mBody.innerHTML=pendMat.map(m=>`<tr><td><strong>${esc(m.item_description||'—')}</strong></td><td>${m.buildings?.name||'—'}</td><td>${esc(m.supplier_name||'—')}</td><td>${fmt(m.estimated_price)}</td><td>${renderMatSteps(m.status)}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--muted2);padding:20px">No pending requests</td></tr>';
 }
 
 // ─── REPORTS ──────────────────────────────────────────────────
